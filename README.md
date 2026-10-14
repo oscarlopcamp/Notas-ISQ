@@ -1,5 +1,8 @@
 # Ingeniería de Software Cuántico — libro interactivo
 
+> 📖 **Si quieres la visualización de lector, [da clic aquí](https://oscarlopcamp.github.io/Notas-ISQ/).**
+> La plataforma está publicada en GitHub Pages: puedes leer las lecciones y usar los simuladores directamente en el navegador, sin instalar nada.
+
 Plataforma web para aprender de forma progresiva, desde cómo una computadora clásica representa información hasta la ingeniería de software cuántico y la ciberseguridad cuántica. Está pensada para ingenieras e ingenieros de software sin conocimientos previos de mecánica cuántica.
 
 Combina libro de texto, curso autodidacta, laboratorio de simulaciones, glosario y biblioteca de referencias verificadas. Cada lección se organiza en tres niveles de profundidad: **Comprender**, **Entender matemáticamente** e **Implementar**.
