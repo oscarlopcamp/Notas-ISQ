@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Pruebas de interacción</title>
+  <style>
+    body { font: 14px system-ui, sans-serif; margin: 1rem; }
+    iframe { width: 1200px; height: 800px; border: 1px solid #999; }
+    .fail { color: #a8322d; } .pass { color: #1d7a4d; }
+  </style>
+</head>
+<body data-status="running">
+  <h1>Pruebas de interacción</h1>
+  <p>Usa la aplicación real dentro de un marco. Atención: reinicia el progreso guardado en este navegador.</p>
+  <ul id="out"></ul>
+  <iframe id="frame" title="Aplicación"></iframe>
+  <script type="module">
+    const frame = document.getElementById('frame');
+    const out = document.getElementById('out');
+    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+    let failed = 0;
+    const check = (name, ok, detail = '') => {
+      if (!ok) failed += 1;
+      out.insertAdjacentHTML('beforeend', `<li class="${ok ? 'pass' : 'fail'}">${ok ? '✓' : '✗'} ${name}${detail ? ` — ${detail}` : ''}</li>`);
+    };
+    // Espera activa a que aparezca el contenido (más robusto que una pausa fija).
+    const until = async (fn, timeout = 15000) => {
+      const start = Date.now();
+      while (Date.now() - start < timeout) {
+        try { if (fn()) return true; } catch { /* aún no disponible */ }
+        await wait(100);
+      }
+      return false;
+    };
+    const go = async (hash, ready) => { frame.contentWindow.location.hash = hash; await wait(300); await until(ready); };
+
+    try { localStorage.removeItem('isq.v1'); } catch {}
+    frame.src = '../index.html#/leccion/representacion-informacion';
+    await new Promise((r) => { frame.onload = r; });
+    const doc = () => frame.contentDocument;
+    await until(() => doc().querySelectorAll('.widget .t2b-stream').length && doc().querySelector('.lesson-header .btn'));
+    const state = () => JSON.parse(frame.contentWindow.localStorage.getItem('isq.v1') || '{}');
+
+    // Progreso
+    const completeBtn = [...doc().querySelectorAll('.lesson-header .btn')].find((b) => b.textContent.includes('completada'));
+    completeBtn.click();
+    await wait(200);
+    check('marcar lección como completada se guarda', Boolean(state().completed?.['representacion-informacion']));
+    check('el índice lateral refleja la lección completada', Boolean(doc().querySelector('.nav-lesson.done')));
+    const favBtn = [...doc().querySelectorAll('.lesson-header .btn')].find((b) => b.textContent.includes('favoritos'));
+    favBtn.click();
+    await wait(100);
+    check('añadir a favoritos se guarda', state().favorites?.includes('representacion-informacion'));
+
+    // Niveles
+    doc().querySelector('.level-tab[data-level="matematico"]').click();
+    await wait(200);
+    const visible = [...doc().querySelectorAll('.level-block')].filter((b) => !b.hidden).map((b) => b.dataset.level);
+    check('seleccionar el nivel 2 oculta los otros niveles', JSON.stringify(visible) === '["matematico"]', visible.join(','));
+    check('el nivel elegido se recuerda', state().level === 'matematico');
+    doc().querySelector('.level-tab[data-level="todo"]').click();
+    await wait(200);
+    check('«Ruta completa» muestra los tres niveles', [...doc().querySelectorAll('.level-block')].every((b) => !b.hidden));
+
+    // Conversor
+    const widget = [...doc().querySelectorAll('.widget')].find((w) => w.textContent.includes('Conversor texto'));
+    const input = widget.querySelector('input[type="text"]');
+    input.value = 'Año';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    await wait(100);
+    check('en ASCII, «ñ» se marca como no representable', widget.querySelector('.widget-warning:not([hidden])')?.textContent.includes('ñ'));
+    [...widget.querySelectorAll('.chip')].find((c) => c.textContent.startsWith('UTF-8')).click();
+    await wait(100);
+    const stream = widget.querySelector('.t2b-stream').textContent;
+    check('en UTF-8, «Año» produce 41 C3 B1 6F', stream === '01000001110000111011000101101111', stream);
+    check('el resumen indica 3 caracteres y 4 bytes', widget.querySelector('.widget-stats').textContent.startsWith('3 caracteres · 4 bytes'));
+
+    // Búsqueda
+    const search = doc().getElementById('global-search');
+    search.value = 'utf8';
+    search.dispatchEvent(new Event('input'));
+    await wait(100);
+    search.value = 'codificacion';
+    search.dispatchEvent(new Event('input'));
+    await wait(100);
+    check('la búsqueda ignora tildes («codificacion» encuentra resultados)', doc().querySelectorAll('.search-result').length > 1);
+    search.value = 'qubit';
+    search.dispatchEvent(new Event('input'));
+    await wait(100);
+    check('la búsqueda encuentra lecciones pendientes («qubit»)', [...doc().querySelectorAll('.search-result')].some((r) => r.textContent.includes('pendiente')));
+    search.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+
+    // Páginas que dependen del progreso
+    await go('#/progreso', () => doc().querySelector('.stat b'));
+    check('«Mi progreso» cuenta 1 lección completada', doc().querySelector('.stat b')?.textContent === '1');
+    check('«Mi progreso» lista el favorito', doc().querySelector('.page').textContent.includes('¿Cómo representa información'));
+    await go('#/leccion/que-es-computacion-cuantica', () => doc().querySelector('.pending-note'));
+    check('una lección pendiente lo indica y no muestra contenido provisional', Boolean(doc().querySelector('.pending-note')));
+    await go('#/referencias/rfc3629', () => doc().getElementById('ref-rfc3629')?.textContent.includes('Citada en'));
+    check('las referencias muestran en qué lección se citan', doc().getElementById('ref-rfc3629')?.textContent.includes('Citada en'));
+
+    // ---------- Lección 1.2: simuladores ----------
+    await go('#/leccion/sistema-binario', () => doc().querySelectorAll('.widget .wheel-svg').length >= 3 && doc().querySelector('.fe-strip .fe-bit'));
+    const widgetsByTitle = (t) => [...doc().querySelectorAll('.widget')].filter((w) => w.querySelector('.widget-head h4')?.textContent.includes(t));
+    const btn = (root, label) => [...root.querySelectorAll('button')].find((b) => b.textContent.trim() === label);
+
+    // Rueda sin signo (empieza en 13): tres pasos de +1 llevan a 0000 con desbordamiento
+    const wheel = widgetsByTitle('rueda')[0];
+    for (let i = 0; i < 3; i += 1) btn(wheel, '+1').click();
+    check('rueda: 13 + 3 vuelve a 0000', wheel.querySelector('.wheel-center-pattern').textContent === '0000');
+    check('rueda: el paso 15 → 0 se señala como desbordamiento', wheel.querySelector('.wheel-status').classList.contains('overflow'));
+    // Rueda en signo y magnitud (empieza en 1001 = −1): +1 da −2
+    const smWheel = widgetsByTitle('rueda')[1];
+    btn(smWheel, '+1').click();
+    check('rueda signo y magnitud: −1 «+1» da −2 y se marca el fallo', smWheel.querySelector('.wheel-center-value').textContent === '−2' || smWheel.querySelector('.wheel-center-value').textContent === '-2');
+    check('rueda signo y magnitud: mensaje de suma incorrecta', smWheel.querySelector('.wheel-status').classList.contains('bad'));
+
+    // Sumador 6 + 7 paso a paso
+    const adder = widgetsByTitle('Sumador')[0];
+    for (let i = 0; i < 4; i += 1) btn(adder, 'Siguiente columna →').click();
+    const sum = [...adder.querySelectorAll('.adder-result .adder-sum')].map((c) => c.textContent).join('');
+    check('sumador: 6 + 7 columna a columna da 1101', sum === '1101', sum);
+    check('sumador: veredicto correcto sin desbordamiento', adder.querySelector('.adder-verdict').classList.contains('ok'));
+    // Sumador 127 + 1 con signo
+    const adder8 = widgetsByTitle('Sumador')[1];
+    btn(adder8, 'Resolver todo').click();
+    check('sumador: 127 + 1 con signo detecta desbordamiento', adder8.querySelector('.adder-verdict').textContent.includes('Desbordamiento con signo'));
+
+    // Complemento a dos: −128
+    const tc = widgetsByTitle('complemento a dos')[0];
+    btn(tc, '-128').click();
+    check('complemento a dos: −128 se marca como caso especial', Boolean(tc.querySelector('.tc-warn')));
+
+    // Fracciones: 0.1 es periódica
+    const fr = widgetsByTitle('Fracciones')[0];
+    check('fracciones: 0,1 muestra expansión periódica', fr.querySelector('.tc-warn')?.textContent.includes('periódica') && fr.querySelectorAll('tr.period').length === 4);
+
+    // Explorador IEEE 754: cambiar el bit de signo de 0.1
+    const fe = widgetsByTitle('IEEE')[0];
+    fe.querySelector('.fe-group.sign .fe-bit').click();
+    await wait(50);
+    check('IEEE 754: cambiar el bit de signo da −0.1 (0xBDCCCCCD)', fe.querySelector('input').value === '-0.1' && fe.textContent.includes('0xBDCCCCCD'));
+    btn(fe, 'binary64').click();
+    btn(fe, '0.1').click();
+    check('IEEE 754: valor exacto de 0.1 en binary64', fe.querySelector('.fe-exact').textContent === '0.1000000000000000055511151231257827021181583404541015625');
+
+    try { frame.contentWindow.localStorage.removeItem('isq.v1'); } catch {}
+    document.body.dataset.status = failed ? 'fail' : 'pass';
+  </script>
+</body>
+</html>
