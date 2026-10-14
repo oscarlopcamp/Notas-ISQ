@@ -1,6 +1,6 @@
 // Laboratorio de mojibake: escribir con una codificación y leer con otra.
 
-import { h, clear } from '../utils/dom.js';
+import { h, clear, append } from '../utils/dom.js';
 import { encode, decode, ENCODINGS } from '../utils/unicode.js';
 import { toHex } from '../utils/encoding.js';
 
@@ -27,7 +27,7 @@ export function mount(root, { text = 'Año', writeAs = 'utf-8', readAs = 'window
     const { bytes, unencodable } = encode(value, w);
     const read = decode(bytes, r);
     const ok = read === value;
-    out.append(
+    append(out, [
       h('div', { class: 'mj-row' }, h('span', { class: 'widget-label' }, '1. Texto original'), h('span', { class: 'mj-text' }, value || ' ')),
       h('div', { class: 'mj-row' }, h('span', { class: 'widget-label' }, `2. Bytes (${ENCODINGS[w]})`),
         h('span', { class: 'mono mj-bytes' }, bytes.map((b) => toHex(b)).join(' ') || '—')),
@@ -40,7 +40,7 @@ export function mount(root, { text = 'Año', writeAs = 'utf-8', readAs = 'window
           : read.includes('�')
           ? 'Algunos bytes no forman una secuencia válida en la codificación de lectura y se muestran como «�» (U+FFFD, carácter de sustitución).'
           : 'Mojibake: los bytes son correctos, pero se interpretan con otra tabla. Ningún dato se ha alterado; solo la convención de lectura es errónea.'),
-    );
+    ]);
   }
 
   render();

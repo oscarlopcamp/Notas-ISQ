@@ -73,8 +73,8 @@ export const modules = [
       {
         title: 'Qué es y de dónde viene',
         lessons: [
-          L('que-es-computacion-cuantica', '¿Qué es la computación cuántica?', ['¿Qué es computación cuántica?', 'Computación clásica frente a cuántica'], { prerequisites: ['limites-complejidad'] }),
-          L('historia-computacion-cuantica', 'Historia: Feynman, Deutsch, Shor y Grover', ['Historia', 'Richard Feynman', 'David Deutsch', 'Peter Shor', 'Lov Grover']),
+          L('que-es-computacion-cuantica', '¿Qué es la computación cuántica?', ['¿Qué es computación cuántica?', 'Computación clásica frente a cuántica'], { load: () => import('./module-02/que-es-computacion-cuantica.js'), minutes: 60, prerequisites: ['limites-complejidad'] }),
+          L('historia-computacion-cuantica', 'Historia: Feynman, Deutsch, Shor y Grover', ['Historia', 'Richard Feynman', 'David Deutsch', 'Peter Shor', 'Lov Grover'], { load: () => import('./module-02/historia-computacion-cuantica.js'), minutes: 60 }),
         ],
       },
       {

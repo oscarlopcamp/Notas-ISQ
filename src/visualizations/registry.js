@@ -102,6 +102,11 @@ export const widgets = {
   'call-stack': { title: 'La pila de llamadas', description: 'Observa cómo se apilan y desapilan los marcos de factorial(n) recursivo.', module: 1, load: () => import('./call-stack.js'), lessons: ['ejecucion-programas'] },
   'growth-race': { title: 'Carrera de crecimiento', description: 'Compara n, n log n, n², 2ⁿ y n! y el tiempo que tardarían para cada tamaño de entrada.', module: 1, load: () => import('./growth-race.js'), lessons: ['limites-complejidad'] },
   'tsp-brute': { title: 'El viajante por fuerza bruta', description: 'Busca la ruta óptima entre ciudades probando todas las permutaciones y compárala con una heurística.', module: 1, load: () => import('./tsp-brute.js'), lessons: ['limites-complejidad'] },
+  // ---------- Módulo 2 ----------
+  interferometer: { title: 'Interferómetro de Mach–Zehnder', description: 'Envía fotones de uno en uno: dos caminos posibles interfieren, algo que un modelo clásico de caminos al azar no puede explicar.', module: 2, load: () => import('./interferometer.js'), lessons: ['que-es-computacion-cuantica'] },
+  'history-timeline': { title: 'Línea de tiempo de la computación cuántica', description: 'De la paradoja EPR (1935) a la corrección de errores bajo el umbral (2025), con la fuente original de cada hito.', module: 2, load: () => import('./history-timeline.js'), lessons: ['historia-computacion-cuantica'] },
+  'chronology-quiz': { title: 'Reto de cronología', description: 'Ordena hitos de la historia de la computación cuántica y comprueba el resultado.', module: 2, load: () => import('./chronology-quiz.js'), lessons: ['historia-computacion-cuantica'] },
+  'deutsch-game': { title: 'El problema de Deutsch', description: '¿Es constante o balanceada? Descubre cuántas consultas necesita un algoritmo clásico.', module: 2, load: () => import('./deutsch-game.js'), lessons: ['historia-computacion-cuantica'] },
 };
 
 export async function mountWidget(id, container, options = {}) {

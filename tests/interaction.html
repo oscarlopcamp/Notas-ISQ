@@ -94,7 +94,7 @@
     await go('#/progreso', () => doc().querySelector('.stat b'));
     check('«Mi progreso» cuenta 1 lección completada', doc().querySelector('.stat b')?.textContent === '1');
     check('«Mi progreso» lista el favorito', doc().querySelector('.page').textContent.includes('¿Cómo representa información'));
-    await go('#/leccion/que-es-computacion-cuantica', () => doc().querySelector('.pending-note'));
+    await go('#/leccion/motivaciones-simulacion', () => doc().querySelector('.pending-note'));
     check('una lección pendiente lo indica y no muestra contenido provisional', Boolean(doc().querySelector('.pending-note')));
     await go('#/referencias/rfc3629', () => doc().getElementById('ref-rfc3629')?.textContent.includes('Citada en'));
     check('las referencias muestran en qué lección se citan', doc().getElementById('ref-rfc3629')?.textContent.includes('Citada en'));
@@ -143,6 +143,28 @@
     btn(fe, 'binary64').click();
     btn(fe, '0.1').click();
     check('IEEE 754: valor exacto de 0.1 en binary64', fe.querySelector('.fe-exact').textContent === '0.1000000000000000055511151231257827021181583404541015625');
+
+    // ---------- Módulo 2 ----------
+    await go('#/leccion/que-es-computacion-cuantica', () => doc().querySelector('.mz-svg') && doc().querySelector('.mz-stats'));
+    const mz = widgetsByTitle('Mach')[0];
+    btn(mz, 'Predicción cuántica').click();
+    btn(mz, 'Enviar 1000').click();
+    const counts = [...mz.querySelectorAll('.mz-row .mono:not(.muted)')].map((x) => x.textContent);
+    check('interferómetro: sin desfase, 1000 fotones a D0 y 0 a D1', counts[0] === '1000' && counts[1] === '0', counts.join(','));
+    mz.querySelectorAll('input[type="checkbox"]')[0].click();
+    btn(mz, 'Enviar 1000').click();
+    const blockedD1 = Number(mz.querySelectorAll('.mz-row .mono:not(.muted)')[1].textContent);
+    check('interferómetro: al bloquear un camino aparecen fotones en D1', blockedD1 > 150 && blockedD1 < 350, String(blockedD1));
+    await go('#/leccion/historia-computacion-cuantica', () => doc().querySelector('.tl-list') && doc().querySelector('.dg-box'));
+    const dg = widgetsByTitle('Deutsch')[0];
+    btn(dg, 'Consultar f(0)').click();
+    check('Deutsch: con una consulta quedan dos funciones de tipos distintos', /constante/.test(dg.textContent) && /balanceada\)/.test(dg.querySelector('.dg-box p').textContent));
+    const tl = widgetsByTitle('Línea de tiempo')[0];
+    tl.querySelector('.tl-head').click();
+    check('línea de tiempo: un hito se abre con su fuente', Boolean(tl.querySelector('.tl-body a.cite')));
+    const total = tl.querySelectorAll('.tl-item').length;
+    [...tl.querySelectorAll('.chip')].find((c) => c.textContent === 'Algoritmos').click();
+    check('línea de tiempo: el filtro reduce los hitos', tl.querySelectorAll('.tl-item').length < total && tl.querySelectorAll('.tl-item').length > 0);
 
     try { frame.contentWindow.localStorage.removeItem('isq.v1'); } catch {}
     document.body.dataset.status = failed ? 'fail' : 'pass';

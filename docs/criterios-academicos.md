@@ -72,3 +72,12 @@ Los recuadros distinguen: conocimiento establecido, modelo simplificado, resulta
 - **Cifras recalculadas:** pares sustitutos y bytes UTF-8 (😀, 𝄞), tamaños de imágenes y audio, tasas de aciertos de caché (75 % / 0 %, 87,5 %, matriz 16×16), cruce de $n^{10}$ y $2^n$ ($n = 59$), $2^{54}$ operaciones por año y límite de Landauer ($2{,}871 \times 10^{-21}$ J).
 - **Pruebas automáticas:** la MiniCPU en JavaScript produce las mismas codificaciones, salidas y número de instrucciones que la versión en Python. Quine–McCluskey se verifica para las 256 funciones de 3 variables, y la regla de desbordamiento, el sumador completo y la universalidad de NAND, en todas sus combinaciones.
 - **Diagrama de clases de complejidad:** la geometría se comprobó numéricamente (P dentro de NP y de BQP; NP-completos fuera de BQP) y el pie distingue lo demostrado de lo conjeturado.
+
+## Registro de verificación de las lecciones 2.1 y 2.2 (2026-10-14)
+
+- **DOI comprobados en Crossref (21):** EPR (1935), Bell (1964), Grangier, Roger y Aspect (1986), Benioff (1980), Wootters y Zurek (1982), Dieks (1982), Wiesner (1983), Deutsch y Jozsa (1992), Bennett et al. (1993), Simon (1997), Shor (1995), Cirac y Zoller (1995), Aharonov y Ben-Or (1997), Chuang et al. (1998), Nakamura et al. (1999), DiVincenzo (2000), Vandersypen et al. (2001), Preskill (2018), Arute et al. (2019), Pan et al. (2022) y Google Quantum AI (2025).
+- **Afirmaciones cuantitativas contrastadas con el resumen original:** Arute et al. (53 qubits, unos 200 s frente a unos 10 000 años; nature.com), Pan et al. (unas 15 horas con 512 GPU; arXiv:2111.03011), Google (factor Λ = 2,14 de distancia 5 a 7; arXiv:2408.13687) y Preskill (resumen en Crossref).
+- **Cita de Feynman:** comprobada en el texto del artículo de 1982 antes de reproducirla.
+- **Código:** los cuatro programas de las lecciones se ejecutaron con CPython 3.14. Las probabilidades del interferómetro (1, 0; 0, 1; 1/4, 1/4), el argumento del problema de Deutsch y el error $2^{1-k}$ del algoritmo aleatorio de Deutsch–Jozsa coinciden con las pruebas automáticas (`tests/module2.test.js`).
+- **Matices añadidos para evitar simplificaciones:** la ventaja de Deutsch–Jozsa desaparece frente a algoritmos clásicos aleatorios; la «supremacía» de 2019 se presenta junto con su respuesta clásica de 2022; la cota de Holevo limita a $n$ bits la información extraíble de $n$ qubits.
+- **Nueva comprobación automática:** `tests/responsive.html` detecta texto residual («null», «undefined») en la página. Permitió corregir dos simuladores que lo mostraban.

@@ -16,6 +16,7 @@ async function run() {
   await import('./encoding.test.js');
   await import('./numbers.test.js');
   await import('./module1.test.js');
+  await import('./module2.test.js');
   await import('./content.test.js');
   const out = document.getElementById('results');
   let passed = 0, failed = 0;
