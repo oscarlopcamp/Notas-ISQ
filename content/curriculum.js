@@ -103,10 +103,10 @@ export const modules = [
       {
         title: '3.1 El qubit',
         lessons: [
-          L('el-qubit', '¿Qué es un qubit? Bit frente a qubit', ['¿Qué es un qubit?', 'Bit frente a qubit', 'Estados base'], { prerequisites: ['qpu-computacion-hibrida'] }),
-          L('notacion-dirac', 'Notación de Dirac: |0⟩ y |1⟩', ['Notación de Dirac', 'Ket cero', 'Ket uno', 'Representación vectorial introductoria']),
-          L('estado-general-amplitudes', 'Estado general y amplitudes de probabilidad', ['Estado general', 'Amplitudes de probabilidad']),
-          L('esfera-de-bloch', 'La esfera de Bloch', ['Esfera de Bloch', 'Interpretación geométrica']),
+          L('el-qubit', '¿Qué es un qubit? Bit frente a qubit', ['¿Qué es un qubit?', 'Bit frente a qubit', 'Estados base'], { prerequisites: ['qpu-computacion-hibrida'], load: () => import('./module-03/el-qubit.js'), minutes: 35 }),
+          L('notacion-dirac', 'Notación de Dirac: |0⟩ y |1⟩', ['Notación de Dirac', 'Ket cero', 'Ket uno', 'Representación vectorial introductoria'], { load: () => import('./module-03/notacion-dirac.js'), minutes: 30 }),
+          L('estado-general-amplitudes', 'Estado general y amplitudes de probabilidad', ['Estado general', 'Amplitudes de probabilidad'], { load: () => import('./module-03/estado-general-amplitudes.js'), minutes: 35 }),
+          L('esfera-de-bloch', 'La esfera de Bloch', ['Esfera de Bloch', 'Interpretación geométrica'], { load: () => import('./module-03/esfera-de-bloch.js'), minutes: 35 }),
         ],
       },
       {

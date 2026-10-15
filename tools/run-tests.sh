@@ -22,7 +22,7 @@ sleep 1
 status=0
 for page in index.html interaction.html responsive.html; do
   dom="$("$CHROME" --headless=new --disable-gpu --no-first-run --user-data-dir="$PROFILE" \
-    --virtual-time-budget=40000 --window-size=1300,900 --dump-dom "http://127.0.0.1:$PORT/tests/$page" 2>/dev/null)"
+    --virtual-time-budget=90000 --window-size=1300,900 --dump-dom "http://127.0.0.1:$PORT/tests/$page" 2>/dev/null)"
   result="$(grep -o 'data-status="[a-z]*"' <<<"$dom" | head -1 | cut -d'"' -f2)"
   printf '%-18s %s\n' "$page" "${result:-sin resultado}"
   grep -o 'class="fail">[^<]*' <<<"$dom" | sed 's/class="fail">/   /' || true

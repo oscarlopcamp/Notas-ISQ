@@ -648,3 +648,54 @@
 .hc-options { display: grid; gap: 4px; }
 .hc-options .chip { text-align: left; white-space: normal; }
 .hc-options .chip.sc-correct { border-color: var(--ok); }
+
+/* ---------- 3.1 Laboratorio bit/qubit ---------- */
+.ql-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: var(--space-3); }
+.ql-card { padding: var(--space-3); border: 1px solid var(--rule); border-radius: var(--radius); background: var(--bg); min-width: 0; }
+.ql-card.quantum { border-style: dashed; border-color: var(--accent); }
+.ql-card h5 { margin: 0 0 var(--space-2); font-size: 0.95rem; }
+.ql-card .btn-row { margin: var(--space-2) 0; }
+.ql-value { font-size: 1.2rem; font-weight: 600; }
+.ql-log { font-size: 0.8rem; color: var(--ink-2); overflow-wrap: anywhere; }
+.ql-status { min-height: 3em; }
+.ql-hist { display: grid; gap: 6px; margin: var(--space-2) 0; }
+.ql-bar { display: grid; grid-template-columns: 1.5rem 1fr 4.5rem; align-items: center; gap: var(--space-2); font-family: var(--font-mono); }
+.ql-bar b { text-align: right; font-weight: 500; }
+.ql-track { height: 1rem; background: var(--rule); border-radius: 3px; overflow: hidden; }
+.ql-track i { display: block; height: 100%; background: var(--accent); }
+.ql-inside { display: flex; gap: var(--space-2); align-items: flex-start; color: var(--ink-2); }
+@media (max-width: 640px) { .ql-grid { grid-template-columns: 1fr; } }
+
+/* ---------- 3.2 Emparejar kets ---------- */
+.km-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+.km-col { display: grid; gap: var(--space-2); align-content: start; }
+.km-item { padding: 0.5rem 0.7rem; border: 1px solid var(--rule-strong); border-radius: var(--radius); background: var(--bg); color: var(--ink); text-align: left; cursor: pointer; font-size: 0.9rem; overflow-wrap: anywhere; }
+.km-item:hover { border-color: var(--accent); }
+.km-item.picked { border-color: var(--accent); background: var(--accent-soft); }
+.km-item.ok { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); cursor: default; }
+.km-item.bad { border-color: var(--bad); background: var(--bad-soft); }
+
+/* ---------- 3.3 Constructor de amplitudes ---------- */
+.ab-ket { font-size: 1rem; margin: var(--space-2) 0; overflow-wrap: anywhere; }
+.ab-sum { padding: var(--space-2) var(--space-3); border-radius: var(--radius); }
+.ab-sum.ok { background: var(--ok-soft); } .ab-sum.bad { background: var(--bad-soft); }
+.ab-bars { display: grid; gap: 6px; margin: var(--space-3) 0; }
+.ab-challenges { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
+.ab-challenges li.ok { color: var(--ok); }
+
+/* ---------- 3.4 Esfera de Bloch ---------- */
+.bs-layout { display: grid; grid-template-columns: minmax(0, 300px) 1fr; gap: var(--space-4); align-items: center; }
+.bs-svg { width: 100%; max-width: 300px; height: auto; display: block; margin: 0 auto; }
+.bs-side { min-width: 0; }
+.bs-outline { fill: var(--accent-soft); fill-opacity: 0.35; stroke: var(--rule-strong); stroke-width: 1.5; }
+.bs-equator { stroke: var(--muted); stroke-width: 1.2; }
+.bs-parallel { stroke: var(--warn); stroke-width: 1.2; }
+.bs-equator.back, .bs-parallel.back { stroke-dasharray: 3 3; opacity: 0.6; }
+.bs-axis { stroke: var(--muted); stroke-dasharray: 4 3; }
+.bs-label { font: 600 13px var(--font-mono); fill: var(--ink-2); }
+.bs-mark { fill: var(--muted); } .bs-mark.back { opacity: 0.5; }
+.bs-height { stroke: var(--warn); stroke-dasharray: 3 3; }
+.bs-vector { stroke: var(--accent); stroke-width: 2.5; }
+.bs-state { fill: var(--accent); stroke: var(--surface); stroke-width: 2; }
+.bs-state.back { opacity: 0.6; }
+@media (max-width: 640px) { .bs-layout { grid-template-columns: 1fr; } }

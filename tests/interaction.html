@@ -84,17 +84,17 @@
     search.dispatchEvent(new Event('input'));
     await wait(100);
     check('la búsqueda ignora tildes («codificacion» encuentra resultados)', doc().querySelectorAll('.search-result').length > 1);
-    search.value = 'bloch';
+    search.value = 'histograma';
     search.dispatchEvent(new Event('input'));
     await wait(100);
-    check('la búsqueda encuentra lecciones pendientes («bloch»)', [...doc().querySelectorAll('.search-result')].some((r) => r.textContent.includes('pendiente')));
+    check('la búsqueda encuentra lecciones pendientes («histograma»)', [...doc().querySelectorAll('.search-result')].some((r) => r.textContent.includes('pendiente')));
     search.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
 
     // Páginas que dependen del progreso
     await go('#/progreso', () => doc().querySelector('.stat b'));
     check('«Mi progreso» cuenta 1 lección completada', doc().querySelector('.stat b')?.textContent === '1');
     check('«Mi progreso» lista el favorito', doc().querySelector('.page').textContent.includes('¿Cómo representa información'));
-    await go('#/leccion/el-qubit', () => doc().querySelector('.pending-note'));
+    await go('#/leccion/superposicion', () => doc().querySelector('.pending-note'));
     check('una lección pendiente lo indica y no muestra contenido provisional', Boolean(doc().querySelector('.pending-note')));
     await go('#/referencias/rfc3629', () => doc().getElementById('ref-rfc3629')?.textContent.includes('Citada en'));
     check('las referencias muestran en qué lección se citan', doc().getElementById('ref-rfc3629')?.textContent.includes('Citada en'));
@@ -220,6 +220,56 @@
     const hc = widgetsByTitle('anuncios')[0];
     hc.querySelector('.hc-options').children[1].click();
     check('titulares: la respuesta correcta se marca y cita su fuente', Boolean(hc.querySelector('.sc-item.ok .sc-why a.cite')));
+
+    // ---------- Módulo 3, unidad 3.1 ----------
+    await go('#/leccion/el-qubit', () => doc().querySelector('.ql-card.quantum'));
+    const ql = widgetsByTitle('bit frente a qubit')[0];
+    btn(ql, 'Guardar 1').click();
+    for (let i = 0; i < 3; i += 1) btn(ql, 'Leer').click();
+    check('laboratorio: leer un bit tres veces da siempre lo mismo', ql.querySelector('.ql-log').textContent.includes('1 1 1'));
+    btn(ql, 'Medir').click();
+    const first = ql.querySelector('.ql-status').textContent.match(/Resultado: (\d)/)?.[1];
+    for (let i = 0; i < 5; i += 1) btn(ql, 'Medir otra vez').click();
+    const again = ql.querySelector('.ql-status').textContent.match(/Resultado: (\d)/)?.[1];
+    check('laboratorio: volver a medir un qubit repite el resultado', first !== undefined && first === again, `${first} / ${again}`);
+    btn(ql, 'Preparar y medir 100').click();
+    const qlCounts = [...ql.querySelectorAll('.ql-bar b')].map((b) => Number(b.textContent));
+    check('laboratorio: el histograma cuenta 101 qubits preparados (una medición cada uno)', qlCounts[0] + qlCounts[1] === 101, qlCounts.join(' + '));
+    [...ql.querySelectorAll('.chip')].find((c) => c.textContent === 'Siempre 0').click();
+    btn(ql, 'Preparar y medir 100').click();
+    check('laboratorio: «Siempre 0» da 100 ceros', ql.querySelector('.ql-bar b').textContent === '100');
+
+    await go('#/leccion/notacion-dirac', () => doc().querySelector('.km-item'));
+    const km = widgetsByTitle('ket con su vector')[0];
+    const kmLeft = () => [...km.querySelectorAll('.km-col')[0].children], kmRight = () => [...km.querySelectorAll('.km-col')[1].children];
+    kmLeft()[0].click();
+    kmRight().find((b) => b.textContent === '[0, 1]').click();
+    check('kets: una pareja incorrecta se marca', Boolean(km.querySelector('.km-item.bad')));
+    const answers = ['[1, 0]', '[0, 1]', '[0.6, 0.8]', '[0.8, −0.6]', '[0.707, 0.707]', '[0.707, −0.707]'];
+    answers.forEach((v, k) => { kmLeft()[k].click(); kmRight().find((b) => b.textContent === v).click(); });
+    check('kets: las seis parejas correctas completan el juego', km.querySelectorAll('.km-item.ok').length === 12 && km.querySelector('.widget-stats').textContent.startsWith('¡Completado'));
+
+    await go('#/leccion/estado-general-amplitudes', () => doc().querySelector('.ab-sum'));
+    const ab = widgetsByTitle('Constructor de amplitudes')[0];
+    const setRange = (input, v) => { input.value = String(v); input.dispatchEvent(new Event('input', { bubbles: true })); };
+    const [aIn, bIn] = ab.querySelectorAll('input[type="range"]');
+    setRange(aIn, 1); setRange(bIn, 1);
+    check('amplitudes: [1, 1] no es un estado válido', ab.querySelector('.ab-sum').classList.contains('bad'));
+    btn(ab, 'Normalizar').click();
+    check('amplitudes: normalizar [1, 1] da 0.71 y 0.71, válido', ab.querySelector('.ab-sum').classList.contains('ok') && ab.querySelector('.ab-ket').textContent.includes('0.71|0⟩ + 0.71|1⟩'), ab.querySelector('.ab-ket').textContent);
+    btn(ab, 'Cambiar el signo de b').click();
+    check('amplitudes: el reto «mitad y mitad con b negativa» se supera', ab.querySelectorAll('.ab-challenges li.ok').length === 1 && ab.querySelector('.ab-challenges li.ok').textContent.includes('negativa'));
+
+    await go('#/leccion/esfera-de-bloch', () => doc().querySelector('.bs-svg .bs-state'));
+    const bs = widgetsByTitle('Esfera de Bloch')[0];
+    [...bs.querySelectorAll('.chip')].find((c) => c.textContent === '|+⟩').click();
+    const bsVals = () => [...bs.querySelectorAll('.ql-bar b')].map((b) => b.textContent);
+    check('Bloch: |+⟩ da 50 % y 50 %', bsVals().join('|') === '50 %|50 %', bsVals().join('|'));
+    const [tIn, fIn] = bs.querySelectorAll('input[type="range"]');
+    setRange(fIn, 90);
+    check('Bloch: girar φ no cambia las probabilidades y supera el reto del ecuador', bsVals().join('|') === '50 %|50 %' && [...bs.querySelectorAll('.ab-challenges li.ok')].some((li) => li.textContent.includes('ni |−⟩')));
+    setRange(tIn, 120);
+    check('Bloch: θ = 120° da P(1) = 75 %', bsVals()[1] === '75 %', bsVals().join('|'));
 
     try { frame.contentWindow.localStorage.removeItem('isq.v1'); } catch {}
     document.body.dataset.status = failed ? 'fail' : 'pass';

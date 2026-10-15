@@ -116,6 +116,10 @@ export const widgets = {
   'technology-explorer': { title: 'Tecnologías de qubits', description: 'Superconductores, iones, átomos neutros, fotones y espines: cómo funcionan, sus puntos fuertes y sus retos. Incluye un juego para ponerte a prueba.', module: 2, load: () => import('./technology-explorer.js'), lessons: ['panorama-tecnologico'] },
   'qubit-metrics': { title: '¿Más qubits es mejor?', description: 'Compara tres procesadores ficticios con un circuito de tamaño ajustable y descubre por qué la tasa de error importa tanto como el número de qubits.', module: 2, load: () => import('./qubit-metrics.js'), lessons: ['panorama-tecnologico'] },
   'headline-check': { title: 'Leer anuncios con criterio', description: 'Titulares ficticios sobre computación cuántica: elige la pregunta que conviene hacer ante cada uno.', module: 2, load: () => import('./headline-check.js'), lessons: ['panorama-tecnologico'] },
+  'qubit-lab': { title: 'Laboratorio: bit frente a qubit', description: 'Lee un bit tantas veces como quieras; mide un qubit y descubre que el resultado es aleatorio, que medir lo cambia y que hay que repetir para conocerlo.', module: 3, load: () => import('./qubit-lab.js'), lessons: ['el-qubit'] },
+  'ket-match': { title: 'Une cada ket con su vector', description: 'Juego de emparejar: cada estado escrito en notación de Dirac con su lista de amplitudes.', module: 3, load: () => import('./ket-match.js'), lessons: ['notacion-dirac'] },
+  'amplitude-builder': { title: 'Constructor de amplitudes', description: 'Elige las dos amplitudes de un qubit, comprueba si forman un estado válido, normalízalo y supera los retos.', module: 3, load: () => import('./amplitude-builder.js'), lessons: ['estado-general-amplitudes'] },
+  'bloch-sphere': { title: 'Esfera de Bloch', description: 'Mueve el estado de un qubit por la esfera: la altura decide las probabilidades y el giro (la fase) no las cambia. Con retos.', module: 3, load: () => import('./bloch-sphere.js'), lessons: ['esfera-de-bloch'] },
 };
 
 export async function mountWidget(id, container, options = {}) {

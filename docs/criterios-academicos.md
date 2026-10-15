@@ -112,3 +112,9 @@ Criterio nuevo: una lección no usa conceptos cuyas bases todavía no se han pre
 - **Módulo 1:** la sección cuántica de la lección 1.2 ya no menciona Qiskit Aer, el vector de estado ni los métodos de simulación; conserva la tabla de memoria en palabras sencillas. Se simplificaron los avances de las lecciones 1.6 (sin «unitarias»), 1.8 y 1.10 (sin «transpilar» ni «compuertas nativas») y la presentación de BQP, Shor y Grover en la 1.11.
 - **Módulo 2:** sin notación |0⟩, «cota de Holevo», «variables ocultas locales», «Hadamard», «qubit lógico/físico», «código de superficie», «redes de tensores», VQE, QAOA ni «transpilación» en el texto de las lecciones (siguen en el glosario y en la bibliografía). «Puertas» pasa a «operaciones» en la 2.6. El simulador del bucle híbrido usa una «perilla de ajuste» en lugar de un ángulo θ en radianes. Se explica «tolerante a fallos» la primera vez que aparece (2.1).
 - **Código:** `bucle.py`, `exito.py` y `tolerancia.py` cambiaron solo nombres de variables y textos; sus salidas se volvieron a obtener con CPython 3.14 y `tests/python.html` las comprobó (41 coincidencias).
+
+## Unidad 3.1: el qubit (2026-10-15)
+
+- **DOI comprobados en Crossref:** Schumacher (1995), origen del término «qubit»; Dirac (1939), notación de bras y kets; Born (1926), interpretación probabilística; y Bloch (1946), que da nombre a la esfera.
+- **Sin temas adelantados:** la lección 3.1 no usa todavía la notación |0⟩, que se presenta en la 3.2. Las amplitudes son reales en toda la unidad. Los números complejos (Módulo 4) y la fase (lección 3.6) aparecen solo a gran escala, y la fórmula general de la esfera de Bloch va en «Para profundizar».
+- **Código:** `medir.py`, `kets.py`, `amplitudes.py` y `bloch.py` se ejecutaron con CPython 3.14, y `tests/python.html` los comprobó en Pyodide (45 coincidencias en total). La lógica de los simuladores está en `src/utils/qubit.js` y se prueba en `tests/module3.test.js`.

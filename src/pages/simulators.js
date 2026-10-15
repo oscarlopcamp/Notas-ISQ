@@ -5,7 +5,6 @@ import { breadcrumbs, setTitle } from '../components/ui.js';
 
 // Simuladores previstos en el programa que aún no están implementados.
 const PLANNED = [
-  ['Esfera de Bloch', 3],
   ['Superposición, fase e interferencia', 3],
   ['Entrelazamiento frente a correlación clásica', 3],
   ['Espacio de estados de n qubits', 3],
