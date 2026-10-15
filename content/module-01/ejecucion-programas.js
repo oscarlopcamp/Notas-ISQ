@@ -10,7 +10,7 @@ export default {
 
   context: {
     learn: 'Las fases de un compilador (análisis léxico, sintáctico y generación de código), la diferencia entre compilar e interpretar, el bytecode de Python, qué es un proceso y cómo organiza su memoria, y cómo funciona la pila de llamadas.',
-    why: 'Los programas cuánticos también se compilan: un circuito escrito en Qiskit se transforma («transpila») en las operaciones que entiende un dispositivo concreto. Entender la compilación clásica hace natural ese proceso, que será central en los módulos 5 y 8.',
+    why: 'Los programas cuánticos también se compilan: antes de ejecutarse, se traducen a las operaciones que sabe hacer un equipo concreto. Entender la compilación clásica hará natural ese proceso cuando llegue.',
     previous: 'En [[>von-neumann|la lección 1.9]] vimos que la CPU solo ejecuta instrucciones de su ISA, y escribimos programas en ensamblador para la MiniCPU.',
     next: 'La lección 1.11 cierra el módulo preguntando qué problemas puede resolver eficientemente cualquier programa, lo que motiva la computación cuántica (Módulo 2).',
   },
@@ -82,32 +82,32 @@ export default {
             { type: 'p', text: 'Cada vez que se llama a una función, se apila un <em>marco</em> con sus parámetros, sus variables locales y el punto al que debe volver. Al terminar, el marco se desapila. Esto permite que una función se llame a sí misma (recursión): cada llamada tiene su propio marco y sus propias variables.' },
             { type: 'widget', id: 'call-stack', options: { n: 4 }, caption: 'Sigue factorial(4) paso a paso. La pila crece mientras cada llamada espera a la siguiente y se vacía a medida que llegan los resultados. Prueba con factorial(6): la pila llega a tener 6 marcos.' },
             { type: 'p', text: 'La pila tiene un tamaño limitado. Una recursión demasiado profunda la agota (un «desbordamiento de pila»). Python, para protegerse, limita por defecto la profundidad de recursión y lanza un <code>RecursionError</code> antes de llegar a ese punto, como veremos en el nivel 3.' },
-            { type: 'callout', kind: 'preview', title: 'Avance: compilar un circuito cuántico', text: 'Un circuito cuántico escrito en Qiskit usa compuertas genéricas, pero cada procesador cuántico solo implementa un conjunto reducido de compuertas nativas y solo permite interacciones entre ciertos pares de qubits. Antes de ejecutarlo, el circuito se <em>transpila</em>: se traduce a las compuertas nativas, se adapta a la conectividad del dispositivo y se optimiza [@qiskit-docs]. Es un compilador con las mismas fases que acabas de ver, y lo estudiaremos en los módulos 5 y 8.' },
+            { type: 'callout', kind: 'preview', title: 'Avance: también se compilan los programas cuánticos', text: 'Igual que cada procesador clásico tiene su propio juego de instrucciones, cada equipo cuántico solo sabe hacer unas pocas operaciones básicas. Un programa cuántico se traduce a esas operaciones antes de ejecutarse, con fases parecidas a las que acabas de ver. Lo estudiaremos cuando empecemos a programar computadoras cuánticas.' },
           ],
         },
       ],
     },
 
     matematico: {
-      intro: 'Gramáticas, árboles y la corrección de la evaluación con pila.',
+      intro: 'Aquí ponemos números a las ideas del nivel 1. Cada sección empieza con la idea en pocas palabras y un ejemplo; las demostraciones están en «Para profundizar», por si te interesan. Basta con aritmética.',
       sections: [
         {
           id: 'gramatica',
-          title: 'Una gramática para expresiones',
+          title: 'Una gramática para expresiones', key: 'Una gramática son reglas que dicen cómo se forma una expresión válida, y de ellas sale la precedencia: × antes que +.',
           blocks: [
-            { type: 'p', text: 'La sintaxis de las expresiones del simulador se describe con tres reglas, en notación BNF (cada regla dice cómo se forma una categoría a partir de otras):' },
-            { type: 'math', tex: '\\begin{aligned} \\langle\\text{expr}\\rangle &::= \\langle\\text{term}\\rangle \\;\\big((\\texttt{+} \\mid \\texttt{-})\\; \\langle\\text{term}\\rangle\\big)^{*} \\\\ \\langle\\text{term}\\rangle &::= \\langle\\text{factor}\\rangle \\;\\big(\\texttt{*}\\; \\langle\\text{factor}\\rangle\\big)^{*} \\\\ \\langle\\text{factor}\\rangle &::= \\text{número} \\mid \\texttt{(}\\; \\langle\\text{expr}\\rangle \\;\\texttt{)} \\end{aligned}', note: '$X^{*}$ significa «cero o más repeticiones de $X$». El asterisco entre comillas es el símbolo de multiplicar.' },
+            { deep: true, type: 'p', text: 'La sintaxis de las expresiones del simulador se describe con tres reglas, en notación BNF (cada regla dice cómo se forma una categoría a partir de otras):' },
+            { deep: true, type: 'math', tex: '\\begin{aligned} \\langle\\text{expr}\\rangle &::= \\langle\\text{term}\\rangle \\;\\big((\\texttt{+} \\mid \\texttt{-})\\; \\langle\\text{term}\\rangle\\big)^{*} \\\\ \\langle\\text{term}\\rangle &::= \\langle\\text{factor}\\rangle \\;\\big(\\texttt{*}\\; \\langle\\text{factor}\\rangle\\big)^{*} \\\\ \\langle\\text{factor}\\rangle &::= \\text{número} \\mid \\texttt{(}\\; \\langle\\text{expr}\\rangle \\;\\texttt{)} \\end{aligned}', note: '$X^{*}$ significa «cero o más repeticiones de $X$». El asterisco entre comillas es el símbolo de multiplicar.' },
             { type: 'p', text: 'La precedencia está codificada en la propia gramática: un $\\langle\\text{term}\\rangle$ agrupa las multiplicaciones antes de que $\\langle\\text{expr}\\rangle$ combine las sumas. Por eso <code>2 + 3 * 4</code> produce el árbol $2 + (3 \\times 4)$. Y la repetición de izquierda a derecha hace que <code>10 - 3 - 2</code> sea $(10 - 3) - 2 = 5$, no $10 - (3 - 2) = 9$ [@aho2006].' },
           ],
         },
         {
           id: 'postorden',
-          title: 'Generar código: recorrido en postorden',
+          title: 'Generar código: recorrido en postorden', key: 'Para generar el código se escriben primero los operandos y después la operación: (2 + 3) × 4 → PUSH 2, PUSH 3, ADD, PUSH 4, MUL.',
           blocks: [
-            { type: 'p', text: 'Para un árbol con raíz $op$ e hijos $L$ y $R$, la regla de generación es:' },
-            { type: 'math', tex: '\\text{gen}(n) = \\begin{cases} \\texttt{PUSH } n & \\text{si } n \\text{ es un número} \\\\ \\text{gen}(L)\\;\\text{gen}(R)\\;\\texttt{OP} & \\text{si } n = L \\;op\\; R \\end{cases}' },
-            { type: 'p', text: '<b>Propiedad:</b> ejecutar $\\text{gen}(n)$ sobre una pila cualquiera deja esa pila intacta con el valor de $n$ encima. Se demuestra por inducción sobre la altura del árbol:' },
-            { type: 'steps', items: [
+            { deep: true, type: 'p', text: 'Para un árbol con raíz $op$ e hijos $L$ y $R$, la regla de generación es:' },
+            { deep: true, type: 'math', tex: '\\text{gen}(n) = \\begin{cases} \\texttt{PUSH } n & \\text{si } n \\text{ es un número} \\\\ \\text{gen}(L)\\;\\text{gen}(R)\\;\\texttt{OP} & \\text{si } n = L \\;op\\; R \\end{cases}' },
+            { deep: true, type: 'p', text: '<b>Propiedad:</b> ejecutar $\\text{gen}(n)$ sobre una pila cualquiera deja esa pila intacta con el valor de $n$ encima. Se demuestra por inducción sobre la altura del árbol:' },
+            { deep: true, type: 'steps', items: [
               { text: 'Caso base: si $n$ es un número, $\\texttt{PUSH } n$ añade exactamente ese valor.' },
               { text: 'Paso inductivo: por hipótesis, $\\text{gen}(L)$ deja el valor $v_L$ encima, y después $\\text{gen}(R)$ deja $v_R$ encima de $v_L$. $\\texttt{OP}$ desapila ambos y apila $v_L \\;op\\; v_R$, que es el valor de $n$. ∎' },
             ] },
@@ -116,7 +116,7 @@ export default {
         },
         {
           id: 'profundidad',
-          title: 'Profundidad de la pila de llamadas',
+          title: 'Profundidad de la pila de llamadas', key: 'La recursión ocupa memoria de pila proporcional a su profundidad; un bucle no.',
           blocks: [
             { type: 'p', text: '<code>factorial(n)</code> recursivo llega a tener $n$ marcos en la pila a la vez: la memoria que necesita crece linealmente con $n$, aunque el resultado sea un único número. Una versión iterativa (un bucle) usa memoria constante. Es la misma diferencia entre «tiempo» y «memoria» que formalizaremos en la lección 1.11.' },
           ],
@@ -224,7 +224,6 @@ RecursionError: maximum recursion depth exceeded` },
     { key: 'python-dis', use: 'Bytecode de CPython como detalle de implementación.' },
     { key: 'tanenbaum2015', use: 'Procesos y organización de su espacio de direcciones.' },
     { key: 'patterson2021', use: 'De los lenguajes de alto nivel al lenguaje máquina.' },
-    { key: 'qiskit-docs', use: 'Transpilación de circuitos cuánticos (avance).' },
     { key: 'python-stdtypes', use: 'Límite de conversión de enteros grandes a texto (ejercicio 5).' },
   ],
 

@@ -86,23 +86,23 @@ sw   x7, 8(x10)    # guarda x7 en memoria`, note: 'Ilustración de la sintaxis d
     },
 
     matematico: {
-      intro: 'Codificación de instrucciones, tamaño del espacio de direcciones y traza formal de la ejecución.',
+      intro: 'Aquí ponemos números a las ideas del nivel 1. Cada sección empieza con la idea en pocas palabras y un ejemplo; las demostraciones están en «Para profundizar», por si te interesan. Basta con aritmética.',
       sections: [
         {
           id: 'codificacion',
-          title: 'Codificar una instrucción',
+          title: 'Codificar una instrucción', key: 'Cada instrucción tiene 3 bits para la operación y 5 para la dirección: por eso hay 8 instrucciones y 32 celdas.',
           blocks: [
-            { type: 'p', text: 'Una instrucción de la MiniCPU con código de operación $o \\in \\{0, \\dots, 7\\}$ y dirección $d \\in \\{0, \\dots, 31\\}$ es el byte:' },
-            { type: 'math', tex: 'w = o \\cdot 2^5 + d, \\qquad o = \\lfloor w / 2^5 \\rfloor, \\qquad d = w \\bmod 2^5' },
+            { deep: true, type: 'p', text: 'Una instrucción de la MiniCPU con código de operación $o \\in \\{0, \\dots, 7\\}$ y dirección $d \\in \\{0, \\dots, 31\\}$ es el byte:' },
+            { deep: true, type: 'math', tex: 'w = o \\cdot 2^5 + d, \\qquad o = \\lfloor w / 2^5 \\rfloor, \\qquad d = w \\bmod 2^5' },
             { type: 'p', text: 'Ejemplo: <code>LOAD 20</code> tiene $o = 1$ y $d = 20$: $w = 32 + 20 = 52 = 00110100_2$. Con 3 bits hay $2^3 = 8$ operaciones posibles, y con 5 bits de dirección, $2^5 = 32$ celdas. Ese límite de 32 bytes es consecuencia directa del formato: con instrucciones de 8 bits no se puede direccionar más memoria sin cambiar el diseño.' },
           ],
         },
         {
           id: 'traza',
-          title: 'La ejecución como secuencia de estados',
+          title: 'La ejecución como secuencia de estados', key: 'Ejecutar un programa es avanzar de un estado (PC, ACC y memoria) al siguiente, una instrucción cada vez.',
           blocks: [
-            { type: 'p', text: 'El estado de la MiniCPU es la tupla $(\\text{PC}, \\text{ACC}, M)$, donde $M$ es el contenido de la memoria. Cada instrucción es una función que transforma un estado en el siguiente. Para <code>ADD d</code>:' },
-            { type: 'math', tex: '(\\text{PC}, \\text{ACC}, M) \\;\\mapsto\\; \\big(\\text{PC} + 1,\\; (\\text{ACC} + M[d]) \\bmod 256,\\; M\\big)' },
+            { deep: true, type: 'p', text: 'El estado de la MiniCPU es la tupla $(\\text{PC}, \\text{ACC}, M)$, donde $M$ es el contenido de la memoria. Cada instrucción es una función que transforma un estado en el siguiente. Para <code>ADD d</code>:' },
+            { deep: true, type: 'math', tex: '(\\text{PC}, \\text{ACC}, M) \\;\\mapsto\\; \\big(\\text{PC} + 1,\\; (\\text{ACC} + M[d]) \\bmod 256,\\; M\\big)' },
             { type: 'p', text: 'Traza del programa «cuenta atrás» con $M[20] = 3$ y $M[21] = 1$ (los saltos cambian el PC):' },
             { type: 'table', head: ['Paso', 'PC', 'Instrucción', 'ACC después', 'Salida'], mono: [1, 2, 3, 4], rows: [
               ['1', '0', 'LOAD 20', '3', ''], ['2', '1', 'OUT', '3', '3'], ['3', '2', 'SUB 21', '2', ''], ['4', '3', 'JZ 5', '2', '(no salta)'], ['5', '4', 'JMP 1', '2', ''],

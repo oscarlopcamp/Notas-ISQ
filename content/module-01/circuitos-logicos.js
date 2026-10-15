@@ -88,31 +88,31 @@ export default {
     },
 
     matematico: {
-      intro: 'Derivación formal del sumador completo, prueba de que la suma de productos funciona y análisis del retardo.',
+      intro: 'Aquí ponemos números a las ideas del nivel 1. Cada sección empieza con la idea en pocas palabras y un ejemplo; las demostraciones están en «Para profundizar», por si te interesan. Basta con aritmética.',
       sections: [
         {
           id: 'derivacion',
-          title: 'Derivar el sumador completo',
+          title: 'Derivar el sumador completo', key: 'Al sumar tres bits, la cifra es 1 si hay un número impar de unos, y el acarreo es 1 si hay dos o más.',
           blocks: [
-            { type: 'p', text: 'La especificación es $A + B + C_{in} = 2\\,C_{out} + S$, con sumas aritméticas. $S$ vale 1 cuando la suma es impar (1 o 3) y $C_{out}$, cuando es al menos 2:' },
+            { deep: true, type: 'p', text: 'La especificación es $A + B + C_{in} = 2\\,C_{out} + S$, con sumas aritméticas. $S$ vale 1 cuando la suma es impar (1 o 3) y $C_{out}$, cuando es al menos 2:' },
             { type: 'table', head: ['$A$', '$B$', '$C_{in}$', 'suma', '$C_{out}$', '$S$'], mono: [0, 1, 2, 3, 4, 5], rows: [
               ['0', '0', '0', '0', '0', '0'], ['0', '0', '1', '1', '0', '1'], ['0', '1', '0', '1', '0', '1'], ['0', '1', '1', '2', '1', '0'],
               ['1', '0', '0', '1', '0', '1'], ['1', '0', '1', '2', '1', '0'], ['1', '1', '0', '2', '1', '0'], ['1', '1', '1', '3', '1', '1'],
             ] },
-            { type: 'steps', items: [
+            { deep: true, type: 'steps', items: [
               { text: '«Impar número de unos» es la paridad, que es XOR encadenado (lección 1.5):', tex: 'S = A \\oplus B \\oplus C_{in}' },
               { text: '$C_{out}$ es la función mayoría. Su suma de productos canónica es:', tex: 'C_{out} = \\lnot A B C_{in} + A \\lnot B C_{in} + A B \\lnot C_{in} + A B C_{in}' },
               { text: 'Agrupando los dos últimos términos ($C_{in}$ no importa) y los dos primeros (son $C_{in}\\cdot(A \\oplus B)$):', tex: 'C_{out} = A\\cdot B + C_{in}\\cdot(A \\oplus B)' },
             ] },
-            { type: 'p', text: 'Esta forma reutiliza la compuerta $A \\oplus B$ que ya necesitamos para $S$, y por eso el circuito tiene solo 5 compuertas.' },
+            { deep: true, type: 'p', text: 'Esta forma reutiliza la compuerta $A \\oplus B$ que ya necesitamos para $S$, y por eso el circuito tiene solo 5 compuertas.' },
           ],
         },
         {
           id: 'universalidad-sop',
-          title: 'Por qué la suma de productos siempre funciona',
+          title: 'Por qué la suma de productos siempre funciona', key: 'Un término AND por cada fila de la tabla que vale 1, todos unidos con OR: así cualquier tabla se convierte en un circuito.',
           blocks: [
-            { type: 'p', text: 'Para cada combinación $m = (m_1, \\dots, m_n)$ definimos el <em>minitérmino</em> $P_m = \\ell_1 \\cdot \\ell_2 \\cdots \\ell_n$, con $\\ell_i = x_i$ si $m_i = 1$ y $\\ell_i = \\lnot x_i$ si $m_i = 0$.' },
-            { type: 'steps', items: [
+            { deep: true, type: 'p', text: 'Para cada combinación $m = (m_1, \\dots, m_n)$ definimos el <em>minitérmino</em> $P_m = \\ell_1 \\cdot \\ell_2 \\cdots \\ell_n$, con $\\ell_i = x_i$ si $m_i = 1$ y $\\ell_i = \\lnot x_i$ si $m_i = 0$.' },
+            { deep: true, type: 'steps', items: [
               { text: '$P_m(x) = 1$ si y solo si todos sus literales valen 1, es decir, si $x = m$.' },
               { text: 'Definimos', tex: 'F(x) = \\sum_{m \\,:\\, f(m) = 1} P_m(x) \\quad (\\text{OR de minitérminos})' },
               { text: 'Si $f(x) = 1$, el minitérmino $P_x$ está en la suma y vale 1, así que $F(x) = 1$. Si $f(x) = 0$, ningún minitérmino de la suma coincide con $x$ y todos valen 0, así que $F(x) = 0$. Por tanto, $F = f$. ∎' },
@@ -121,11 +121,11 @@ export default {
         },
         {
           id: 'retardo',
-          title: 'El coste del acarreo en cadena',
+          title: 'El coste del acarreo en cadena', key: 'En el sumador en cadena, el acarreo pasa por los bloques uno tras otro: cuantos más bits, más tarda.',
           blocks: [
-            { type: 'p', text: 'Si cada sumador completo tarda $t$ en producir su acarreo, el sumador de $n$ bits en cadena tarda en el peor caso:' },
-            { type: 'math', tex: 'T_{\\text{ripple}}(n) \\approx n \\cdot t = O(n)' },
-            { type: 'p', text: 'El peor caso es un acarreo que recorre todas las posiciones, como en $0111\\ldots1 + 0000\\ldots1$. Los sumadores con anticipación de acarreo reducen el retardo a un crecimiento logarítmico en $n$, a cambio de más compuertas [@harris2013]. Es nuestro primer encuentro con el análisis de complejidad, que formalizaremos en la lección 1.11.' },
+            { deep: true, type: 'p', text: 'Si cada sumador completo tarda $t$ en producir su acarreo, el sumador de $n$ bits en cadena tarda en el peor caso:' },
+            { deep: true, type: 'math', tex: 'T_{\\text{ripple}}(n) \\approx n \\cdot t = O(n)' },
+            { deep: true, type: 'p', text: 'El peor caso es un acarreo que recorre todas las posiciones, como en $0111\\ldots1 + 0000\\ldots1$. Los sumadores con anticipación de acarreo reducen el retardo a un crecimiento logarítmico en $n$, a cambio de más compuertas [@harris2013]. Es nuestro primer encuentro con el análisis de complejidad, que formalizaremos en la lección 1.11.' },
           ],
         },
       ],

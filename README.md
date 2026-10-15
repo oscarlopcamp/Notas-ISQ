@@ -13,7 +13,7 @@ Combina libro de texto, curso autodidacta, laboratorio de simulaciones, glosario
 |---|---|---|
 | 1 | Arquitectura, interfaz, navegación, modelo de contenido, referencias y lección 1.1 completa | **Terminada** |
 | 2 | Módulo 1 completo (fundamentos clásicos): 11 lecciones, 32 simuladores | **Terminada** |
-| 3 | Módulos 2 y 3 (introducción y fundamentos conceptuales cuánticos) | En curso: lecciones 2.1 y 2.2 publicadas |
+| 3 | Módulos 2 y 3 (introducción y fundamentos conceptuales cuánticos) | En curso: Módulo 2 completo (6 lecciones, 13 simuladores); Módulo 3 pendiente |
 | 4 | Módulo 4 (matemáticas) | Pendiente |
 | 5 | Módulo 5 (Python y Qiskit) y tutoriales | Pendiente |
 | 6 | Módulos 6 y 7 (protocolos; Grover y Shor) | Pendiente |
@@ -21,7 +21,7 @@ Combina libro de texto, curso autodidacta, laboratorio de simulaciones, glosario
 | 8 | Módulo 9 (ciberseguridad cuántica) | Pendiente |
 | 9 | Revisión integral | Pendiente |
 
-El índice muestra el programa completo (9 módulos, 102 lecciones). El Módulo 1 (11 lecciones) está publicado completo, y del Módulo 2, la unidad «Qué es y de dónde viene» (lecciones 2.1 y 2.2). Las demás lecciones aparecen como «pendiente» con los temas que cubrirán, sin contenido provisional.
+El índice muestra el programa completo (9 módulos, 102 lecciones). El Módulo 1 (11 lecciones) está publicado completo, y también el Módulo 2 (6 lecciones): «Qué es y de dónde viene», «Motivaciones y límites» y «El sistema de cómputo». Las demás lecciones aparecen como «pendiente» con los temas que cubrirán, sin contenido provisional.
 
 ## Código editable y ejecutable
 

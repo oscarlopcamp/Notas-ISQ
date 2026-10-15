@@ -13,9 +13,9 @@ export default {
 
   context: {
     learn: 'Cómo se representan los enteros con un ancho fijo de bits, cómo se suman, cómo se codifican los negativos (complemento a dos) y los números reales (punto flotante IEEE 754), y qué consecuencias tiene: desbordamiento y error de redondeo.',
-    why: 'Muchos fallos reales de software nacen aquí. Además, los simuladores cuánticos guardan las amplitudes de probabilidad como números de punto flotante, de modo que entender el redondeo es imprescindible para interpretar y probar resultados cuánticos.',
+    why: 'Muchos fallos reales de software nacen aquí. Además, cuando más adelante simulemos computadoras cuánticas en una computadora normal, todo se calculará con números de punto flotante, y entender el redondeo será imprescindible para interpretar y probar los resultados.',
     previous: 'En [[>representacion-informacion|la lección 1.1]] vimos la notación posicional, la conversión decimal-binario por divisiones sucesivas y el hexadecimal. Aquí los damos por sabidos y vamos un paso más allá.',
-    next: 'La aritmética módulo $2^n$ reaparecerá en el algoritmo de Shor (Módulo 7). El punto flotante será la base de los números complejos del Módulo 4 y de las pruebas estadísticas del Módulo 8. En la unidad «Lógica digital» construiremos el sumador de esta lección con compuertas.',
+    next: 'La aritmética módulo $2^n$ y el punto flotante reaparecerán más adelante en el curso. En la unidad «Lógica digital» construiremos el sumador de esta lección con compuertas.',
   },
 
   objectives: [
@@ -136,18 +136,17 @@ export default {
         },
         {
           id: 'puente-cuantico',
-          title: 'Avance: los números dentro de un simulador cuántico',
+          title: 'Avance: por qué esto importará en computación cuántica',
           blocks: [
-            { type: 'p', text: 'Todo esto no es solo cultura general clásica. Cuando en el Módulo 5 simulemos circuitos cuánticos en una computadora clásica, el estado del sistema se guardará como una lista de números complejos, y cada número complejo, como dos números de punto flotante.' },
-            { type: 'p', text: 'Por ejemplo, el método «statevector» del simulador Qiskit Aer guarda el vector de estado completo y, por defecto, usa doble precisión [@aer-simulator-api]. Como veremos en el Módulo 3, un sistema de $n$ qubits se describe con $2^n$ amplitudes. Si cada una ocupa 16 bytes (dos binary64), la memoria necesaria crece así:' },
-            { type: 'table', head: ['Qubits', 'Amplitudes ($2^n$)', 'Memoria (16 bytes cada una)'], rows: [
+            { type: 'p', text: 'Todo esto no es solo cultura general clásica. Más adelante simularemos pequeñas computadoras cuánticas en una computadora normal, y una de las primeras sorpresas será cuánta memoria hace falta: cada [[qubit|qubit]] que se añade <b>duplica</b> la cantidad de números que hay que guardar. Esa duplicación es la misma de esta lección: $n$ bits dan $2^n$ combinaciones.' },
+            { type: 'table', head: ['Qubits simulados', 'Números que guardar ($2^n$)', 'Memoria (16 bytes cada uno)'], rows: [
               ['10', '1 024', '16 KiB'],
               ['20', '≈ 10⁶', '16 MiB'],
               ['30', '≈ 10⁹', '16 GiB'],
               ['40', '≈ 10¹²', '16 TiB'],
               ['50', '≈ 10¹⁵', '16 PiB'],
-            ], caption: 'Memoria de un vector de estado completo en doble precisión. Es aritmética directa: $2^n \\times 16$ bytes.' },
-            { type: 'callout', kind: 'preview', status: 'establecido', title: 'Dos ideas que retomaremos', text: 'Primero, esta tabla mide el coste de <em>simular</em> qubits con una computadora clásica guardando el vector completo. No describe cuánta información se puede leer de un sistema cuántico (ver el avance de la lección 1.1). Además, existen otros métodos de simulación, como «stabilizer» o «matrix_product_state», que para ciertos circuitos necesitan mucha menos memoria [@aer-simulator-api]. Segundo, como las amplitudes son números de punto flotante, las probabilidades calculadas por un simulador tendrán errores de redondeo. Las pruebas de software cuántico deben comparar con tolerancia, nunca con <code>==</code>. Lo verás en el nivel 3 con un número que aparecerá a menudo en el Módulo 3: $1/\\sqrt{2}$.' },
+            ], caption: 'Es aritmética directa: $2^n \\times 16$ bytes. Por qué hacen falta esos números se explica en los módulos 2 y 3.' },
+            { type: 'callout', kind: 'preview', title: 'Lo que retomaremos', text: 'Esos números son de punto flotante, así que los resultados de un simulador tendrán pequeños errores de redondeo, y las pruebas deberán comparar con tolerancia, nunca con <code>==</code>. Lo verás en el nivel 3 con un número que aparecerá a menudo: $1/\\sqrt{2}$.' },
           ],
         },
       ],
@@ -155,14 +154,14 @@ export default {
 
     // =====================================================================
     matematico: {
-      intro: 'Formalizamos ahora los rangos, la aritmética módulo $2^n$, el complemento a dos, las fracciones binarias y el formato IEEE 754. Cada resultado se acompaña de un ejemplo calculado paso a paso.',
+      intro: 'Aquí ponemos números a las ideas del nivel 1. Cada sección empieza con la idea en pocas palabras y un ejemplo; las demostraciones están en «Para profundizar», por si te interesan. Basta con aritmética.',
       sections: [
         {
           id: 'rango',
-          title: 'Rango de los enteros de n bits',
+          title: 'Rango de los enteros de n bits', key: 'Con n bits sin signo se cuenta de 0 a 2ⁿ − 1: con 8 bits, de 0 a 255.',
           blocks: [
-            { type: 'p', text: 'El mayor entero sin signo de $n$ bits es el patrón con todos los bits a 1. Su valor es una suma geométrica:' },
-            { type: 'steps', items: [
+            { deep: true, type: 'p', text: 'El mayor entero sin signo de $n$ bits es el patrón con todos los bits a 1. Su valor es una suma geométrica:' },
+            { deep: true, type: 'steps', items: [
               { text: 'Todos los bits valen 1:', tex: 'N_{\\max} = \\sum_{i=0}^{n-1} 2^i = 1 + 2 + 4 + \\cdots + 2^{n-1}' },
               { text: 'Multiplicamos por 2, lo que desplaza cada término una posición:', tex: '2N_{\\max} = 2 + 4 + \\cdots + 2^{n-1} + 2^{n}' },
               { text: 'Restamos ambas expresiones; todos los términos intermedios se cancelan:', tex: '2N_{\\max} - N_{\\max} = 2^n - 1' },
@@ -173,43 +172,44 @@ export default {
         },
         {
           id: 'aritmetica-modular',
-          title: 'Suma binaria y aritmética módulo 2ⁿ',
+          title: 'Suma binaria y aritmética módulo 2ⁿ', key: 'Se suma como en la escuela, columna a columna. Si el resultado no cabe, se pierde el último acarreo y el número «da la vuelta», como un reloj.',
           blocks: [
-            { type: 'p', text: 'Sean $a_i$ y $b_i$ los bits de la columna $i$ y $c_i$ el acarreo que entra en ella (con $c_0 = 0$). El bit del resultado y el acarreo siguiente son:' },
-            { type: 'math', tex: 's_i = (a_i + b_i + c_i) \\bmod 2, \\qquad c_{i+1} = \\left\\lfloor \\frac{a_i + b_i + c_i}{2} \\right\\rfloor', note: '$x \\bmod 2$ es el resto de dividir entre 2; $\\lfloor x \\rfloor$ es la parte entera por abajo.' },
+            { deep: true, type: 'p', text: 'Sean $a_i$ y $b_i$ los bits de la columna $i$ y $c_i$ el acarreo que entra en ella (con $c_0 = 0$). El bit del resultado y el acarreo siguiente son:' },
+            { deep: true, type: 'math', tex: 's_i = (a_i + b_i + c_i) \\bmod 2, \\qquad c_{i+1} = \\left\\lfloor \\frac{a_i + b_i + c_i}{2} \\right\\rfloor', note: '$x \\bmod 2$ es el resto de dividir entre 2; $\\lfloor x \\rfloor$ es la parte entera por abajo.' },
             { type: 'p', text: 'Calculemos $6 + 7$ con 4 bits, $0110_2 + 0111_2$:' },
-            { type: 'table', head: ['Columna $i$', '3', '2', '1', '0'], mono: [1, 2, 3, 4], rows: [
-              ['Acarreo $c_i$', '1', '1', '0', '0'],
-              ['$a_i$ (6)', '0', '1', '1', '0'],
-              ['$b_i$ (7)', '0', '1', '1', '1'],
-              ['$a_i + b_i + c_i$', '1', '3', '2', '1'],
-              ['$s_i$', '<b>1</b>', '<b>1</b>', '<b>0</b>', '<b>1</b>'],
+            { type: 'table', head: ['Columna (peso)', '8', '4', '2', '1'], mono: [1, 2, 3, 4], rows: [
+              ['Acarreo que llega', '1', '1', '0', '0'],
+              ['A = 6', '0', '1', '1', '0'],
+              ['B = 7', '0', '1', '1', '1'],
+              ['Suma de la columna', '1', '3', '2', '1'],
+              ['Se escribe', '<b>1</b>', '<b>1</b>', '<b>0</b>', '<b>1</b>'],
             ], caption: 'Se lee de derecha a izquierda. El acarreo de cada columna se calcula con la columna anterior. Resultado: $1101_2 = 13$, sin acarreo final.' },
-            { type: 'p', text: 'Como solo se conservan $n$ bits, el resultado almacenado es la suma <em>módulo $2^n$</em>, el resto de dividir entre $2^n$:' },
-            { type: 'math', tex: '\\text{resultado} = (A + B) \\bmod 2^n' },
-            { type: 'p', text: 'Ejemplo con desbordamiento: $12 + 5 = 17$, y $17 \\bmod 16 = 1$. El acarreo final ($c_4 = 1$) es exactamente el «16» que se pierde. Esta aritmética se llama <em>aritmética modular</em>, y es la de un reloj: 10 horas después de las 9 son las 7, porque $19 \\bmod 12 = 7$. La reencontraremos en el algoritmo de Shor.' },
+            { deep: true, type: 'p', text: 'Como solo se conservan $n$ bits, el resultado almacenado es la suma <em>módulo $2^n$</em>, el resto de dividir entre $2^n$:' },
+            { deep: true, type: 'math', tex: '\\text{resultado} = (A + B) \\bmod 2^n' },
+            { type: 'p', text: 'Ejemplo con desbordamiento: $12 + 5 = 17$, y $17 \\bmod 16 = 1$. El acarreo final es exactamente el «16» que se pierde. Esta aritmética se llama <em>aritmética modular</em>, y es la de un reloj: 10 horas después de las 9 son las 7, porque $19 \\bmod 12 = 7$. La reencontraremos en el algoritmo de Shor.' },
           ],
         },
         {
           id: 'complemento-definicion',
-          title: 'Complemento a dos: definición y rango',
+          title: 'Complemento a dos: definición y rango', key: 'En complemento a dos, el primer bit resta en lugar de sumar: con 8 bits vale −128. Así, 11111011 = −128 + 123 = −5.',
           blocks: [
-            { type: 'p', text: 'En complemento a dos, el bit más significativo tiene peso <em>negativo</em>. Todo lo demás es igual que en la notación posicional sin signo:' },
-            { type: 'math', tex: 'N = -b_{n-1}\\, 2^{n-1} + \\sum_{i=0}^{n-2} b_i\\, 2^i', note: 'Si $b_{n-1} = 0$, el número coincide con su lectura sin signo. Si $b_{n-1} = 1$, se resta $2^{n-1}$ y el resultado es negativo.' },
+            { deep: true, type: 'p', text: 'En complemento a dos, el bit más significativo tiene peso <em>negativo</em>. Todo lo demás es igual que en la notación posicional sin signo:' },
+            { deep: true, type: 'math', tex: 'N = -b_{n-1}\\, 2^{n-1} + \\sum_{i=0}^{n-2} b_i\\, 2^i', note: 'Si $b_{n-1} = 0$, el número coincide con su lectura sin signo. Si $b_{n-1} = 1$, se resta $2^{n-1}$ y el resultado es negativo.' },
             { type: 'p', text: 'Ejemplo con $n = 8$: $11111011_2$.' },
             { type: 'math', tex: '11111011_2 = -128 + 64 + 32 + 16 + 8 + 0 + 2 + 1 = -128 + 123 = -5' },
-            { type: 'p', text: 'El menor valor tiene solo el bit de signo a 1: $-2^{n-1}$. El mayor tiene todos los demás a 1: $2^{n-1} - 1$. Con 8 bits, de −128 a 127. El rango es <em>asimétrico</em>: hay un negativo más que positivos, porque el cero ocupa uno de los patrones que empiezan por 0.' },
-            { type: 'math', tex: '-2^{n-1} \\le N \\le 2^{n-1} - 1' },
-            { type: 'p', text: 'Hay otra forma equivalente de verlo que conecta con la rueda. Un patrón con $b_{n-1} = 1$ tiene valor sin signo $U$ y valor con signo $U - 2^n$. Ambos coinciden módulo $2^n$, y por eso el mismo sumador sirve para las dos interpretaciones.' },
-            { type: 'math', tex: 'N_{\\text{con signo}} = \\begin{cases} U & \\text{si } U < 2^{n-1} \\\\ U - 2^n & \\text{si } U \\ge 2^{n-1} \\end{cases}' },
+            { type: 'p', text: 'Con 8 bits, el rango va de −128 (<code>10000000</code>) a 127 (<code>01111111</code>). Hay un negativo más que positivos, porque el cero ocupa uno de los patrones que empiezan por 0.' },
+            { deep: true, type: 'p', text: 'En general, con $n$ bits, el menor valor tiene solo el bit de signo a 1, $-2^{n-1}$, y el mayor tiene todos los demás a 1, $2^{n-1} - 1$:' },
+            { deep: true, type: 'math', tex: '-2^{n-1} \\le N \\le 2^{n-1} - 1' },
+            { deep: true, type: 'p', text: 'Hay otra forma equivalente de verlo que conecta con la rueda. Un patrón con $b_{n-1} = 1$ tiene valor sin signo $U$ y valor con signo $U - 2^n$. Ambos coinciden módulo $2^n$, y por eso el mismo sumador sirve para las dos interpretaciones.' },
+            { deep: true, type: 'math', tex: 'N_{\\text{con signo}} = \\begin{cases} U & \\text{si } U < 2^{n-1} \\\\ U - 2^n & \\text{si } U \\ge 2^{n-1} \\end{cases}' },
           ],
         },
         {
           id: 'negacion',
-          title: 'Por qué «invertir y sumar 1» niega un número',
+          title: 'Por qué «invertir y sumar 1» niega un número', key: 'Para cambiar el signo de un número: invierte todos sus bits y suma 1.',
           blocks: [
-            { type: 'p', text: 'Llamemos $\\bar{x}$ al patrón $x$ con todos sus bits invertidos. Demostremos que $\\bar{x} + 1$ representa $-x$:' },
-            { type: 'steps', items: [
+            { deep: true, type: 'p', text: 'Llamemos $\\bar{x}$ al patrón $x$ con todos sus bits invertidos. Demostremos que $\\bar{x} + 1$ representa $-x$:' },
+            { deep: true, type: 'steps', items: [
               { text: 'En cada posición, exactamente uno de los dos bits ($x_i$ o $\\bar{x}_i$) es 1, así que su suma no produce acarreos y da todo unos:', tex: 'x + \\bar{x} = \\underbrace{11\\cdots1}_{n} = 2^n - 1' },
               { text: 'Despejamos y sumamos 1 a ambos lados:', tex: '\\bar{x} + 1 = 2^n - x' },
               { text: 'Trabajando módulo $2^n$, sumar $2^n$ no cambia nada (es una vuelta completa a la rueda):', tex: '2^n - x \\equiv -x \\pmod{2^n}' },
@@ -227,7 +227,7 @@ export default {
         },
         {
           id: 'desbordamiento-signo',
-          title: 'Detectar el desbordamiento con signo',
+          title: 'Detectar el desbordamiento con signo', key: 'Con signo, hay desbordamiento cuando dos números del mismo signo dan un resultado de signo contrario: 127 + 1 = −128.',
           blocks: [
             { type: 'p', text: 'Sin signo, el desbordamiento se reconoce por el acarreo final: $c_n = 1$. Con signo, el acarreo final no indica nada por sí solo (en $-5 + 6$ hay acarreo final y el resultado, 1, es correcto). La regla es otra [@bryant2016, §2.3]:' },
             { type: 'callout', kind: 'note', status: 'establecido', title: 'Regla del desbordamiento en complemento a dos', text: 'Hay desbordamiento si y solo si los dos sumandos tienen el mismo signo y el resultado tiene el signo contrario. Equivalentemente, si el acarreo que <em>entra</em> en el bit de signo ($c_{n-1}$) es distinto del que <em>sale</em> ($c_n$).' },
@@ -237,7 +237,7 @@ export default {
         },
         {
           id: 'fracciones-formal',
-          title: 'Fracciones binarias: cuándo son finitas',
+          title: 'Fracciones binarias: cuándo son finitas', key: 'Una fracción tiene un número finito de cifras binarias solo si su denominador (simplificado) es una potencia de 2: ½, ¼, ⅛… Por eso 0,1 = 1/10 no se puede guardar exactamente.',
           blocks: [
             { type: 'p', text: 'Una fracción binaria $0{,}d_1 d_2 d_3 \\ldots$ vale $\\sum_{k \\ge 1} d_k\\, 2^{-k}$. Para convertir $x \\in [0, 1)$ se multiplica por 2: la parte entera de $2x$ es $d_1$, y se repite con la parte fraccionaria. Ejemplo con 0,625:' },
             { type: 'table', head: ['Paso', 'Cálculo', 'Cifra', 'Resto'], mono: [2], rows: [
@@ -247,18 +247,18 @@ export default {
             ], caption: 'El proceso termina al llegar a resto 0: $0{,}625 = 0{,}101_2$. Comprobación: $\\tfrac12 + \\tfrac18 = 0{,}625$.' },
             { type: 'p', text: '¿Cuándo termina el proceso? Si $x = p/q$ es una fracción irreducible, se cumple un criterio sencillo:' },
             { type: 'callout', kind: 'note', status: 'establecido', title: 'Criterio', text: '$p/q$ (irreducible) tiene una expansión binaria finita si y solo si $q$ es una potencia de 2.' },
-            { type: 'steps', items: [
+            { deep: true, type: 'steps', items: [
               { text: 'Si la expansión tiene $m$ cifras, entonces $x = \\sum_{k=1}^{m} d_k 2^{-k}$, y multiplicando por $2^m$ se obtiene un entero:', tex: 'x = \\frac{\\text{entero}}{2^m}' },
               { text: 'Al simplificar esa fracción, el denominador solo puede contener el factor primo 2. Recíprocamente, $p/2^m$ se escribe con $m$ cifras binarias.' },
               { text: 'Para 0,1:', tex: '0{,}1 = \\frac{1}{10} = \\frac{1}{2 \\cdot 5}' },
               { text: 'El factor 5 impide que la expansión termine. Como solo hay finitos restos posibles (menores que $q$), alguno se repite y la expansión es periódica:', tex: '0{,}1 = 0{,}0\\overline{0011}_2' },
             ] },
-            { type: 'p', text: 'El mismo criterio en base 10 dice que $p/q$ es finito si $q$ solo tiene los factores 2 y 5. Por eso $\\tfrac{1}{3}$ es infinito en decimal, mientras que $\\tfrac{1}{10}$ es finito en decimal pero infinito en binario.' },
+            { deep: true, type: 'p', text: 'El mismo criterio en base 10 dice que $p/q$ es finito si $q$ solo tiene los factores 2 y 5. Por eso $\\tfrac{1}{3}$ es infinito en decimal, mientras que $\\tfrac{1}{10}$ es finito en decimal pero infinito en binario.' },
           ],
         },
         {
           id: 'ieee754',
-          title: 'IEEE 754: formato, valor y casos especiales',
+          title: 'IEEE 754: formato, valor y casos especiales', key: 'Un número de punto flotante guarda signo, exponente y cifras significativas, como la notación científica pero en base 2. Como las cifras son limitadas (23 en float, 52 en double), muchos números se redondean.',
           blocks: [
             { type: 'p', text: 'Un número normal de IEEE 754 con bit de signo $s$, exponente almacenado $E$ y fracción $f$ (las cifras tras la coma) vale [@ieee754; @goldberg1991]:' },
             { type: 'math', tex: 'x = (-1)^{s} \\times 1{,}f_2 \\times 2^{E - \\text{sesgo}}', note: 'El «1,» inicial no se almacena, porque en un número normalizado siempre vale 1: es un bit gratis de precisión. El <em>sesgo</em> permite guardar exponentes negativos como enteros sin signo.' },
@@ -266,24 +266,24 @@ export default {
               ['binary32', '1', '8', '23', '127', '24 bits ≈ 7 cifras decimales', '$3{,}4 \\times 10^{38}$'],
               ['binary64', '1', '11', '52', '1023', '53 bits ≈ 16 cifras decimales', '$1{,}8 \\times 10^{308}$'],
             ] },
-            { type: 'h', text: 'Ejemplo 1: codificar −2,5 en binary32' },
-            { type: 'steps', items: [
+            { deep: true, type: 'h', text: 'Ejemplo 1: codificar −2,5 en binary32' },
+            { deep: true, type: 'steps', items: [
               { text: 'Signo negativo:', tex: 's = 1' },
               { text: 'Pasamos 2,5 a binario y normalizamos (coma tras el primer 1):', tex: '2{,}5 = 10{,}1_2 = 1{,}01_2 \\times 2^{1}' },
               { text: 'Exponente almacenado:', tex: 'E = 1 + 127 = 128 = 10000000_2' },
               { text: 'Fracción (lo que va tras «1,», completado con ceros hasta 23 bits):', tex: 'f = 0100\\,0000\\,0000\\,0000\\,0000\\,000' },
               { text: 'Juntamos los campos y agrupamos de 4 en 4 para el hexadecimal:', tex: '1\\,10000000\\,0100\\ldots0 = \\texttt{C0200000}_{16}' },
             ] },
-            { type: 'h', text: 'Ejemplo 2: por qué 0,1 no se guarda exactamente' },
-            { type: 'steps', items: [
+            { deep: true, type: 'h', text: 'Ejemplo 2: por qué 0,1 no se guarda exactamente' },
+            { deep: true, type: 'steps', items: [
               { text: 'Expansión binaria (sección anterior) y normalización:', tex: '0{,}1 = 0{,}0\\overline{0011}_2 = 1{,}\\overline{1001}_2 \\times 2^{-4}' },
               { text: 'Exponente almacenado:', tex: 'E = -4 + 127 = 123 = 01111011_2' },
               { text: 'Solo caben 23 bits de fracción. Los siguientes bits son «1100…», más de la mitad de una unidad en la última posición, así que se redondea hacia arriba:', tex: '\\underbrace{10011001100110011001100}_{23 \\text{ bits}}\\,|\\,1100\\ldots \\;\\to\\; 10011001100110011001101' },
               { text: 'Patrón resultante:', tex: '0\\,01111011\\,10011001100110011001101 = \\texttt{3DCCCCCD}_{16}' },
               { text: 'Valor exacto almacenado (ligeramente mayor que 0,1, por haber redondeado hacia arriba):', tex: '0{,}100000001490116119384765625' },
             ] },
-            { type: 'h', text: 'Valores especiales' },
-            { type: 'table', head: ['Exponente almacenado', 'Fracción', 'Significado'], rows: [
+            { deep: true, type: 'h', text: 'Valores especiales' },
+            { deep: true, type: 'table', head: ['Exponente almacenado', 'Fracción', 'Significado'], rows: [
               ['todo ceros', '0', '$\\pm 0$'],
               ['todo ceros', '≠ 0', 'Subnormal: $(-1)^s \\times 0{,}f \\times 2^{1-\\text{sesgo}}$'],
               ['ni todo ceros ni todo unos', 'cualquiera', 'Normal: $(-1)^s \\times 1{,}f \\times 2^{E-\\text{sesgo}}$'],
@@ -294,11 +294,11 @@ export default {
         },
         {
           id: 'precision',
-          title: 'Precisión, unidad de redondeo y comparación con tolerancia',
+          title: 'Precisión, unidad de redondeo y comparación con tolerancia', key: 'Un float acierta unas 7 cifras y un double unas 16. Por eso los decimales se comparan con tolerancia (math.isclose), nunca con ==.',
           blocks: [
-            { type: 'p', text: 'Con redondeo al más cercano, el valor almacenado de un real $x$ (dentro del rango normal) cumple [@higham2002]:' },
-            { type: 'math', tex: '\\mathrm{fl}(x) = x\\,(1 + \\delta), \\qquad |\\delta| \\le u = 2^{-p}', note: '$p$ es la precisión en bits: $u = 2^{-24} \\approx 6 \\times 10^{-8}$ en binary32 y $u = 2^{-53} \\approx 1{,}1 \\times 10^{-16}$ en binary64. $u$ se llama <em>unidad de redondeo</em>.' },
-            { type: 'p', text: 'Es decir, el error <em>relativo</em> está acotado, pero el absoluto crece con el tamaño del número. Dos consecuencias importantes:' },
+            { deep: true, type: 'p', text: 'Con redondeo al más cercano, el valor almacenado de un real $x$ (dentro del rango normal) cumple [@higham2002]:' },
+            { deep: true, type: 'math', tex: '\\mathrm{fl}(x) = x\\,(1 + \\delta), \\qquad |\\delta| \\le u = 2^{-p}', note: '$p$ es la precisión en bits: $u = 2^{-24} \\approx 6 \\times 10^{-8}$ en binary32 y $u = 2^{-53} \\approx 1{,}1 \\times 10^{-16}$ en binary64. $u$ se llama <em>unidad de redondeo</em>.' },
+            { deep: true, type: 'p', text: 'Es decir, el error <em>relativo</em> está acotado, pero el absoluto crece con el tamaño del número. Dos consecuencias importantes:' },
             { type: 'list', items: [
               'Los enteros son exactos solo hasta $2^{p}$: $2^{24} = 16\\,777\\,216$ en binary32 y $2^{53} = 9\\,007\\,199\\,254\\,740\\,992$ en binary64. Por encima, el hueco entre valores consecutivos es mayor que 1.',
               'Cada operación introduce un nuevo error de hasta $u$, y los errores se acumulan. Por eso dos cálculos matemáticamente equivalentes pueden dar resultados que difieren en las últimas cifras.',
@@ -322,12 +322,12 @@ export default {
 print(255 + 1)
 
 
-def suma_8_bits(a: int, b: int) -> int:
-    return (a + b) & 0xFF  # conserva solo los 8 bits menos significativos
+def suma_8_bits(a, b):
+    return (a + b) % 256  # un registro de 8 bits solo guarda el resto módulo 2^8
 
 
-def con_signo(patron: int, n: int = 8) -> int:
-    return patron - (1 << n) if patron & (1 << (n - 1)) else patron
+def con_signo(patron):
+    return patron - 256 if patron >= 128 else patron  # complemento a dos de 8 bits
 
 
 r = suma_8_bits(255, 1)
@@ -340,8 +340,8 @@ print(r, format(r, "08b"), con_signo(r))`,
 128 10000000 -128` },
             { type: 'list', items: [
               '<b>Líneas 1–2:</b> Python calcula $2^{100}$ exacto y $255 + 1 = 256$ sin desbordar: sus enteros crecen lo necesario.',
-              '<b><code>suma_8_bits</code>:</b> <code>&amp; 0xFF</code> aplica una máscara de 8 unos, es decir, calcula $(a + b) \\bmod 2^8$, que es lo que hace un registro de 8 bits.',
-              '<b><code>con_signo</code>:</b> implementa la fórmula del nivel 2. Si el bit $n-1$ está activo, resta $2^n$. <code>1 &lt;&lt; n</code> es $2^n$.',
+              '<b><code>suma_8_bits</code>:</b> <code>% 256</code> calcula $(a + b) \\bmod 2^8$, que es lo que hace un registro de 8 bits. En código real verás a menudo la forma equivalente <code>&amp; 0xFF</code> (una «máscara» de 8 unos).',
+              '<b><code>con_signo</code>:</b> implementa la fórmula del nivel 2 para 8 bits: los patrones de 128 en adelante (bit de signo a 1) representan el valor menos 256.',
               '<b>Resultado:</b> $255 + 1 = 0$ sin signo y $127 + 1 = -128$ con signo, como en la rueda y el sumador.',
             ] },
           ],
@@ -379,9 +379,9 @@ OverflowError: int too big to convert` },
 EPOCA = datetime(1970, 1, 1, tzinfo=timezone.utc)
 
 
-def a_int32(x: int) -> int:
-    x &= 0xFFFFFFFF
-    return x - 2**32 if x >= 2**31 else x
+def a_int32(x):
+    x = x % 2**32  # se queda con 32 bits
+    return x - 2**32 if x >= 2**31 else x  # y los lee en complemento a dos
 
 
 maximo = 2**31 - 1
@@ -429,23 +429,23 @@ True` },
         },
         {
           id: 'python-tolerancia',
-          title: 'Comparar con tolerancia: un adelanto cuántico',
+          title: 'Comparar con tolerancia',
           blocks: [
-            { type: 'p', text: 'En el Módulo 3 veremos estados cuánticos en los que dos resultados de medición tienen la misma probabilidad. Sus amplitudes valen $1/\\sqrt{2}$, y las probabilidades se obtienen elevándolas al cuadrado. Matemáticamente, $(1/\\sqrt{2})^2 = 1/2$ y las dos probabilidades suman exactamente 1. Veamos qué calcula la computadora:' },
+            { type: 'p', text: 'El número $1/\\sqrt{2}$ aparecerá a menudo en computación cuántica: al elevarlo al cuadrado da una probabilidad de $1/2$, y dos mitades suman exactamente 1. Matemáticamente, claro. Veamos qué calcula la computadora:' },
             { type: 'code', lang: 'python', file: 'tolerancia.py', code: `import math
 
-amplitud = 1 / math.sqrt(2)
-probabilidad = amplitud**2
-print(probabilidad)
-print(probabilidad + probabilidad)
-print(probabilidad + probabilidad == 1.0)
-print(math.isclose(probabilidad + probabilidad, 1.0, rel_tol=1e-9))`,
+x = 1 / math.sqrt(2)
+mitad = x**2
+print(mitad)
+print(mitad + mitad)
+print(mitad + mitad == 1.0)
+print(math.isclose(mitad + mitad, 1.0, rel_tol=1e-9))`,
             output: `0.4999999999999999
 0.9999999999999998
 False
 True` },
-            { type: 'p', text: '$\\sqrt{2}$ es irracional y no se puede representar exactamente, así que $1/\\sqrt{2}$ ya lleva un error de redondeo. Al elevarlo al cuadrado sale $0{,}4999999999999999$, y las «probabilidades» suman $0{,}9999999999999998$. Una prueba automática escrita como <code>assert total == 1.0</code> fallaría aunque el programa sea correcto. Escrita con <code>math.isclose</code>, pasa.' },
-            { type: 'callout', kind: 'preview', title: 'Para el Módulo 8', text: 'Probar software cuántico añade una dificultad más: los resultados medidos en un dispositivo real o en un simulador con muestreo son <em>estadísticos</em>, no solo redondeados. Ahí la tolerancia dependerá del número de repeticiones del experimento. Lo estudiaremos en «Pruebas y testing estadístico».' },
+            { type: 'p', text: '$\\sqrt{2}$ es irracional y no se puede representar exactamente, así que $1/\\sqrt{2}$ ya lleva un error de redondeo. Al elevarlo al cuadrado sale $0{,}4999999999999999$, y las dos mitades suman $0{,}9999999999999998$. Una prueba automática escrita como <code>assert total == 1.0</code> fallaría aunque el programa sea correcto. Escrita con <code>math.isclose</code>, pasa.' },
+            { type: 'callout', kind: 'preview', title: 'Más adelante', text: 'Con programas cuánticos habrá una dificultad más: los resultados varían de una ejecución a otra, no solo por redondeo. Ahí la tolerancia dependerá de cuántas veces se repita el experimento.' },
           ],
         },
       ],
@@ -479,7 +479,7 @@ True` },
     { level: 'matematico', question: 'Convierte 0,375 a binario por multiplicaciones sucesivas. ¿Es finita su expansión? Justifícalo con el criterio del denominador.', answer: '$2 \\times 0{,}375 = 0{,}75 \\to 0$; $2 \\times 0{,}75 = 1{,}5 \\to 1$; $2 \\times 0{,}5 = 1{,}0 \\to 1$. Resultado: $0{,}011_2$. Es finita porque $0{,}375 = 3/8$ y $8 = 2^3$.' },
     { level: 'matematico', question: '¿Cuáles de estos números se representan exactamente en binary64: 0,75; 0,2; 0,5; 0,3?', answer: '0,75 = 3/4 y 0,5 = 1/2 sí (denominadores potencia de 2). 0,2 = 1/5 y 0,3 = 3/10 no (su denominador tiene el factor 5). Puedes verificarlo con el explorador IEEE 754: el error de redondeo será cero solo en los dos primeros.' },
     { level: 'matematico', question: 'Obtén el patrón binary32 de 0,15625 y escríbelo en hexadecimal.', answer: '$0{,}15625 = 5/32 = 0{,}00101_2 = 1{,}01_2 \\times 2^{-3}$. $s = 0$; $E = -3 + 127 = 124 = 01111100_2$; $f = 0100\\ldots0$. Patrón: $0\\,01111100\\,0100\\ldots0 = \\texttt{3E200000}_{16}$.' },
-    { level: 'implementar', question: 'Escribe una función <code>desborda_8_bits(a, b)</code> que, para dos enteros en $[-128, 127]$, indique si su suma desborda en complemento a dos de 8 bits, usando la regla de los signos. Pruébala con todas las parejas posibles.', answer: '<pre><code>def con_signo(p):\n    return p - 256 if p &amp; 0x80 else p\n\ndef desborda_8_bits(a, b):\n    r = con_signo((a + b) &amp; 0xFF)\n    return (a &lt; 0) == (b &lt; 0) and (r &lt; 0) != (a &lt; 0)\n\nassert all(desborda_8_bits(a, b) == (not (-128 &lt;= a + b &lt;= 127))\n           for a in range(-128, 128) for b in range(-128, 128))</code></pre>La prueba final compara la regla con la definición (el resultado real está fuera de rango) para las 65 536 parejas.' },
+    { level: 'implementar', question: 'Escribe una función <code>desborda_8_bits(a, b)</code> que, para dos enteros en $[-128, 127]$, indique si su suma desborda en complemento a dos de 8 bits, usando la regla de los signos. Pruébala con todas las parejas posibles.', answer: '<pre><code>def con_signo(p):\n    return p - 256 if p &gt;= 128 else p\n\ndef desborda_8_bits(a, b):\n    r = con_signo((a + b) % 256)\n    return (a &lt; 0) == (b &lt; 0) and (r &lt; 0) != (a &lt; 0)\n\nassert all(desborda_8_bits(a, b) == (not (-128 &lt;= a + b &lt;= 127))\n           for a in range(-128, 128) for b in range(-128, 128))</code></pre>La prueba final compara la regla con la definición (el resultado real está fuera de rango) para las 65 536 parejas.' },
   ],
 
   references: [
@@ -493,7 +493,6 @@ True` },
     { key: 'python-stdtypes', use: 'Los enteros de Python tienen precisión ilimitada.' },
     { key: 'python-math', use: 'Definición de <code>math.isclose</code> y sus tolerancias por defecto.' },
     { key: 'cppreference-arith', use: 'El desbordamiento de enteros con signo es comportamiento indefinido en C y C++.' },
-    { key: 'aer-simulator-api', use: 'Método «statevector» con doble precisión por defecto y métodos alternativos de simulación.' },
   ],
 
   related: ['representacion-informacion', 'texto-ascii-unicode', 'compuertas-logicas', 'numeros-complejos', 'shor-periodo', 'pruebas-cuanticas'],

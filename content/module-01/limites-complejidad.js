@@ -86,11 +86,11 @@ export default {
           id: 'cuantica',
           title: '¿Qué podría aportar la computación cuántica?',
           blocks: [
-            { type: 'p', text: 'Con todo lo anterior podemos formular la pregunta con precisión. Existe una clase de complejidad para los problemas que una computadora cuántica resuelve eficientemente (con probabilidad de error acotada), llamada [[bqp|BQP]] [@bernstein1997]. Esto es lo que se sabe, y lo que no:' },
+            { type: 'p', text: 'Con todo lo anterior podemos formular la pregunta con precisión. Igual que P agrupa los problemas que una computadora clásica resuelve eficientemente, existe una clase para los que resolvería eficientemente una computadora cuántica (aceptando una pequeña probabilidad de error). Se llama [[bqp|BQP]] [@bernstein1997]. Todavía no necesitas saber cómo funciona una computadora cuántica para entender lo que se sabe de esta clase:' },
             { type: 'figure', id: 'complexity-classes', caption: '<b>Figura 1.</b> Relaciones entre clases. Demostrado: P ⊆ NP y P ⊆ BQP, y la factorización está en BQP (algoritmo de Shor). Conjeturado, pero <em>no demostrado</em>: P ≠ NP, la factorización no está en P y los problemas NP-completos no están en BQP. El dibujo representa las relaciones que se creen ciertas.' },
             { type: 'list', items: [
-              '<b>Ventajas exponenciales para problemas concretos.</b> El algoritmo de Shor factoriza enteros en tiempo polinómico [@shor1997], mientras que no se conoce ningún algoritmo clásico polinómico para ello. La simulación de sistemas cuánticos, la motivación original de Feynman [@feynman1982], es otro ejemplo.',
-              '<b>Ventajas más modestas para problemas generales.</b> Para la búsqueda sin estructura, el algoritmo de Grover reduce el número de consultas de $N$ a aproximadamente $\\sqrt{N}$, y se ha demostrado que, en ese modelo, ningún algoritmo cuántico puede hacerlo mejor [@grover1996; @bennett1997]. Es una mejora cuadrática, no exponencial.',
+              '<b>Ventajas exponenciales para problemas concretos.</b> Un algoritmo cuántico, el de Shor, factoriza enteros en tiempo polinómico [@shor1997], mientras que no se conoce ningún algoritmo clásico polinómico para ello. La simulación de sistemas cuánticos, la motivación original de Feynman [@feynman1982], es otro ejemplo.',
+              '<b>Ventajas más modestas para problemas generales.</b> Para buscar en una lista sin ningún orden, otro algoritmo cuántico, el de Grover, necesita mirar unas $\\sqrt{N}$ veces en lugar de $N$, y se ha demostrado que ningún algoritmo cuántico puede hacerlo mejor [@grover1996; @bennett1997]. Es una mejora cuadrática, no exponencial.',
               '<b>Sin atajo general para los problemas NP-completos.</b> No se conoce ningún algoritmo cuántico eficiente para ellos, y el resultado anterior sugiere que la fuerza bruta no se acelera exponencialmente. Que NP-completo esté fuera de BQP es una conjetura, no un teorema.',
             ] },
             { type: 'callout', kind: 'misconception', title: 'Lo que la computación cuántica no hace', text: 'Una computadora cuántica no «prueba todas las soluciones a la vez y lee la correcta». Ese malentendido llevaría a pensar que resuelve el viajante instantáneamente. En los módulos 3 y 7 veremos por qué: la medición devuelve un único resultado, y los algoritmos cuánticos útiles deben usar la interferencia para que la respuesta correcta sea probable.' },
@@ -100,47 +100,47 @@ export default {
     },
 
     matematico: {
-      intro: 'Definiciones formales, una comparación rigurosa de crecimientos y la demostración de Turing.',
+      intro: 'Aquí ponemos números a las ideas del nivel 1. Cada sección empieza con la idea en pocas palabras y un ejemplo; las demostraciones están en «Para profundizar», por si te interesan. Basta con aritmética.',
       sections: [
         {
           id: 'o-formal',
-          title: 'La notación O grande',
+          title: 'La notación O grande', key: 'La notación O grande ignora las constantes y se fija en cómo crece el coste: 4n + 2 es O(n).',
           blocks: [
-            { type: 'math', tex: 'f(n) = O(g(n)) \\iff \\exists\\, c > 0,\\; n_0 :\\; f(n) \\le c\\, g(n) \\;\\; \\forall n \\ge n_0', note: 'Se ignoran las constantes ($c$) y los valores pequeños de $n$ ($n_0$): solo importa el crecimiento a largo plazo [@cormen2022].' },
-            { type: 'p', text: 'Ejemplo: $f(n) = 4n + 2$ (la cuenta atrás de la lección 1.9) es $O(n)$: con $c = 5$ y $n_0 = 2$, se cumple $4n + 2 \\le 5n$ para todo $n \\ge 2$.' },
+            { deep: true, type: 'math', tex: 'f(n) = O(g(n)) \\iff \\exists\\, c > 0,\\; n_0 :\\; f(n) \\le c\\, g(n) \\;\\; \\forall n \\ge n_0', note: 'Se ignoran las constantes ($c$) y los valores pequeños de $n$ ($n_0$): solo importa el crecimiento a largo plazo [@cormen2022].' },
+            { deep: true, type: 'p', text: 'Ejemplo: $f(n) = 4n + 2$ (la cuenta atrás de la lección 1.9) es $O(n)$: con $c = 5$ y $n_0 = 2$, se cumple $4n + 2 \\le 5n$ para todo $n \\ge 2$.' },
           ],
         },
         {
           id: 'exponencial',
-          title: 'Lo exponencial acaba ganando',
+          title: 'Lo exponencial acaba ganando', key: 'Cualquier exponencial acaba superando a cualquier polinomio: n¹⁰ es mayor que 2ⁿ hasta n = 58, y a partir de ahí 2ⁿ gana sin remedio.',
           blocks: [
-            { type: 'p', text: 'Para cualquier exponente fijo $k$, $n^k = O(2^n)$, pero $2^n$ no es $O(n^k)$. Una forma de verlo es con logaritmos:' },
-            { type: 'math', tex: '\\log_2(n^k) = k \\log_2 n, \\qquad \\log_2(2^n) = n, \\qquad \\lim_{n \\to \\infty} \\frac{k \\log_2 n}{n} = 0' },
-            { type: 'p', text: 'El logaritmo de $n^k$ crece mucho más despacio que el de $2^n$, así que a partir de cierto $n$ la exponencial supera a cualquier polinomio. Por ejemplo, $n^{10}$ es mayor que $2^n$ para $n = 10$ ($10^{10}$ frente a $1024$), pero a partir de $n = 59$ ya es menor.' },
-            { type: 'p', text: 'El número de rutas del viajante crece aún más deprisa. Por la fórmula de Stirling, $n! \\approx \\sqrt{2\\pi n}\\,(n/e)^n$, que supera a $c^n$ para cualquier constante $c$.' },
+            { deep: true, type: 'p', text: 'Para cualquier exponente fijo $k$, $n^k = O(2^n)$, pero $2^n$ no es $O(n^k)$. Una forma de verlo es con logaritmos:' },
+            { deep: true, type: 'math', tex: '\\log_2(n^k) = k \\log_2 n, \\qquad \\log_2(2^n) = n, \\qquad \\lim_{n \\to \\infty} \\frac{k \\log_2 n}{n} = 0' },
+            { deep: true, type: 'p', text: 'El logaritmo de $n^k$ crece mucho más despacio que el de $2^n$, así que a partir de cierto $n$ la exponencial supera a cualquier polinomio. Por ejemplo, $n^{10}$ es mayor que $2^n$ para $n = 10$ ($10^{10}$ frente a $1024$), pero a partir de $n = 59$ ya es menor.' },
+            { deep: true, type: 'p', text: 'El número de rutas del viajante crece aún más deprisa. Por la fórmula de Stirling, $n! \\approx \\sqrt{2\\pi n}\\,(n/e)^n$, que supera a $c^n$ para cualquier constante $c$.' },
           ],
         },
         {
           id: 'np-formal',
-          title: 'P y NP con verificadores',
+          title: 'P y NP con verificadores', key: 'NP son los problemas en los que comprobar una solución es rápido. Probar todas las candidatas, en cambio, es exponencialmente lento.',
           blocks: [
-            { type: 'p', text: 'Un problema de decisión $L$ está en NP si existe un algoritmo verificador $V$ de tiempo polinómico y un polinomio $p$ tales que [@arora2009; @sipser2013]:' },
-            { type: 'math', tex: 'x \\in L \\iff \\exists\\, w,\\; |w| \\le p(|x|) : V(x, w) = 1', note: '$w$ es el «certificado»: por ejemplo, una ruta concreta. $V$ comprueba que es válida y que cumple la condición pedida.' },
-            { type: 'p', text: 'Probar todos los certificados posibles resuelve cualquier problema de NP, pero hay hasta $2^{p(n)}$ certificados: tiempo exponencial. La pregunta P = NP es si siempre existe una forma radicalmente mejor.' },
+            { deep: true, type: 'p', text: 'Un problema de decisión $L$ está en NP si existe un algoritmo verificador $V$ de tiempo polinómico y un polinomio $p$ tales que [@arora2009; @sipser2013]:' },
+            { deep: true, type: 'math', tex: 'x \\in L \\iff \\exists\\, w,\\; |w| \\le p(|x|) : V(x, w) = 1', note: '$w$ es el «certificado»: por ejemplo, una ruta concreta. $V$ comprueba que es válida y que cumple la condición pedida.' },
+            { deep: true, type: 'p', text: 'Probar todos los certificados posibles resuelve cualquier problema de NP, pero hay hasta $2^{p(n)}$ certificados: tiempo exponencial. La pregunta P = NP es si siempre existe una forma radicalmente mejor.' },
           ],
         },
         {
           id: 'parada',
-          title: 'La demostración de Turing (esquema)',
+          title: 'La demostración de Turing (esquema)', key: 'Si existiera un programa que predijera si otro termina, se podría construir otro que hiciera justo lo contrario de lo predicho. Esa contradicción demuestra que no puede existir.',
           blocks: [
-            { type: 'p', text: 'Supongamos, por reducción al absurdo, que existe una función <code>para(P, x)</code> que devuelve siempre, en tiempo finito, si el programa <code>P</code> termina con la entrada <code>x</code> [@turing1937; @sipser2013].' },
-            { type: 'steps', items: [
+            { deep: true, type: 'p', text: 'Supongamos, por reducción al absurdo, que existe una función <code>para(P, x)</code> que devuelve siempre, en tiempo finito, si el programa <code>P</code> termina con la entrada <code>x</code> [@turing1937; @sipser2013].' },
+            { deep: true, type: 'steps', items: [
               { text: 'Construimos un programa <code>D(P)</code> que hace lo contrario de lo que predice <code>para</code> cuando un programa se recibe a sí mismo: si <code>para(P, P)</code> es verdadero, <code>D</code> entra en un bucle infinito; si es falso, <code>D</code> termina.' },
               { text: 'Preguntamos qué hace <code>D(D)</code>. Si <code>D(D)</code> termina, es porque <code>para(D, D)</code> dijo que no termina: contradicción.' },
               { text: 'Si <code>D(D)</code> no termina, es porque <code>para(D, D)</code> dijo que termina: contradicción.' },
               { text: 'En ambos casos llegamos a una contradicción, así que <code>para</code> no puede existir. ∎' },
             ] },
-            { type: 'p', text: 'Es un argumento de <em>diagonalización</em>, el mismo tipo de razonamiento que usó Cantor para demostrar que hay infinitos de distintos tamaños.' },
+            { deep: true, type: 'p', text: 'Es un argumento de <em>diagonalización</em>, el mismo tipo de razonamiento que usó Cantor para demostrar que hay infinitos de distintos tamaños.' },
           ],
         },
       ],
@@ -186,7 +186,7 @@ n = 90:  1.24e+18 s =  3.92e+10 años` },
           title: 'El programa imposible',
           blocks: [
             { type: 'p', text: 'Este código no se puede ejecutar, porque <code>para</code> no existe. Escribirlo ayuda a ver por qué la demostración funciona.' },
-            { type: 'code', lang: 'python', file: 'parada.py', code: `def para(programa, entrada) -> bool:
+            { type: 'code', lang: 'python', file: 'parada.py', code: `def para(programa, entrada):
     """Supuesto oráculo: True si programa(entrada) termina. No puede existir."""
     ...
 

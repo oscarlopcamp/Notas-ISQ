@@ -101,23 +101,23 @@ export default {
     },
 
     matematico: {
-      intro: 'Formalizamos el cálculo de los pares sustitutos de UTF-16 y la codificación UTF-8 de 4 bytes, con el mismo carácter de ejemplo.',
+      intro: 'Aquí ponemos números a las ideas del nivel 1. Cada sección empieza con la idea en pocas palabras y un ejemplo; las demostraciones están en «Para profundizar», por si te interesan. Basta con aritmética.',
       sections: [
         {
           id: 'planos',
-          title: 'El espacio de códigos y sus planos',
+          title: 'El espacio de códigos y sus planos', key: 'Unicode se organiza en 17 «planos» de 65 536 caracteres. Casi todos los emojis están fuera del primero.',
           blocks: [
-            { type: 'p', text: 'Los puntos de código van de U+0000 a U+10FFFF. Como $\\text{10FFFF}_{16} + 1 = 17 \\times 2^{16}$, el espacio se divide en 17 planos de $2^{16}$ puntos de código. El plano de un punto de código es su parte entera al dividir entre $2^{16}$:' },
-            { type: 'math', tex: '\\text{plano}(c) = \\left\\lfloor \\frac{c}{2^{16}} \\right\\rfloor, \\qquad \\text{U+1D11E} \\to \\left\\lfloor \\frac{\\text{1D11E}_{16}}{\\text{10000}_{16}} \\right\\rfloor = 1' },
+            { deep: true, type: 'p', text: 'Los puntos de código van de U+0000 a U+10FFFF. Como $\\text{10FFFF}_{16} + 1 = 17 \\times 2^{16}$, el espacio se divide en 17 planos de $2^{16}$ puntos de código. El plano de un punto de código es su parte entera al dividir entre $2^{16}$:' },
+            { deep: true, type: 'math', tex: '\\text{plano}(c) = \\left\\lfloor \\frac{c}{2^{16}} \\right\\rfloor, \\qquad \\text{U+1D11E} \\to \\left\\lfloor \\frac{\\text{1D11E}_{16}}{\\text{10000}_{16}} \\right\\rfloor = 1' },
           ],
         },
         {
           id: 'sustitutos',
-          title: 'Pares sustitutos de UTF-16',
+          title: 'Pares sustitutos de UTF-16', key: 'En UTF-16, los caracteres fuera del primer plano ocupan dos unidades de 16 bits, un «par sustituto». Por ejemplo, 𝄞 = D834 DD1E.',
           blocks: [
-            { type: 'p', text: 'Para $c \\ge \\text{10000}_{16}$, UTF-16 resta $\\text{10000}_{16}$ (queda un número de 20 bits), lo parte en dos mitades de 10 bits y suma a cada una una base fija [@rfc2781]:' },
-            { type: 'math', tex: "c' = c - \\text{10000}_{16}, \\qquad \\text{alto} = \\text{D800}_{16} + \\lfloor c' / 2^{10} \\rfloor, \\qquad \\text{bajo} = \\text{DC00}_{16} + (c' \\bmod 2^{10})" },
-            { type: 'steps', items: [
+            { deep: true, type: 'p', text: 'Para $c \\ge \\text{10000}_{16}$, UTF-16 resta $\\text{10000}_{16}$ (queda un número de 20 bits), lo parte en dos mitades de 10 bits y suma a cada una una base fija [@rfc2781]:' },
+            { deep: true, type: 'math', tex: "c' = c - \\text{10000}_{16}, \\qquad \\text{alto} = \\text{D800}_{16} + \\lfloor c' / 2^{10} \\rfloor, \\qquad \\text{bajo} = \\text{DC00}_{16} + (c' \\bmod 2^{10})" },
+            { deep: true, type: 'steps', items: [
               { text: 'Restamos la base:', tex: "c' = \\text{1D11E}_{16} - \\text{10000}_{16} = \\text{D11E}_{16} = 0000\\,1101\\,0001\\,0001\\,1110_2" },
               { text: 'Los 10 bits altos y los 10 bits bajos:', tex: "\\lfloor c'/2^{10} \\rfloor = 0000110100_2 = \\text{34}_{16}, \\qquad c' \\bmod 2^{10} = 0100011110_2 = \\text{11E}_{16}" },
               { text: 'Sumamos las bases:', tex: '\\text{alto} = \\text{D800} + \\text{34} = \\text{D834}_{16}, \\qquad \\text{bajo} = \\text{DC00} + \\text{11E} = \\text{DD1E}_{16}' },
@@ -127,10 +127,10 @@ export default {
         },
         {
           id: 'utf8-4bytes',
-          title: 'El mismo carácter en UTF-8 (4 bytes)',
+          title: 'El mismo carácter en UTF-8 (4 bytes)', key: 'En UTF-8, ese mismo carácter ocupa 4 bytes: F0 9D 84 9E.',
           blocks: [
-            { type: 'p', text: 'U+1D11E está en el rango U+10000–U+10FFFF, que en UTF-8 usa el patrón <code>11110xxx 10xxxxxx 10xxxxxx 10xxxxxx</code>, con 21 bits útiles [@rfc3629].' },
-            { type: 'steps', items: [
+            { deep: true, type: 'p', text: 'U+1D11E está en el rango U+10000–U+10FFFF, que en UTF-8 usa el patrón <code>11110xxx 10xxxxxx 10xxxxxx 10xxxxxx</code>, con 21 bits útiles [@rfc3629].' },
+            { deep: true, type: 'steps', items: [
               { text: 'Escribimos el punto de código con 21 bits:', tex: '\\text{1D11E}_{16} = 000\\;011101\\;000100\\;011110_2' },
               { text: 'Repartimos 3 + 6 + 6 + 6 bits y añadimos los prefijos:', tex: '\\texttt{11110}000,\\; \\texttt{10}011101,\\; \\texttt{10}000100,\\; \\texttt{10}011110' },
               { text: 'En hexadecimal:', tex: '\\text{F0}\\;\\text{9D}\\;\\text{84}\\;\\text{9E}' },
@@ -140,10 +140,10 @@ export default {
         },
         {
           id: 'equivalencia',
-          title: 'La normalización como función',
+          title: 'La normalización como función', key: 'Para comparar textos, primero normaliza los dos (NFC) y después compáralos.',
           blocks: [
-            { type: 'p', text: 'Formalmente, la normalización es una función $N$ sobre cadenas tal que dos cadenas canónicamente equivalentes tienen la misma imagen, y aplicarla dos veces no cambia nada (es <em>idempotente</em>) [@uax15]:' },
-            { type: 'math', tex: 's \\equiv t \\iff N(s) = N(t), \\qquad N(N(s)) = N(s)' },
+            { deep: true, type: 'p', text: 'Formalmente, la normalización es una función $N$ sobre cadenas tal que dos cadenas canónicamente equivalentes tienen la misma imagen, y aplicarla dos veces no cambia nada (es <em>idempotente</em>) [@uax15]:' },
+            { deep: true, type: 'math', tex: 's \\equiv t \\iff N(s) = N(t), \\qquad N(N(s)) = N(s)' },
             { type: 'p', text: 'Por eso la comparación correcta de texto no es $s = t$, sino $N(s) = N(t)$.' },
           ],
         },
@@ -159,11 +159,14 @@ export default {
           blocks: [
             { type: 'code', lang: 'python', file: 'contar_texto.py', code: `import unicodedata
 
-for texto in ["e\\u0301", "é", "👍🏽", "🇪🇸"]:
-    print(ascii(texto), len(texto), len(texto.encode("utf-8")), len(texto.encode("utf-16-le")) // 2)
+for texto in ["é", "é", "👍🏽", "🇪🇸"]:
+    puntos = len(texto)
+    bytes_utf8 = len(texto.encode("utf-8"))
+    unidades_utf16 = len(texto.encode("utf-16-le")) // 2
+    print(ascii(texto), puntos, bytes_utf8, unidades_utf16)
 
 a = "café"  # é precompuesta (U+00E9)
-b = "cafe\\u0301"  # e + acento agudo combinante (U+0301)
+b = "café"  # e + acento agudo combinante (U+0301)
 print(a == b, len(a), len(b))
 print(unicodedata.normalize("NFC", a) == unicodedata.normalize("NFC", b))
 print([unicodedata.name(c) for c in b[-2:]])`,
@@ -175,9 +178,9 @@ False 4 5
 True
 ['LATIN SMALL LETTER E', 'COMBINING ACUTE ACCENT']` },
             { type: 'list', items: [
-              '<b>Línea 4:</b> <code>ascii()</code> muestra los puntos de código como secuencias de escape, para verlos aunque la terminal no dibuje el emoji. Las columnas son: puntos de código (<code>len</code>), bytes UTF-8 y unidades UTF-16 (bytes UTF-16 entre 2).',
-              '<b>Línea 8:</b> las dos «café» son distintas para <code>==</code> y tienen distinta longitud.',
-              '<b>Línea 9:</b> tras normalizar a NFC, son iguales.',
+              '<b>Líneas 4–7:</b> tres formas de medir el mismo texto: puntos de código (<code>len</code>), bytes en UTF-8 y unidades UTF-16 (bytes UTF-16 entre 2). <code>ascii()</code> muestra los puntos de código como secuencias de escape, para verlos aunque la terminal no dibuje el emoji.',
+              '<b>Línea 11:</b> las dos «café» son distintas para <code>==</code> y tienen distinta longitud.',
+              '<b>Línea 12:</b> tras normalizar a NFC, son iguales.',
               'Python no cuenta grafemas en la biblioteca estándar; para eso hacen falta bibliotecas externas que implementen UAX #29. En JavaScript existe <code>Intl.Segmenter</code>, que es lo que usa el inspector de esta lección.',
             ] },
           ],

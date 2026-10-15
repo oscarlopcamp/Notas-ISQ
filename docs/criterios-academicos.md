@@ -87,3 +87,28 @@ Los recuadros distinguen: conocimiento establecido, modelo simplificado, resulta
 - Los bloques de Python se ejecutan con Pyodide 0.27.7 (CPython 3.12.7) en un *worker*; no se simula ninguna ejecución.
 - `tests/python.html` ejecutó los 36 ejemplos publicados: 35 producen exactamente la salida publicada (obtenida con CPython 3.14) y 1 difiere de forma conocida y documentada (el bytecode de `dis`, lección 1.10, que ahora explica la diferencia).
 - La salida esperada de cada bloque se etiqueta con la versión con que se obtuvo (CPython 3.14), y la salida propia del lector, con la versión de Python del navegador.
+
+## Lecciones 2.3 y 2.4 y revisión de la complejidad del código (2026-10-14)
+
+- **DOI comprobados en Crossref:** Dirac (1929), Lloyd (1996), Reiher et al. (2017), Lee et al. (2021), Lee et al. (2023), Peruzzo et al. (2014), Babbush et al. (2021), Hoefler, Häner y Troyer (2023), Aaronson (2015) y Høyer, Neerbek y Shi (2001). Farhi et al. (2014) se consultó en arXiv. Las listas completas de autores también se comprobaron en Crossref.
+- **Afirmaciones contrastadas con el resumen original (arXiv):** recursos para FeMoco (≈ 4 millones de qubits físicos, < 4 días, ciclos de 1 µs y errores ≤ 0,1 %), ausencia de pruebas de ventaja exponencial general en química, ventajas cuadráticas insuficientes y cuárticas prometedoras, «pocos datos y ventajas mayores que cuadráticas», y Ω(N log N) para ordenar.
+- **Cita de Dirac:** se parafrasea, no se cita textualmente, porque el texto original no se pudo consultar.
+- **Política de código:** un bloque breve por lección cuando basta; sin anotaciones de tipo ni operadores de bits cuando no son el objeto de la lección; variables con nombre en lugar de expresiones densas. Se simplificaron 6 bloques (lecciones 1.1, 1.2, 1.3, 1.11 y 2.2) y una solución de ejercicio. Las salidas se volvieron a obtener con CPython 3.14 y `tests/python.html` las comprobó en el navegador (39 coincidencias).
+
+## Lecciones 2.5 y 2.6: el sistema de cómputo (2026-10-14)
+
+- **DOI comprobados en Crossref:** Ladd et al. (2010), Kjaergaard et al. (2020), Bruzewicz et al. (2019), Henriet et al. (2020), Slussarenko y Pryde (2019), Kok et al. (2007), Burkard et al. (2023) y Cross et al. (2019). Las listas de autores también se comprobaron en Crossref.
+- **Afirmaciones contrastadas con el resumen original (arXiv):** lo que se dice de cada tecnología en el explorador (por ejemplo, el rango de 100 a 1000 qubits de los átomos neutros, la dificultad de las puertas de dos fotones o la coherencia larga de los espines), la definición del volumen cuántico, y la latencia de decodificación (63 µs) y el ciclo (1,1 µs) del experimento de corrección de errores de 2024.
+- **Servicios en la nube:** los enlaces de IBM Quantum Platform, Amazon Braket y Azure Quantum responden. Su oferta cambia con el tiempo, así que la lección no enumera equipos.
+- **Sin cifras volátiles:** la lección 2.6 describe las tecnologías de forma cualitativa y no da el número de qubits, las tasas de error ni los récords de equipos concretos. Los procesadores del simulador son ficticios y se declaran como tales.
+- **Modelos simplificados declarados:** la QPU del bucle híbrido (P(1) = sin²(θ/2) con ruido de repeticiones) y el éxito de un circuito, (1 − ε)^G con errores independientes. Su lógica está en `src/utils/hardware.js` y se prueba en `tests/module2.test.js`.
+- **Código:** `bucle.py` y `exito.py` se ejecutaron con CPython 3.14 y `tests/python.html` los comprobó en Pyodide (41 coincidencias en total).
+
+
+## Revisión: sin temas adelantados (2026-10-14)
+
+Criterio nuevo: una lección no usa conceptos cuyas bases todavía no se han presentado en el orden del libro. Si un tema no se puede omitir, se presenta a gran escala (la idea, en palabras cotidianas) y se indica dónde se explicará.
+
+- **Módulo 1:** la sección cuántica de la lección 1.2 ya no menciona Qiskit Aer, el vector de estado ni los métodos de simulación; conserva la tabla de memoria en palabras sencillas. Se simplificaron los avances de las lecciones 1.6 (sin «unitarias»), 1.8 y 1.10 (sin «transpilar» ni «compuertas nativas») y la presentación de BQP, Shor y Grover en la 1.11.
+- **Módulo 2:** sin notación |0⟩, «cota de Holevo», «variables ocultas locales», «Hadamard», «qubit lógico/físico», «código de superficie», «redes de tensores», VQE, QAOA ni «transpilación» en el texto de las lecciones (siguen en el glosario y en la bibliografía). «Puertas» pasa a «operaciones» en la 2.6. El simulador del bucle híbrido usa una «perilla de ajuste» en lugar de un ángulo θ en radianes. Se explica «tolerante a fallos» la primera vez que aparece (2.1).
+- **Código:** `bucle.py`, `exito.py` y `tolerancia.py` cambiaron solo nombres de variables y textos; sus salidas se volvieron a obtener con CPython 3.14 y `tests/python.html` las comprobó (41 coincidencias).

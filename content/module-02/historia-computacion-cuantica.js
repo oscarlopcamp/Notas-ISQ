@@ -40,7 +40,7 @@ export default {
           id: 'antecedentes',
           title: 'Antecedentes: una física extraña (1935–1964)',
           blocks: [
-            { type: 'p', text: 'La mecánica cuántica se formuló en los años veinte y treinta del siglo pasado. En 1935, Einstein, Podolsky y Rosen señalaron que la teoría predice correlaciones tan fuertes entre sistemas separados, lo que hoy llamamos entrelazamiento, que, en su opinión, la teoría debía ser incompleta [@epr1935]. En 1964, John Bell demostró que la discusión podía resolverse con experimentos: ninguna teoría de variables ocultas locales puede reproducir todas las predicciones cuánticas [@bell1964]. Los experimentos posteriores dieron la razón a la mecánica cuántica.' },
+            { type: 'p', text: 'La mecánica cuántica se formuló en los años veinte y treinta del siglo pasado. En 1935, Einstein, Podolsky y Rosen señalaron que la teoría predice correlaciones tan fuertes entre sistemas separados, lo que hoy llamamos entrelazamiento, que, en su opinión, la teoría debía ser incompleta [@epr1935]. En 1964, John Bell demostró que la discusión podía resolverse con experimentos: ninguna explicación en la que cada partícula lleve sus resultados «escritos» de antemano, sin influencias instantáneas a distancia, reproduce todas las predicciones cuánticas [@bell1964]. Los experimentos posteriores dieron la razón a la mecánica cuántica.' },
             { type: 'p', text: 'Durante décadas, estos fenómenos se vieron como rarezas filosóficas. La idea de que pudieran ser un <em>recurso</em> para procesar información llegó más tarde.' },
           ],
         },
@@ -60,8 +60,8 @@ export default {
             { type: 'p', text: 'En 1985, David Deutsch dio el paso decisivo: definió una <b>computadora cuántica universal</b>, una máquina de Turing cuántica capaz de simular cualquier otra computadora cuántica, y planteó un primer ejemplo de tarea en la que la interferencia ofrece una ventaja [@deutsch1985]. La computación cuántica pasó de idea física a modelo de cómputo preciso.' },
             { type: 'p', text: 'El ejemplo más sencillo, conocido como el <b>problema de Deutsch</b>, cabe en un juego. Pruébalo:' },
             { type: 'widget', id: 'deutsch-game', caption: 'Una función oculta f de un bit es constante (f(0) = f(1)) o balanceada (f(0) ≠ f(1)). Juega varias partidas. ¿Puedes acertar siempre con una sola consulta?' },
-            { type: 'p', text: 'Con una sola consulta, por ejemplo $f(0) = 0$, siguen siendo posibles una función constante y una balanceada: hay que acertar al azar. Cualquier algoritmo clásico que quiera estar seguro necesita <b>dos consultas</b>. El algoritmo cuántico de Deutsch (en la versión mejorada de Cleve, Ekert, Macchiavello y Mosca) responde con certeza con <b>una sola consulta</b>, aplicando la función a una superposición y usando la interferencia para que el resultado de la medición indique directamente si $f(0)$ y $f(1)$ son iguales [@nielsen2010]. No obtiene $f(0)$ ni $f(1)$: obtiene una propiedad global de la función, que es justo lo que se preguntaba.' },
-            { type: 'callout', kind: 'preview', title: 'Avance: el algoritmo de Deutsch', text: 'Para entender el algoritmo hacen falta la compuerta de Hadamard y la idea de oráculo, que veremos en los módulos 3 y 7. La clave es la misma que en el interferómetro: dos «caminos» (las entradas 0 y 1) cuyas amplitudes se refuerzan o se cancelan según la función.' },
+            { type: 'p', text: 'Con una sola consulta, por ejemplo $f(0) = 0$, siguen siendo posibles una función constante y una balanceada: hay que acertar al azar. Cualquier algoritmo clásico que quiera estar seguro necesita <b>dos consultas</b>. El algoritmo cuántico de Deutsch (en la versión mejorada de Cleve, Ekert, Macchiavello y Mosca) responde con certeza con <b>una sola consulta</b>: usa la interferencia, como el interferómetro de la lección 2.1, para que el resultado medido indique directamente si $f(0)$ y $f(1)$ son iguales [@nielsen2010]. No obtiene $f(0)$ ni $f(1)$: obtiene una propiedad global de la función, que es justo lo que se preguntaba.' },
+            { type: 'callout', kind: 'preview', title: 'Avance: el algoritmo de Deutsch', text: 'Cómo funciona por dentro lo veremos en los módulos 3 y 7. La clave es la misma que en el interferómetro: dos «caminos» (las entradas 0 y 1) cuyas amplitudes se refuerzan o se cancelan según la función.' },
             { type: 'p', text: 'En 1992, Deutsch y Richard Jozsa lo generalizaron a funciones de $n$ bits [@deutsch1992]. El algoritmo cuántico sigue necesitando una sola consulta, mientras que un algoritmo clásico <em>determinista</em> puede necesitar $2^{n-1} + 1$. Sin embargo, como veremos en el nivel 2, un algoritmo clásico <em>aleatorio</em> resuelve el problema con pocas consultas y una probabilidad de error minúscula. La separación era real, pero frágil.' },
           ],
         },
@@ -70,7 +70,7 @@ export default {
           title: 'Simon, Shor y Grover: de la curiosidad a la revolución (1993–1997)',
           blocks: [
             { type: 'p', text: 'Ethan Bernstein y Umesh Vazirani definieron la clase BQP y dieron nuevas separaciones [@bernstein1997]. En 1994, Daniel Simon encontró un problema de consultas que un algoritmo cuántico resuelve exponencialmente más rápido que <em>cualquier</em> algoritmo clásico, incluso aleatorio [@simon1997].' },
-            { type: 'p', text: 'Inspirado por la estructura del algoritmo de Simon, Peter Shor publicó ese mismo año algoritmos cuánticos de tiempo polinómico para <b>factorizar enteros</b> y calcular <b>logaritmos discretos</b> [@shor1994; @shor1997]. No se conoce ningún algoritmo clásico eficiente para estos problemas, y la seguridad de RSA y de la criptografía de curva elíptica depende de su dificultad. De repente, la computación cuántica dejó de ser una curiosidad teórica: tenía consecuencias para la seguridad de las comunicaciones de todo el mundo.' },
+            { type: 'p', text: 'Inspirado por la estructura del algoritmo de Simon, Peter Shor publicó ese mismo año un algoritmo cuántico de tiempo polinómico para <b>factorizar enteros</b> (y otro para un problema emparentado) [@shor1994; @shor1997]. No se conoce ningún algoritmo clásico eficiente para ellos, y de su dificultad depende la seguridad de RSA y de otros sistemas de cifrado que protegen internet. De repente, la computación cuántica dejó de ser una curiosidad teórica: tenía consecuencias para la seguridad de las comunicaciones de todo el mundo.' },
             { type: 'p', text: 'En 1996, Lov Grover propuso un algoritmo de búsqueda sin estructura que necesita del orden de $\\sqrt{N}$ consultas en lugar de $N$ [@grover1996]. Un año después se demostró que, en ese modelo, ningún algoritmo cuántico puede hacerlo mejor [@bennett1997]. Shor y Grover marcan los dos extremos que estudiaremos en el Módulo 7: ventajas exponenciales para problemas con estructura muy particular, y ventajas cuadráticas para problemas generales.' },
           ],
         },
@@ -78,17 +78,17 @@ export default {
           id: 'errores',
           title: '¿Y el ruido? La corrección de errores (1995–1997)',
           blocks: [
-            { type: 'p', text: 'Tras el algoritmo de Shor llegó una objeción seria: los sistemas cuánticos son extremadamente frágiles, el ruido destruye la interferencia, y la no clonación impide proteger la información copiándola, como se hace con los bits. Parecía que una computadora cuántica grande sería imposible.' },
-            { type: 'p', text: 'En 1995, el propio Shor mostró cómo codificar un qubit lógico en nueve qubits físicos de modo que ciertos errores puedan detectarse y corregirse <em>sin medir</em> la información codificada [@shor1995]. Poco después, varios grupos demostraron el <b>teorema del umbral</b>: si el error físico por operación está por debajo de cierto valor, se puede computar con una fiabilidad arbitraria a un coste razonable [@aharonov1997]. La computación cuántica a gran escala pasó de «imposible» a «extremadamente difícil de ingeniería». Lo estudiaremos en la unidad 3.7.' },
+            { type: 'p', text: 'Tras el algoritmo de Shor llegó una objeción seria: los sistemas cuánticos son extremadamente frágiles, el ruido destruye la interferencia y, como los qubits no se pueden copiar (lección 2.1), no se puede proteger la información guardando copias, como se hace con los bits. Parecía que una computadora cuántica grande sería imposible.' },
+            { type: 'p', text: 'En 1995, el propio Shor mostró cómo repartir la información de un qubit entre nueve, de modo que ciertos errores puedan detectarse y corregirse <em>sin leer</em> (y, por tanto, sin destruir) la información protegida [@shor1995]. Poco después, varios grupos demostraron el <b>teorema del umbral</b>: si el error físico por operación está por debajo de cierto valor, se puede computar con una fiabilidad arbitraria a un coste razonable [@aharonov1997]. La computación cuántica a gran escala pasó de «imposible» a «extremadamente difícil de ingeniería». Lo estudiaremos en la unidad 3.7.' },
           ],
         },
         {
           id: 'hardware',
           title: 'Del papel al laboratorio (1995–hoy)',
           blocks: [
-            { type: 'p', text: 'En 1995, Ignacio Cirac y Peter Zoller propusieron cómo construir compuertas cuánticas con iones atrapados [@cirac1995]. Las primeras demostraciones de algoritmos llegaron con la resonancia magnética nuclear: Grover con 2 qubits en 1998 [@chuang1998] y Shor factorizando 15 = 3 × 5 en 2001 [@vandersypen2001]. En 1999 se controló por primera vez un qubit superconductor [@nakamura1999], la tecnología que usan hoy muchos procesadores. En 2000, David DiVincenzo resumió los requisitos de una implementación física útil [@divincenzo2000].' },
+            { type: 'p', text: 'En 1995, Ignacio Cirac y Peter Zoller propusieron cómo construir compuertas cuánticas con iones atrapados [@cirac1995]. Las primeras demostraciones de algoritmos llegaron con la resonancia magnética nuclear (la técnica de las resonancias médicas, aplicada a moléculas en un tubo): Grover con 2 qubits en 1998 [@chuang1998] y Shor factorizando 15 = 3 × 5 en 2001 [@vandersypen2001]. En 1999 se controló por primera vez un qubit superconductor [@nakamura1999], la tecnología que usan hoy muchos procesadores. En 2000, David DiVincenzo resumió los requisitos de una implementación física útil [@divincenzo2000].' },
             { type: 'callout', kind: 'warning', title: 'Factorizar 15 no es romper RSA', text: 'Las demostraciones de Shor con números pequeños son pruebas de concepto. Factorizar claves RSA de uso real exigiría computadoras cuánticas tolerantes a fallos, con un número de qubits y una calidad muy superiores a los actuales. Lo estudiaremos con cifras en los módulos 7 y 9.' },
-            { type: 'p', text: 'La historia reciente, la era NISQ [@preskill2018], el experimento de muestreo de 2019 [@arute2019] y su respuesta clásica de 2022 [@pan2022], y la corrección de errores por debajo del umbral en 2025 [@google2025], se presentó en la lección 2.1. Muestra un patrón que conviene recordar: cada afirmación de ventaja estimula mejores algoritmos clásicos, y la frontera se mueve en ambas direcciones.' },
+            { type: 'p', text: 'La historia reciente, la era NISQ [@preskill2018], el experimento de muestreo de 2019 [@arute2019] y su respuesta clásica de 2022 [@pan2022], y la primera protección contra errores que mejora al crecer, en 2025 [@google2025], se presentó en la lección 2.1. Muestra un patrón que conviene recordar: cada afirmación de ventaja estimula mejores algoritmos clásicos, y la frontera se mueve en ambas direcciones.' },
           ],
         },
         {
@@ -103,14 +103,14 @@ export default {
     },
 
     matematico: {
-      intro: 'Contamos consultas: el problema de Deutsch, Deutsch–Jozsa determinista y aleatorio, y por qué Simon y Shor fueron distintos.',
+      intro: 'Aquí ponemos números a las ideas del nivel 1. Cada sección empieza con la idea en pocas palabras y un ejemplo; las demostraciones están en «Para profundizar», por si te interesan. Basta con aritmética.',
       sections: [
         {
           id: 'deutsch-formal',
-          title: 'El problema de Deutsch: dos consultas clásicas',
+          title: 'El problema de Deutsch: dos consultas clásicas', key: 'Con una sola consulta siempre quedan posibles una función constante y una balanceada, así que hacen falta dos.',
           blocks: [
-            { type: 'p', text: 'Hay $2^{2} = 4$ funciones $f : \\{0,1\\} \\to \\{0,1\\}$ (lección 1.5): dos constantes ($f \\equiv 0$, $f \\equiv 1$) y dos balanceadas (identidad y negación). Queremos decidir si $f(0) = f(1)$, es decir, calcular $f(0) \\oplus f(1)$.' },
-            { type: 'steps', items: [
+            { deep: true, type: 'p', text: 'Hay $2^{2} = 4$ funciones $f : \\{0,1\\} \\to \\{0,1\\}$ (lección 1.5): dos constantes ($f \\equiv 0$, $f \\equiv 1$) y dos balanceadas (identidad y negación). Queremos decidir si $f(0) = f(1)$, es decir, calcular $f(0) \\oplus f(1)$.' },
+            { deep: true, type: 'steps', items: [
               { text: 'Tras consultar $f(0) = b$, las funciones compatibles son una constante ($f \\equiv b$) y una balanceada ($f(1) = 1 - b$).' },
               { text: 'Un algoritmo que responda tras una consulta acierta solo en una de esas dos funciones. Por tanto, ningún algoritmo clásico determinista resuelve el problema con una consulta.' },
               { text: 'Con dos consultas se calcula $f(0) \\oplus f(1)$ directamente.' },
@@ -120,7 +120,7 @@ export default {
         },
         {
           id: 'dj',
-          title: 'Deutsch–Jozsa: determinista frente a aleatorio',
+          title: 'Deutsch–Jozsa: determinista frente a aleatorio', key: 'Un algoritmo determinista necesita mirar más de la mitad de las entradas. Uno aleatorio necesita pocas consultas: cada consulta extra reduce el error a la mitad.',
           blocks: [
             { type: 'p', text: 'Con $f : \\{0,1\\}^n \\to \\{0,1\\}$, que se sabe que es constante o balanceada (vale 1 en exactamente la mitad de las $2^n$ entradas) [@deutsch1992]:' },
             { type: 'list', items: [
@@ -128,16 +128,16 @@ export default {
               '<b>Cuántico:</b> 1 consulta, con certeza.',
               '<b>Clásico aleatorio:</b> consultar $k$ entradas elegidas al azar y responder «constante» si todas coinciden.',
             ] },
-            { type: 'p', text: 'Si $f$ es constante, el algoritmo aleatorio nunca se equivoca. Si es balanceada, cada consulta da 0 o 1 con probabilidad $\\tfrac12$ (eligiendo con reemplazamiento), y solo se equivoca si las $k$ coinciden:' },
-            { type: 'math', tex: 'P(\\text{error}) = 2 \\cdot \\left(\\tfrac12\\right)^{k} = 2^{1-k}', note: 'Con $k = 10$, el error es menor que 0,2 %, sea cual sea $n$. Con $n = 10$, el algoritmo determinista necesita 513 consultas.' },
+            { deep: true, type: 'p', text: 'Si $f$ es constante, el algoritmo aleatorio nunca se equivoca. Si es balanceada, cada consulta da 0 o 1 con probabilidad $\\tfrac12$ (eligiendo con reemplazamiento), y solo se equivoca si las $k$ coinciden:' },
+            { deep: true, type: 'math', tex: 'P(\\text{error}) = 2 \\cdot \\left(\\tfrac12\\right)^{k} = 2^{1-k}', note: 'Con $k = 10$, el error es menor que 0,2 %, sea cual sea $n$. Con $n = 10$, el algoritmo determinista necesita 513 consultas.' },
             { type: 'p', text: 'Por eso Deutsch–Jozsa no demuestra una ventaja frente a los algoritmos clásicos que pueden equivocarse con probabilidad pequeña. El algoritmo de Simon sí: su problema exige un número exponencial de consultas incluso a los algoritmos clásicos aleatorios, mientras que el cuántico necesita un número polinómico [@simon1997]. Ese salto, y la técnica de buscar periodos, condujo a Shor.' },
           ],
         },
         {
           id: 'shor-contexto',
-          title: 'Qué cambió Shor, en términos de complejidad',
+          title: 'Qué cambió Shor, en términos de complejidad', key: 'Shor es polinómico, y el mejor algoritmo clásico conocido es más lento. Pero no está demostrado que no exista uno clásico mejor.',
           blocks: [
-            { type: 'p', text: 'Para un entero de $n$ bits, los mejores algoritmos clásicos conocidos para factorizar (la criba del cuerpo de números) tienen un coste subexponencial, del orden de $\\exp\\big(\\Theta(n^{1/3} (\\log n)^{2/3})\\big)$, mientras que el algoritmo de Shor es polinómico en $n$ [@nielsen2010; @shor1997]. Dos matices importan:' },
+            { deep: true, type: 'p', text: 'Para un entero de $n$ bits, los mejores algoritmos clásicos conocidos para factorizar (la criba del cuerpo de números) tienen un coste subexponencial, del orden de $\\exp\\big(\\Theta(n^{1/3} (\\log n)^{2/3})\\big)$, mientras que el algoritmo de Shor es polinómico en $n$ [@nielsen2010; @shor1997]. Dos matices importan:' },
             { type: 'list', items: [
               'La ventaja es frente al mejor algoritmo clásico <em>conocido</em>; no está demostrado que factorizar sea difícil para las computadoras clásicas.',
               'La factorización no se cree NP-completa, así que el algoritmo de Shor no implica que las computadoras cuánticas resuelvan eficientemente los problemas NP-completos (lección 1.11).',
@@ -183,25 +183,34 @@ si f(0) = 0, puede ser: ['constante 0', 'identidad']` },
 
 def prueba_aleatoria(f, n, k):
     """Consulta k entradas al azar y responde «constante» si todas dan lo mismo."""
-    valores = {f(random.getrandbits(n)) for _ in range(k)}
-    return "constante" if len(valores) == 1 else "balanceada"
+    primera = f(random.randrange(2**n))
+    for _ in range(k - 1):
+        if f(random.randrange(2**n)) != primera:
+            return "balanceada"
+    return "constante"
+
+
+def balanceada(x):
+    return x % 2  # vale 1 en las entradas impares: exactamente la mitad
 
 
 n = 10
-balanceada = lambda x: x & 1  # vale 1 en exactamente la mitad de las 2^n entradas
 random.seed(2026)
 for k in [1, 2, 5, 10]:
-    errores = sum(prueba_aleatoria(balanceada, n, k) == "constante" for _ in range(100_000))
+    errores = 0
+    for _ in range(100_000):
+        if prueba_aleatoria(balanceada, n, k) == "constante":
+            errores += 1
     print(f"k = {k:2}: error observado {errores / 100_000:.4f}, cota 2^(1-k) = {2 ** (1 - k):.4f}")
 print("consultas deterministas en el peor caso:", 2 ** (n - 1) + 1)`,
             output: `k =  1: error observado 1.0000, cota 2^(1-k) = 1.0000
-k =  2: error observado 0.4983, cota 2^(1-k) = 0.5000
-k =  5: error observado 0.0630, cota 2^(1-k) = 0.0625
-k = 10: error observado 0.0019, cota 2^(1-k) = 0.0020
+k =  2: error observado 0.5016, cota 2^(1-k) = 0.5000
+k =  5: error observado 0.0624, cota 2^(1-k) = 0.0625
+k = 10: error observado 0.0020, cota 2^(1-k) = 0.0020
 consultas deterministas en el peor caso: 513` },
             { type: 'list', items: [
-              '<b><code>random.getrandbits(n)</code></b> elige una entrada de $n$ bits al azar (con reemplazamiento).',
-              '<b><code>x &amp; 1</code></b> es una función balanceada: vale 1 en las entradas impares, que son exactamente la mitad.',
+              '<b><code>random.randrange(2**n)</code></b> elige una de las $2^n$ entradas al azar (con reemplazamiento). La función responde «balanceada» en cuanto encuentra un valor distinto del primero.',
+              '<b><code>balanceada</code></b> devuelve <code>x % 2</code>: vale 1 en las entradas impares, que son exactamente la mitad.',
               'Las frecuencias observadas en 100 000 repeticiones coinciden con $2^{1-k}$ salvo fluctuaciones estadísticas. Con $k = 1$ siempre responde «constante», así que con una función balanceada falla siempre.',
               'Con 10 consultas aleatorias, el error es del 0,2 %, frente a las 513 que exige el algoritmo determinista: la ventaja cuántica de Deutsch–Jozsa no se mantiene frente al azar clásico.',
             ] },

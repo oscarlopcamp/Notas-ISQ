@@ -95,11 +95,11 @@ export default {
     },
 
     matematico: {
-      intro: 'Fórmulas de tamaño, el argumento de conteo contra el compresor universal y la frecuencia aparente del aliasing.',
+      intro: 'Aquí ponemos números a las ideas del nivel 1. Cada sección empieza con la idea en pocas palabras y un ejemplo; las demostraciones están en «Para profundizar», por si te interesan. Basta con aritmética.',
       sections: [
         {
           id: 'formulas-tamano',
-          title: 'Tamaños y número de colores',
+          title: 'Tamaños y número de colores', key: 'Imagen: ancho × alto × bits por píxel. Audio: muestras por segundo × bits por muestra × canales.',
           blocks: [
             { type: 'p', text: 'Con $b$ bits por canal y $k$ canales, cada píxel tiene $bk$ bits y existen $2^{bk}$ colores distintos. Una imagen de $W \\times H$ píxeles sin comprimir ocupa:' },
             { type: 'math', tex: '\\text{bits} = W \\cdot H \\cdot b \\cdot k, \\qquad 1920 \\cdot 1080 \\cdot 8 \\cdot 3 = 49\\,766\\,400 \\text{ bits} = 6\\,220\\,800 \\text{ bytes}' },
@@ -109,10 +109,10 @@ export default {
         },
         {
           id: 'conteo',
-          title: 'Por qué no existe el compresor universal',
+          title: 'Por qué no existe el compresor universal', key: 'Hay más archivos de n bits que archivos más cortos, así que ningún compresor puede acortarlos todos.',
           blocks: [
-            { type: 'p', text: 'Supongamos un compresor sin pérdida $C$ que acorta todos los archivos de exactamente $n$ bits. Contemos:' },
-            { type: 'steps', items: [
+            { deep: true, type: 'p', text: 'Supongamos un compresor sin pérdida $C$ que acorta todos los archivos de exactamente $n$ bits. Contemos:' },
+            { deep: true, type: 'steps', items: [
               { text: 'Archivos distintos de $n$ bits:', tex: '2^n' },
               { text: 'Archivos distintos de menos de $n$ bits (longitudes $0, 1, \\dots, n-1$):', tex: '\\sum_{k=0}^{n-1} 2^k = 2^n - 1' },
               { text: 'Hay más entradas que salidas posibles, así que dos archivos distintos tendrían que comprimirse en el mismo resultado (principio del palomar). Entonces la descompresión no podría saber cuál de los dos era el original: $C$ no sería sin pérdida. Contradicción. ∎' },
@@ -122,12 +122,12 @@ export default {
         },
         {
           id: 'aliasing-formal',
-          title: 'La frecuencia aparente del aliasing',
+          title: 'La frecuencia aparente del aliasing', key: 'Si se muestrea demasiado despacio, una señal parece tener otra frecuencia: 9 Hz muestreados 10 veces por segundo parecen 1 Hz.',
           blocks: [
-            { type: 'p', text: 'Muestrear $\\sin(2\\pi f t)$ en los instantes $t_k = k/f_s$ da $\\sin(2\\pi f k / f_s)$. Como el seno se repite cada $2\\pi$, sumar o restar múltiplos de $f_s$ a la frecuencia no cambia ninguna muestra:' },
-            { type: 'math', tex: '\\sin\\!\\Big(2\\pi (f + m f_s)\\tfrac{k}{f_s}\\Big) = \\sin\\!\\Big(2\\pi f \\tfrac{k}{f_s} + 2\\pi m k\\Big) = \\sin\\!\\Big(2\\pi f \\tfrac{k}{f_s}\\Big)', note: '$m$ y $k$ son enteros, así que $2\\pi m k$ es un múltiplo de $2\\pi$.' },
-            { type: 'p', text: 'Por tanto, las muestras son indistinguibles de las de una señal con frecuencia $f_a$, la distancia de $f$ al múltiplo de $f_s$ más cercano:' },
-            { type: 'math', tex: 'f_a = \\big|\\, f - f_s \\cdot \\mathrm{round}(f / f_s) \\,\\big|' },
+            { deep: true, type: 'p', text: 'Muestrear $\\sin(2\\pi f t)$ en los instantes $t_k = k/f_s$ da $\\sin(2\\pi f k / f_s)$. Como el seno se repite cada $2\\pi$, sumar o restar múltiplos de $f_s$ a la frecuencia no cambia ninguna muestra:' },
+            { deep: true, type: 'math', tex: '\\sin\\!\\Big(2\\pi (f + m f_s)\\tfrac{k}{f_s}\\Big) = \\sin\\!\\Big(2\\pi f \\tfrac{k}{f_s} + 2\\pi m k\\Big) = \\sin\\!\\Big(2\\pi f \\tfrac{k}{f_s}\\Big)', note: '$m$ y $k$ son enteros, así que $2\\pi m k$ es un múltiplo de $2\\pi$.' },
+            { deep: true, type: 'p', text: 'Por tanto, las muestras son indistinguibles de las de una señal con frecuencia $f_a$, la distancia de $f$ al múltiplo de $f_s$ más cercano:' },
+            { deep: true, type: 'math', tex: 'f_a = \\big|\\, f - f_s \\cdot \\mathrm{round}(f / f_s) \\,\\big|' },
             { type: 'p', text: 'Ejemplo: una señal de 9 Hz muestreada a 10 Hz parece de $|9 - 10| = 1$ Hz. Pruébalo en el simulador con 9 Hz y 10 muestras por segundo. Para que $f_a = f$ (sin confusión) hace falta $f < f_s / 2$, que es la condición del teorema de muestreo.' },
           ],
         },

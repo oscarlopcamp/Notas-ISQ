@@ -544,3 +544,107 @@
 .dg-result.ok { background: var(--ok-soft); } .dg-result.bad { background: var(--bad-soft); }
 .dg-result p { margin: var(--space-1) 0; }
 @media (max-width: 760px) { .mz-row { grid-template-columns: 4rem minmax(0, 1fr) 3rem; } .mz-row > :last-child { display: none; } }
+
+/* ---------- Lecciones 2.3 y 2.4 ---------- */
+.ss-big { display: flex; flex-wrap: wrap; gap: var(--space-6); margin: var(--space-3) 0; }
+.ss-big > div { display: grid; }
+.ss-big b { font-size: 1.7rem; font-weight: 500; font-family: var(--font-mono); }
+.ss-big span { color: var(--muted); font-size: 0.8rem; }
+.ss-refs { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
+.ss-refs li { margin: 0; padding: 0.3rem 0.6rem; border-radius: 4px; }
+.ss-refs li.fits { background: var(--ok-soft); color: var(--ok); }
+.ss-refs li.nofit { background: var(--bad-soft); color: var(--bad); }
+.bm-table { display: grid; gap: 4px; margin: var(--space-3) 0; }
+.bm-row { display: grid; grid-template-columns: 5.5rem 5rem minmax(0, 1fr) 5rem 3rem; gap: var(--space-3); align-items: center; }
+.bm-bar { height: 0.9rem; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
+.bm-bar > div { height: 100%; background: var(--accent); }
+.ac-svg { width: 100%; height: auto; display: block; }
+.ac-axis { stroke: var(--rule-strong); }
+.ac-label { font: 11px var(--font-sans); fill: var(--muted); }
+.ac-line { fill: none; stroke-width: 2.5; }
+.ac-line.classical { stroke: var(--muted); }
+.ac-line.quantum { stroke: var(--accent); }
+.ac-tag { font: 600 12px var(--font-sans); }
+.ac-tag.classical { fill: var(--muted); } .ac-tag.quantum { fill: var(--accent); }
+.ac-cross { fill: var(--warn); stroke: var(--surface); stroke-width: 2; }
+.ac-drop { stroke: var(--warn); stroke-dasharray: 3 3; }
+.ac-verdict { padding: var(--space-2) var(--space-3); border-radius: var(--radius); }
+.ac-verdict p { margin: var(--space-1) 0; }
+.ac-verdict.ok { background: var(--ok-soft); } .ac-verdict.warn { background: var(--warn-soft); } .ac-verdict.bad { background: var(--bad-soft); }
+.sc-list { display: grid; gap: var(--space-2); }
+.sc-item { border: 1px solid var(--rule); border-radius: var(--radius); padding: var(--space-2) var(--space-3); background: var(--bg); }
+.sc-item.ok { border-color: var(--ok); } .sc-item.bad { border-color: var(--bad); }
+.sc-task { margin: 0 0 var(--space-2); font-weight: 500; }
+.sc-options { display: flex; flex-wrap: wrap; gap: 4px; }
+.sc-options .chip.sc-correct { border-color: var(--ok); }
+.sc-why { margin: var(--space-2) 0 0; font-size: 0.85rem; }
+@media (max-width: 760px) { .bm-row { grid-template-columns: 4.5rem minmax(0, 1fr) 4.2rem; } .bm-row > :nth-child(2), .bm-row > :nth-child(5) { display: none; } }
+
+/* ---------- 2.5 Flujo híbrido ---------- */
+.hf-lane { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; align-items: stretch; gap: var(--space-1); margin-bottom: var(--space-3); }
+.hf-part { display: flex; flex-direction: column; justify-content: center; gap: 2px; min-width: 0; padding: var(--space-2); border: 1px solid var(--rule-strong); border-radius: var(--radius); background: var(--bg); text-align: center; transition: background 0.2s, border-color 0.2s; }
+.hf-part b { font-size: 0.82rem; overflow-wrap: anywhere; }
+.hf-part small { color: var(--muted); font-size: 0.7rem; }
+.hf-part.quantum { border-style: dashed; }
+.hf-part.active { background: var(--accent-soft); border-color: var(--accent); }
+.hf-arrow { align-self: center; color: var(--muted); }
+.hf-card { padding: var(--space-3); border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 var(--radius) var(--radius) 0; }
+.hf-card h5 { margin: 0 0 var(--space-1); font-size: 1rem; }
+.hf-card p { margin: var(--space-1) 0; }
+.hf-step { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.hf-travels span { font-weight: 600; color: var(--teal); }
+.hf-dots { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; }
+.hf-dot { width: 12px; height: 12px; padding: 0; border-radius: 50%; border: 1px solid var(--rule-strong); background: var(--bg); cursor: pointer; }
+.hf-dot.on { background: var(--accent); border-color: var(--accent); }
+@media (max-width: 560px) {
+  .hf-lane { grid-template-columns: 1fr; }
+  .hf-arrow { transform: rotate(90deg); justify-self: center; }
+}
+
+/* ---------- 2.5 Bucle híbrido ---------- */
+.hl-result { min-height: 4rem; }
+.hl-bars { display: grid; gap: 6px; margin-bottom: var(--space-2); }
+.hl-bar { display: grid; grid-template-columns: 1.5rem 1fr 3.5rem; align-items: center; gap: var(--space-2); font-family: var(--font-mono); }
+.hl-bar b { text-align: right; font-weight: 500; }
+.hl-track { position: relative; height: 1.1rem; background: var(--rule); border-radius: 3px; }
+.hl-track i { display: block; height: 100%; background: var(--muted); border-radius: 3px; }
+.hl-bar.one .hl-track i { background: var(--accent); }
+.hl-target { position: absolute; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; background: var(--warn); }
+.hl-ok { color: var(--ok); }
+.hl-truth { display: flex; gap: var(--space-2); align-items: flex-start; margin: var(--space-2) 0; color: var(--ink-2); }
+.hl-log { margin: var(--space-2) 0 0; padding-left: 2rem; font-size: 0.8rem; color: var(--ink-2); }
+
+/* ---------- 2.6 Tecnologías ---------- */
+.te-card { padding: var(--space-3); border: 1px solid var(--rule); border-radius: var(--radius); background: var(--bg); }
+.te-facts { display: grid; grid-template-columns: max-content 1fr; gap: var(--space-1) var(--space-3); margin: 0 0 var(--space-3); }
+.te-facts dt { font-weight: 600; color: var(--ink-2); }
+.te-facts dd { margin: 0; }
+.te-cols { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+.te-cols ul { margin: 0; padding-left: 1.2rem; }
+.te-head { margin: 0 0 var(--space-1); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.te-head.ok { color: var(--ok); } .te-head.bad { color: var(--bad); }
+.te-quiz-title { margin: var(--space-4) 0 var(--space-2); font-size: 0.95rem; }
+.te-quiz { display: grid; gap: var(--space-2); }
+@media (max-width: 560px) {
+  .te-facts, .te-cols { grid-template-columns: 1fr; }
+}
+
+/* ---------- 2.6 Métricas ---------- */
+.qm-rows { display: grid; gap: var(--space-2); }
+.qm-row { display: grid; grid-template-columns: minmax(0, 15rem) 1fr 6.5rem; align-items: center; gap: var(--space-3); }
+.qm-row.nofit { opacity: 0.6; }
+.qm-name { display: flex; flex-direction: column; min-width: 0; }
+.qm-name small { color: var(--muted); font-size: 0.72rem; }
+.qm-track { height: 1rem; background: var(--rule); border-radius: 3px; overflow: hidden; }
+.qm-track i { display: block; height: 100%; background: var(--accent); }
+.qm-val { text-align: right; font-size: 0.8rem; }
+@media (max-width: 560px) {
+  .qm-row { grid-template-columns: 1fr 5.5rem; }
+  .qm-name { grid-column: 1 / -1; }
+}
+
+/* ---------- 2.6 Titulares ---------- */
+.hc-headline { font-family: var(--font-serif); font-style: italic; }
+.hc-options { display: grid; gap: 4px; }
+.hc-options .chip { text-align: left; white-space: normal; }
+.hc-options .chip.sc-correct { border-color: var(--ok); }

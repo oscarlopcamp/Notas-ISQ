@@ -39,6 +39,22 @@ export default {
 
 Los identificadores de sección (`id`) deben ser únicos dentro de la lección: se usan en el índice lateral.
 
+### Nivel matemático: ligero por defecto
+
+El público son ingenieros de software, que a menudo no tienen las matemáticas recientes. En el nivel 2:
+
+- Cada sección lleva `key`: la idea en una o dos frases, sin símbolos. Se muestra como «En pocas palabras».
+- Lo visible es lo básico: como mucho una fórmula y un ejemplo numérico sencillo, con etiquetas en palabras en lugar de subíndices.
+- Las demostraciones, los desarrollos largos y la notación general se marcan con `deep: true`. Esos bloques se agrupan en un desplegable «Para profundizar (opcional)», cerrado por defecto.
+
+```js
+{ id: 'negacion', title: '…', key: 'Para cambiar el signo: invierte los bits y suma 1.', blocks: [
+  { type: 'p', text: 'Ejemplo: negar 5 con 8 bits.' },
+  { type: 'steps', items: [ … ] },
+  { deep: true, type: 'steps', items: [ /* demostración */ ] },
+] }
+```
+
 ## Bloques
 
 | `type` | Campos | Uso |

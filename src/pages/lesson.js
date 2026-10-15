@@ -126,9 +126,16 @@ export async function render(main, [id], ctx) {
         h('h2', {}, lvl.title)),
       data.intro ? h('p', { class: 'level-intro', html: inline(data.intro) }) : null);
     data.sections.forEach((s, i) => {
+      // Bloques esenciales a la vista; los marcados como «deep» van a un desplegable opcional.
+      const essential = s.blocks.filter((b) => !b.deep);
+      const deep = s.blocks.filter((b) => b.deep);
       const sec = h('section', { class: 'lesson-section', id: `sec-${s.id}` },
         h('h3', {}, h('span', { class: 'sec-num' }, `${lvl.n}.${i + 1}`), h('span', { html: inline(s.title) })),
-        renderBlocks(s.blocks, ctx));
+        s.key ? h('div', { class: 'key-idea' }, h('span', { class: 'key-idea-label' }, 'En pocas palabras'), h('p', { html: inline(s.key) })) : null,
+        renderBlocks(essential, ctx),
+        deep.length ? h('details', { class: 'deepdive' },
+          h('summary', {}, h('span', {}, 'Para profundizar'), h('small', {}, ' · opcional: el desarrollo completo y las demostraciones')),
+          h('div', { class: 'deepdive-body' }, renderBlocks(deep, ctx))) : null);
       sectionEntries.push({ id: `sec-${s.id}`, label: `${lvl.n}.${i + 1} ${s.title.replace(/\$/g, '')}`, level: lvl.id, el: sec });
       block.append(sec);
     });

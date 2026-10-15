@@ -168,21 +168,21 @@ export default {
 
     // =====================================================================
     matematico: {
-      intro: 'Formalizamos ahora lo que hemos visto: notación posicional, conversión entre bases, conteo de patrones, hexadecimal y el esquema UTF-8. No se omite ningún paso.',
+      intro: 'Aquí ponemos números a las ideas del nivel 1. Cada sección empieza con la idea en pocas palabras y un ejemplo; las demostraciones están en «Para profundizar», por si te interesan. Basta con aritmética.',
       sections: [
         {
           id: 'notacion-posicional',
-          title: 'Notación posicional en base 2',
+          title: 'Notación posicional en base 2', key: 'Cada posición de un número binario vale el doble que la de su derecha: 1, 2, 4, 8, 16… Para saber cuánto vale, suma los valores de las posiciones donde hay un 1.',
           blocks: [
             { type: 'p', text: 'Empecemos por algo que ya sabes hacer sin pensar. En decimal, el número 472 significa:' },
             { type: 'math', tex: '472 = 4 \\cdot 10^2 + 7 \\cdot 10^1 + 2 \\cdot 10^0 = 400 + 70 + 2' },
-            { type: 'p', text: 'Cada posición tiene un <em>peso</em> que es una potencia de la base (10), y cada dígito dice cuántas veces se toma ese peso. El [[binario|sistema binario]] funciona exactamente igual, con base 2 y solo dos dígitos posibles, 0 y 1. Un número binario de $n$ dígitos $b_{n-1} b_{n-2} \\dots b_1 b_0$ vale:' },
-            { type: 'math', tex: 'N = \\sum_{i=0}^{n-1} b_i \\cdot 2^i, \\qquad b_i \\in \\{0, 1\\}', note: 'El subíndice $i$ indica la posición contando desde la derecha y empezando en 0. El bit $b_0$ es el <em>menos significativo</em> (peso $2^0 = 1$) y $b_{n-1}$ el <em>más significativo</em>.' },
+            { deep: true, type: 'p', text: 'Cada posición tiene un <em>peso</em> que es una potencia de la base (10), y cada dígito dice cuántas veces se toma ese peso. El [[binario|sistema binario]] funciona exactamente igual, con base 2 y solo dos dígitos posibles, 0 y 1. Un número binario de $n$ dígitos $b_{n-1} b_{n-2} \\dots b_1 b_0$ vale:' },
+            { deep: true, type: 'math', tex: 'N = \\sum_{i=0}^{n-1} b_i \\cdot 2^i, \\qquad b_i \\in \\{0, 1\\}', note: 'El subíndice $i$ indica la posición contando desde la derecha y empezando en 0. El bit $b_0$ es el <em>menos significativo</em> (peso $2^0 = 1$) y $b_{n-1}$ el <em>más significativo</em>.' },
             { type: 'p', text: 'Apliquémoslo al byte de la letra «H», $01001000_2$ (el subíndice 2 indica que está en base 2):' },
-            { type: 'table', head: ['Posición $i$', '7', '6', '5', '4', '3', '2', '1', '0'], mono: [1, 2, 3, 4, 5, 6, 7, 8], rows: [
-              ['Peso $2^i$', '128', '64', '32', '16', '8', '4', '2', '1'],
-              ['Bit $b_i$', '0', '1', '0', '0', '1', '0', '0', '0'],
-              ['$b_i \\cdot 2^i$', '0', '64', '0', '0', '8', '0', '0', '0'],
+            { type: 'table', head: ['Posición', '7', '6', '5', '4', '3', '2', '1', '0'], mono: [1, 2, 3, 4, 5, 6, 7, 8], rows: [
+              ['Peso', '128', '64', '32', '16', '8', '4', '2', '1'],
+              ['Bit', '0', '1', '0', '0', '1', '0', '0', '0'],
+              ['Bit × peso', '0', '64', '0', '0', '8', '0', '0', '0'],
             ] },
             { type: 'math', tex: '\\begin{aligned} 01001000_2 &= 0\\cdot128 + 1\\cdot64 + 0\\cdot32 + 0\\cdot16 \\\\ &\\quad + 1\\cdot8 + 0\\cdot4 + 0\\cdot2 + 0\\cdot1 \\\\ &= 64 + 8 = 72 \\end{aligned}' },
             { type: 'p', text: 'En la práctica, basta con sumar los pesos de las posiciones donde hay un 1. Es lo que hace el explorador de bits del nivel 1 al mostrar el peso bajo cada bit.' },
@@ -191,7 +191,7 @@ export default {
         },
         {
           id: 'decimal-a-binario',
-          title: 'De decimal a binario: divisiones sucesivas',
+          title: 'De decimal a binario: divisiones sucesivas', key: 'Para pasar un número a binario, divídelo entre 2 una y otra vez, apunta los restos y léelos de abajo arriba.',
           blocks: [
             { type: 'p', text: 'Para el camino inverso usamos un método sistemático: dividir repetidamente entre 2 y anotar los restos. Convirtamos 72:' },
             { type: 'table', head: ['Paso', 'División', 'Cociente', 'Resto'], mono: [1, 2, 3], rows: [
@@ -204,9 +204,9 @@ export default {
               ['7', '1 ÷ 2', '0', '<b>1</b>'],
             ], caption: 'Se detiene cuando el cociente llega a 0.' },
             { type: 'p', text: 'Leyendo los restos <em>de abajo arriba</em> obtenemos $1001000_2$. Para completar un byte añadimos un 0 a la izquierda, que no cambia el valor: $01001000_2$. Comprobación: $64 + 8 = 72$. ✓' },
-            { type: 'h', text: '¿Por qué funciona?' },
-            { type: 'p', text: 'Dividir un número entre 2 separa su último bit. Si $N = 2q + r$ con $r \\in \\{0,1\\}$, entonces $r$ es exactamente $b_0$, porque todos los demás términos de la suma $\\sum b_i 2^i$ son múltiplos de 2. El cociente $q$ es el número que queda al «quitar» ese último bit, y repetir el proceso con $q$ nos da $b_1$, luego $b_2$, etc. Por eso los restos salen en orden del menos al más significativo y hay que leerlos al revés.' },
-            { type: 'steps', items: [
+            { deep: true, type: 'h', text: '¿Por qué funciona?' },
+            { deep: true, type: 'p', text: 'Dividir un número entre 2 separa su último bit. Si $N = 2q + r$ con $r \\in \\{0,1\\}$, entonces $r$ es exactamente $b_0$, porque todos los demás términos de la suma $\\sum b_i 2^i$ son múltiplos de 2. El cociente $q$ es el número que queda al «quitar» ese último bit, y repetir el proceso con $q$ nos da $b_1$, luego $b_2$, etc. Por eso los restos salen en orden del menos al más significativo y hay que leerlos al revés.' },
+            { deep: true, type: 'steps', items: [
               { text: 'Partimos de la expansión binaria:', tex: '72 = b_6 2^6 + b_5 2^5 + b_4 2^4 + b_3 2^3 + b_2 2^2 + b_1 2^1 + b_0' },
               { text: 'Todo salvo $b_0$ es par, así que el resto de dividir entre 2 es $b_0$:', tex: '72 = 2 \\cdot 36 + 0 \\;\\Rightarrow\\; b_0 = 0' },
               { text: 'El cociente contiene los bits restantes desplazados una posición:', tex: '36 = b_6 2^5 + b_5 2^4 + b_4 2^3 + b_3 2^2 + b_2 2^1 + b_1' },
@@ -216,12 +216,12 @@ export default {
         },
         {
           id: 'contar-patrones',
-          title: 'Cuántos patrones y cuántos bits',
+          title: 'Cuántos patrones y cuántos bits', key: 'Con n bits hay 2ⁿ combinaciones. Para distinguir N opciones necesitas tantos bits como haga falta para que 2ⁿ llegue a N: 26 letras → 5 bits, porque 2⁵ = 32.',
           blocks: [
             { type: 'p', text: 'En el nivel 1 vimos que cada bit duplica las combinaciones. Formalmente, como cada uno de los $n$ bits puede tomar 2 valores de forma independiente, el principio multiplicativo da:' },
             { type: 'math', tex: '\\underbrace{2 \\times 2 \\times \\cdots \\times 2}_{n\\ \\text{veces}} = 2^n \\ \\text{patrones}' },
-            { type: 'p', text: 'La pregunta inversa es igual de útil en ingeniería: ¿cuántos bits necesito, como mínimo, para dar un patrón distinto a cada una de $N$ alternativas? Necesitamos que $2^n \\ge N$, y el menor entero que lo cumple es:' },
-            { type: 'math', tex: 'n_{\\min} = \\lceil \\log_2 N \\rceil', note: '$\\lceil x \\rceil$ («techo de $x$») es el menor entero mayor o igual que $x$. $\\log_2 N$ es el exponente al que hay que elevar 2 para obtener $N$.' },
+            { deep: true, type: 'p', text: 'La pregunta inversa es igual de útil en ingeniería: ¿cuántos bits necesito, como mínimo, para dar un patrón distinto a cada una de $N$ alternativas? Necesitamos que $2^n \\ge N$, y el menor entero que lo cumple es:' },
+            { deep: true, type: 'math', tex: 'n_{\\min} = \\lceil \\log_2 N \\rceil', note: '$\\lceil x \\rceil$ («techo de $x$») es el menor entero mayor o igual que $x$. $\\log_2 N$ es el exponente al que hay que elevar 2 para obtener $N$.' },
             { type: 'table', head: ['Alternativas $N$', '$\\log_2 N$', 'Bits mínimos', 'Comprobación'], rows: [
               ['2 (moneda)', '1', '1', '$2^1 = 2$'],
               ['26 (letras del alfabeto inglés)', '≈ 4,70', '5', '$2^4 = 16 < 26 \\le 32 = 2^5$'],
@@ -229,16 +229,16 @@ export default {
               ['256 (un byte)', '8', '8', '$2^8 = 256$'],
               ['1 114 112 (puntos de código Unicode)', '≈ 20,09', '21', '$2^{20} = 1\\,048\\,576 < 1\\,114\\,112 \\le 2^{21}$'],
             ], caption: 'El espacio de Unicode va de U+0000 a U+10FFFF, es decir, $\\text{10FFFF}_{16} + 1 = 1\\,114\\,112$ valores posibles.' },
-            { type: 'h', text: 'Una medida de la información (avance)' },
-            { type: 'p', text: 'En su artículo de 1948, Shannon mide la información de una elección entre $N$ alternativas <em>igualmente probables</em> con el logaritmo de $N$ —una idea que él mismo atribuye a Hartley (1928)— y, al usar logaritmos en base 2, llama <em>bits</em> a la unidad resultante, término que atribuye a J. W. Tukey [@shannon1948]:' },
-            { type: 'math', tex: 'I = \\log_2 N \\ \\text{bits}' },
-            { type: 'p', text: 'Para la moneda, $\\log_2 2 = 1$ bit; para el dado, $\\log_2 6 \\approx 2{,}585$ bits; para una letra elegida al azar entre 26, $\\log_2 26 \\approx 4{,}70$ bits. Observa la diferencia con la tabla anterior: la <em>medida</em> de información puede no ser entera, pero para <em>almacenar</em> una sola letra con un código de longitud fija necesitamos un número entero de bits (5). Cuando las alternativas no son igualmente probables, la medida se generaliza con la entropía de Shannon, $H = -\\sum_i p_i \\log_2 p_i$, que estudiaremos cuando la necesitemos.' },
+            { deep: true, type: 'h', text: 'Una medida de la información (avance)' },
+            { deep: true, type: 'p', text: 'En su artículo de 1948, Shannon mide la información de una elección entre $N$ alternativas <em>igualmente probables</em> con el logaritmo de $N$ —una idea que él mismo atribuye a Hartley (1928)— y, al usar logaritmos en base 2, llama <em>bits</em> a la unidad resultante, término que atribuye a J. W. Tukey [@shannon1948]:' },
+            { deep: true, type: 'math', tex: 'I = \\log_2 N \\ \\text{bits}' },
+            { deep: true, type: 'p', text: 'Para la moneda, $\\log_2 2 = 1$ bit; para el dado, $\\log_2 6 \\approx 2{,}585$ bits; para una letra elegida al azar entre 26, $\\log_2 26 \\approx 4{,}70$ bits. Observa la diferencia con la tabla anterior: la <em>medida</em> de información puede no ser entera, pero para <em>almacenar</em> una sola letra con un código de longitud fija necesitamos un número entero de bits (5). Cuando las alternativas no son igualmente probables, la medida se generaliza con la entropía de Shannon, $H = -\\sum_i p_i \\log_2 p_i$, que estudiaremos cuando la necesitemos.' },
             { type: 'callout', kind: 'warning', title: 'Dos usos de la palabra «bit»', text: '«Bit» designa tanto un dígito binario de almacenamiento como la unidad de medida de información. No son lo mismo: un archivo de un millón de bits que contiene solo ceros ocupa un millón de bits de almacenamiento, pero apenas aporta información, y por eso se comprime muchísimo.' },
           ],
         },
         {
           id: 'hexadecimal',
-          title: 'Hexadecimal: una abreviatura para leer bits',
+          title: 'Hexadecimal: una abreviatura para leer bits', key: 'Cada dígito hexadecimal resume exactamente 4 bits: 0100 1000 → 4 y 8 → 0x48.',
           blocks: [
             { type: 'p', text: 'Las cadenas binarias largas son difíciles de leer. Por eso se usa con frecuencia la base 16, o [[hexadecimal|hexadecimal]], con los dígitos 0–9 y A–F (A = 10, …, F = 15). La clave es que $16 = 2^4$: cada dígito hexadecimal corresponde exactamente a 4 bits, de modo que la conversión se hace por bloques, sin cálculos:' },
             { type: 'steps', items: [
@@ -258,7 +258,7 @@ export default {
         },
         {
           id: 'utf8',
-          title: 'UTF-8 paso a paso: por qué «ñ» ocupa dos bytes',
+          title: 'UTF-8 paso a paso: por qué «ñ» ocupa dos bytes', key: 'UTF-8 reparte los bits de cada carácter en 1 a 4 bytes, y los primeros bits de cada byte indican cuántos bytes forman el carácter. Así, «ñ» se guarda como C3 B1.',
           blocks: [
             { type: 'p', text: 'UTF-8 reparte los bits del punto de código en 1, 2, 3 o 4 bytes según su tamaño. Los primeros bits de cada byte indican su función [@rfc3629]:' },
             { type: 'table', head: ['Rango de puntos de código', 'Bits útiles', 'Patrón de bytes'], mono: [0, 2], rows: [
@@ -267,8 +267,8 @@ export default {
               ['U+0800 – U+FFFF', '16', '1110xxxx 10xxxxxx 10xxxxxx'],
               ['U+10000 – U+10FFFF', '21', '11110xxx 10xxxxxx 10xxxxxx 10xxxxxx'],
             ], caption: 'Las «x» se rellenan con los bits del punto de código, de izquierda a derecha. Fuente: RFC 3629, sección 3.' },
-            { type: 'p', text: 'Codifiquemos «ñ», cuyo punto de código es U+00F1:' },
-            { type: 'steps', items: [
+            { deep: true, type: 'p', text: 'Codifiquemos «ñ», cuyo punto de código es U+00F1:' },
+            { deep: true, type: 'steps', items: [
               { text: 'Pasamos el punto de código a decimal y binario:', tex: '\\text{F1}_{16} = 15 \\cdot 16 + 1 = 241 = 11110001_2' },
               { text: 'Como $128 \\le 241 \\le 2047$ (es decir, U+0080–U+07FF), corresponde la fila de 2 bytes, que tiene 11 bits útiles. Rellenamos con ceros a la izquierda hasta 11 bits:', tex: '000\\,1111\\,0001' },
               { text: 'Repartimos: los 5 primeros bits van al primer byte y los 6 últimos al segundo:', tex: '\\underbrace{00011}_{5} \\;|\\; \\underbrace{110001}_{6}' },
@@ -339,9 +339,7 @@ ASCII no puede representar: ñ` },
           title: 'Implementar la conversión y probarla',
           blocks: [
             { type: 'p', text: 'Python ya ofrece <code>bin()</code> e <code>int(s, 2)</code>, pero implementar la conversión nosotros mismos es un buen ejercicio para fijar el método de las divisiones sucesivas. Añadimos además pruebas automáticas: un hábito de ingeniería de software que retomaremos —con dificultades nuevas— cuando hablemos de probar programas cuánticos en el Módulo 8.' },
-            { type: 'code', lang: 'python', file: 'conversion.py', code: `def a_binario(n: int, ancho: int = 8) -> str:
-    if n < 0:
-        raise ValueError("Este ejemplo solo admite enteros no negativos")
+            { type: 'code', lang: 'python', file: 'conversion.py', code: `def a_binario(n, ancho=8):
     digitos = []
     while n > 0:
         n, resto = divmod(n, 2)
@@ -350,7 +348,7 @@ ASCII no puede representar: ñ` },
     return binario.zfill(ancho)
 
 
-def a_decimal(bits: str) -> int:
+def a_decimal(bits):
     valor = 0
     for b in bits:
         valor = valor * 2 + int(b)

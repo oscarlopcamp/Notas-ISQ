@@ -80,15 +80,15 @@ export const modules = [
       {
         title: 'Motivaciones y límites',
         lessons: [
-          L('motivaciones-simulacion', 'Motivaciones: simulación de sistemas físicos y moleculares', ['Motivaciones de la computación cuántica', 'Simulación de sistemas físicos', 'Simulación molecular', 'Crecimiento de espacios de estados']),
-          L('ventajas-y-limitaciones', 'Posibles ventajas y limitaciones', ['Problemas de optimización', 'Posibles ventajas cuánticas', 'Limitaciones', 'Qué problemas no se benefician necesariamente', 'Computación cuántica como complemento de la clásica']),
+          L('motivaciones-simulacion', 'Motivaciones: simular la naturaleza', ['Motivaciones de la computación cuántica', 'Simulación de sistemas físicos', 'Simulación molecular', 'Crecimiento de espacios de estados'], { load: () => import('./module-02/motivaciones-simulacion.js'), minutes: 45 }),
+          L('ventajas-y-limitaciones', 'Posibles ventajas y limitaciones', ['Problemas de optimización', 'Posibles ventajas cuánticas', 'Limitaciones', 'Qué problemas no se benefician necesariamente', 'Computación cuántica como complemento de la clásica'], { load: () => import('./module-02/ventajas-y-limitaciones.js'), minutes: 50 }),
         ],
       },
       {
         title: 'El sistema de cómputo',
         lessons: [
-          L('qpu-computacion-hibrida', 'La QPU y la computación híbrida', ['¿Qué es una QPU?', 'Computación híbrida', 'Arquitectura general de una computadora cuántica']),
-          L('panorama-tecnologico', 'Panorama tecnológico', ['Panorama tecnológico']),
+          L('qpu-computacion-hibrida', 'La QPU y la computación híbrida', ['¿Qué es una QPU?', 'Computación híbrida', 'Arquitectura general de una computadora cuántica'], { load: () => import('./module-02/qpu-computacion-hibrida.js'), minutes: 45 }),
+          L('panorama-tecnologico', 'Panorama tecnológico', ['Panorama tecnológico'], { load: () => import('./module-02/panorama-tecnologico.js'), minutes: 45 }),
         ],
       },
     ],

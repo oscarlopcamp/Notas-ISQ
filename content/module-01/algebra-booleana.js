@@ -97,20 +97,20 @@ export default {
     },
 
     matematico: {
-      intro: 'Definición formal, demostraciones algebraicas y por inducción perfecta, y el número de funciones booleanas posibles.',
+      intro: 'Aquí ponemos números a las ideas del nivel 1. Cada sección empieza con la idea en pocas palabras y un ejemplo; las demostraciones están en «Para profundizar», por si te interesan. Basta con aritmética.',
       sections: [
         {
           id: 'definicion',
-          title: 'Definición',
+          title: 'Definición', key: 'AND da 1 solo si todo es 1; OR, si algo es 1; NOT invierte; XOR da 1 si los valores son distintos (es la suma sin acarreo).',
           blocks: [
-            { type: 'p', text: 'Trabajamos en el conjunto $\\mathbb{B} = \\{0, 1\\}$. Las operaciones básicas se definen por sus tablas, o de forma equivalente con aritmética entera:' },
-            { type: 'math', tex: 'A \\cdot B = \\min(A, B), \\qquad A + B = \\max(A, B), \\qquad \\lnot A = 1 - A, \\qquad A \\oplus B = (A + B) \\bmod 2', note: 'En la fórmula de XOR, «+» es la suma de enteros.' },
-            { type: 'p', text: 'Una <em>función booleana</em> de $n$ variables es cualquier función $f : \\mathbb{B}^n \\to \\mathbb{B}$.' },
+            { deep: true, type: 'p', text: 'Trabajamos en el conjunto $\\mathbb{B} = \\{0, 1\\}$. Las operaciones básicas se definen por sus tablas, o de forma equivalente con aritmética entera:' },
+            { deep: true, type: 'math', tex: 'A \\cdot B = \\min(A, B), \\qquad A + B = \\max(A, B), \\qquad \\lnot A = 1 - A, \\qquad A \\oplus B = (A + B) \\bmod 2', note: 'En la fórmula de XOR, «+» es la suma de enteros.' },
+            { deep: true, type: 'p', text: 'Una <em>función booleana</em> de $n$ variables es cualquier función $f : \\mathbb{B}^n \\to \\mathbb{B}$.' },
           ],
         },
         {
           id: 'demostraciones',
-          title: 'Dos formas de demostrar',
+          title: 'Dos formas de demostrar', key: 'Una ley booleana se demuestra comprobando todas las filas de su tabla. Si una sola fila falla, la ley es falsa.',
           blocks: [
             { type: 'h', text: 'Por inducción perfecta (tabla de verdad): De Morgan' },
             { type: 'table', head: ['$A$', '$B$', '$A \\cdot B$', '$\\lnot(A\\cdot B)$', '$\\lnot A$', '$\\lnot B$', '$\\lnot A + \\lnot B$'], mono: [0, 1, 2, 3, 4, 5, 6], rows: [
@@ -119,22 +119,22 @@ export default {
               ['1', '0', '0', '<b>1</b>', '0', '1', '<b>1</b>'],
               ['1', '1', '1', '<b>0</b>', '0', '0', '<b>0</b>'],
             ], caption: 'Las columnas en negrita coinciden en las cuatro filas: $\\lnot(A \\cdot B) = \\lnot A + \\lnot B$. ∎' },
-            { type: 'h', text: 'Por manipulación algebraica: la absorción' },
-            { type: 'steps', items: [
+            { deep: true, type: 'h', text: 'Por manipulación algebraica: la absorción' },
+            { deep: true, type: 'steps', items: [
               { text: 'Identidad ($A = A \\cdot 1$):', tex: 'A + A \\cdot B = A \\cdot 1 + A \\cdot B' },
               { text: 'Distributiva (sacamos factor común):', tex: '= A \\cdot (1 + B)' },
               { text: 'Anulación ($1 + B = 1$):', tex: '= A \\cdot 1' },
               { text: 'Identidad:', tex: '= A \\quad \\blacksquare' },
             ] },
-            { type: 'p', text: 'La manipulación algebraica no depende del número de variables y produce expresiones más cortas; la tabla de verdad es mecánica e infalible, pero crece como $2^n$. En la práctica se usan ambas.' },
+            { deep: true, type: 'p', text: 'La manipulación algebraica no depende del número de variables y produce expresiones más cortas; la tabla de verdad es mecánica e infalible, pero crece como $2^n$. En la práctica se usan ambas.' },
           ],
         },
         {
           id: 'contar-funciones',
-          title: '¿Cuántas funciones booleanas hay?',
+          title: '¿Cuántas funciones booleanas hay?', key: 'Con 2 entradas hay 16 funciones distintas posibles; con 3, 256. Crecen muy deprisa.',
           blocks: [
-            { type: 'p', text: 'Una función de $n$ variables queda determinada por su tabla, que tiene $2^n$ filas. En cada fila la salida puede ser 0 o 1, de forma independiente. Por el principio multiplicativo:' },
-            { type: 'math', tex: '\\#\\{f : \\mathbb{B}^n \\to \\mathbb{B}\\} = 2^{2^n}' },
+            { deep: true, type: 'p', text: 'Una función de $n$ variables queda determinada por su tabla, que tiene $2^n$ filas. En cada fila la salida puede ser 0 o 1, de forma independiente. Por el principio multiplicativo:' },
+            { deep: true, type: 'math', tex: '\\#\\{f : \\mathbb{B}^n \\to \\mathbb{B}\\} = 2^{2^n}' },
             { type: 'p', text: 'Con $n = 2$ hay $2^4 = 16$ funciones (AND, OR, XOR, NAND… y 12 más). Con $n = 3$, 256; con $n = 5$, más de cuatro mil millones. En la lección 1.7 demostraremos que todas ellas pueden escribirse usando solo AND, OR y NOT.' },
           ],
         },

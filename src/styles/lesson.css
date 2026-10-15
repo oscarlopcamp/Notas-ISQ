@@ -170,3 +170,15 @@ a.term { color: inherit; text-decoration: underline dotted var(--accent); text-u
 .ce-result pre { white-space: pre-wrap; overflow-wrap: anywhere; }
 .ce-err { color: var(--bad); }
 .exercise .ce { margin: var(--space-3) 0; }
+
+/* ---------- «En pocas palabras» y «Para profundizar» ---------- */
+.key-idea { border-left: 3px solid var(--violet); background: var(--violet-soft); padding: var(--space-2) var(--space-4); border-radius: 0 var(--radius) var(--radius) 0; margin: var(--space-3) 0 var(--space-4); }
+.key-idea p { margin: 0; font-size: calc(1.02rem * var(--font-scale)); }
+.key-idea-label { display: block; font-family: var(--font-sans); font-size: var(--text-xs); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--violet); margin-bottom: 2px; }
+.deepdive { border: 1px dashed var(--rule-strong); border-radius: var(--radius); margin: var(--space-4) 0; background: var(--surface); }
+.deepdive > summary { cursor: pointer; padding: var(--space-2) var(--space-4); font-family: var(--font-sans); font-weight: 600; font-size: 0.9rem; color: var(--ink-2); list-style: none; }
+.deepdive > summary::-webkit-details-marker { display: none; }
+.deepdive > summary::before { content: "▸ "; color: var(--violet); }
+.deepdive[open] > summary::before { content: "▾ "; }
+.deepdive > summary small { font-weight: 400; color: var(--muted); }
+.deepdive-body { padding: 0 var(--space-4) var(--space-2); }

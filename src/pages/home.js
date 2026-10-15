@@ -29,7 +29,7 @@ export function render(main) {
     h('p', {}, 'Las lecciones se organizan, cuando el tema lo permite, en tres niveles. Puedes leerlos en orden (recomendado) o elegir uno desde el selector de nivel.'),
     h('div', { class: 'level-legend' },
       h('div', {}, h('strong', {}, '1 · Comprender'), 'Intuición, analogías, diagramas y simulaciones, con comparaciones con la computación clásica.'),
-      h('div', {}, h('strong', {}, '2 · Entender matemáticamente'), 'Notación, definiciones y cálculos desarrollados paso a paso.'),
+      h('div', {}, h('strong', {}, '2 · Entender matemáticamente'), 'La idea con números y ejemplos sencillos; las demostraciones, en un apartado opcional.'),
       h('div', {}, h('strong', {}, '3 · Implementar'), 'Código en Python (y, desde el Módulo 5, Qiskit) que puedes editar y ejecutar en el propio navegador, con su resultado esperado.')),
 
     h('h3', {}, 'Dos formas de usarlo'),

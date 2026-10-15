@@ -77,18 +77,18 @@ export default {
             { type: 'p', text: 'Veámoslo con una matriz de enteros guardada fila tras fila, como hacen C y NumPy por defecto. Recorrerla por filas o por columnas hace exactamente el mismo cálculo, pero no con la misma eficiencia:' },
             { type: 'widget', id: 'cache-sim', caption: 'Reproduce el recorrido por filas y luego por columnas. Verde: acierto (el dato ya estaba en la caché). Rojo: fallo (hay que ir a memoria). Por filas, cada fallo trae un bloque con los siguientes elementos; por columnas, cada acceso salta a otro bloque y expulsa los anteriores antes de reutilizarlos.' },
             { type: 'callout', kind: 'model', status: 'simplificacion', text: 'Es una caché de correspondencia directa minúscula, elegida para que se vea el efecto. Las cachés reales son mucho mayores y asociativas, tienen varios niveles y se combinan con mecanismos de precarga. Pero el principio se mantiene: los recorridos con buena localidad espacial son mucho más rápidos [@hennessy2012].' },
-            { type: 'callout', kind: 'preview', title: 'Avance: simuladores cuánticos', text: 'Un simulador de vector de estado manipula arreglos de $2^n$ números complejos (lección 1.2). Muchas operaciones recorren ese arreglo con saltos de tamaño $2^k$, y su rendimiento depende de cómo aprovechan la caché y la memoria. La ingeniería de software cuántico también es ingeniería de rendimiento clásica.' },
+            { type: 'callout', kind: 'preview', title: 'Avance: simuladores cuánticos', text: 'Simular una computadora cuántica en una normal exige recorrer una y otra vez arreglos enormes de números (lección 1.2). Su velocidad depende, sobre todo, de lo bien que aprovechen la caché y la memoria. La ingeniería de software cuántico también es ingeniería de rendimiento clásica.' },
           ],
         },
       ],
     },
 
     matematico: {
-      intro: 'Espacio de direcciones, descomposición de una dirección en una caché y tiempo medio de acceso.',
+      intro: 'Aquí ponemos números a las ideas del nivel 1. Cada sección empieza con la idea en pocas palabras y un ejemplo; las demostraciones están en «Para profundizar», por si te interesan. Basta con aritmética.',
       sections: [
         {
           id: 'direcciones',
-          title: 'Cuánta memoria se puede direccionar',
+          title: 'Cuánta memoria se puede direccionar', key: 'Con a bits de dirección se pueden numerar 2ᵃ bytes: con 32 bits, 4 GiB.',
           blocks: [
             { type: 'p', text: 'Si las direcciones tienen $a$ bits y cada dirección corresponde a un byte, hay $2^a$ bytes direccionables (el mismo conteo de patrones de la lección 1.1):' },
             { type: 'math', tex: 'a = 32 \\Rightarrow 2^{32} \\text{ B} = 4 \\text{ GiB}, \\qquad a = 64 \\Rightarrow 2^{64} \\text{ B} = 16 \\text{ EiB}', note: '1 GiB = $2^{30}$ bytes; 1 EiB = $2^{60}$ bytes. Por eso los sistemas de 32 bits no podían usar más de 4 GiB de memoria por proceso de forma directa.' },
@@ -96,22 +96,22 @@ export default {
         },
         {
           id: 'direccion-cache',
-          title: 'Cómo localiza un dato una caché de correspondencia directa',
+          title: 'Cómo localiza un dato una caché de correspondencia directa', key: 'La caché usa una parte de la dirección para saber dónde buscar y otra para comprobar que ha encontrado el dato correcto.',
           blocks: [
-            { type: 'p', text: 'Con bloques de $B$ bytes y $L$ líneas, la dirección $d$ se descompone en:' },
-            { type: 'math', tex: '\\text{bloque} = \\lfloor d / B \\rfloor, \\qquad \\text{línea} = \\text{bloque} \\bmod L, \\qquad \\text{etiqueta} = \\lfloor \\text{bloque} / L \\rfloor' },
-            { type: 'p', text: 'La línea indica dónde buscar; la etiqueta, guardada junto al bloque, permite saber si el bloque que hay en esa línea es el buscado. Ejemplo con $B = 16$ y $L = 4$, para la dirección 100:' },
-            { type: 'steps', items: [
+            { deep: true, type: 'p', text: 'Con bloques de $B$ bytes y $L$ líneas, la dirección $d$ se descompone en:' },
+            { deep: true, type: 'math', tex: '\\text{bloque} = \\lfloor d / B \\rfloor, \\qquad \\text{línea} = \\text{bloque} \\bmod L, \\qquad \\text{etiqueta} = \\lfloor \\text{bloque} / L \\rfloor' },
+            { deep: true, type: 'p', text: 'La línea indica dónde buscar; la etiqueta, guardada junto al bloque, permite saber si el bloque que hay en esa línea es el buscado. Ejemplo con $B = 16$ y $L = 4$, para la dirección 100:' },
+            { deep: true, type: 'steps', items: [
               { tex: '\\text{bloque} = \\lfloor 100 / 16 \\rfloor = 6' },
               { tex: '\\text{línea} = 6 \\bmod 4 = 2, \\qquad \\text{etiqueta} = \\lfloor 6 / 4 \\rfloor = 1' },
               { text: 'Si la línea 2 contiene la etiqueta 1, es un acierto. Si no, es un fallo y se trae el bloque 6 (bytes 96–111).' },
             ] },
-            { type: 'p', text: 'En el recorrido por columnas del simulador (filas de 32 bytes), los elementos de una columna están en direcciones separadas 32 bytes: bloques 0, 2, 4, 6…, que con 4 líneas caen alternativamente en las líneas 0 y 2 y se expulsan unos a otros antes de reutilizarse. De ahí el 0 % de aciertos.' },
+            { deep: true, type: 'p', text: 'En el recorrido por columnas del simulador (filas de 32 bytes), los elementos de una columna están en direcciones separadas 32 bytes: bloques 0, 2, 4, 6…, que con 4 líneas caen alternativamente en las líneas 0 y 2 y se expulsan unos a otros antes de reutilizarse. De ahí el 0 % de aciertos.' },
           ],
         },
         {
           id: 'amat',
-          title: 'Tiempo medio de acceso a memoria',
+          title: 'Tiempo medio de acceso a memoria', key: 'Tiempo medio de acceso = tiempo de un acierto + (fracción de fallos × coste de un fallo). Pocos fallos ya pesan mucho.',
           blocks: [
             { type: 'p', text: 'Si un acierto cuesta $t_h$, la tasa de fallos es $m$ y cada fallo añade una penalización $t_p$, el tiempo medio de acceso es [@patterson2021]:' },
             { type: 'math', tex: '\\text{AMAT} = t_h + m \\cdot t_p' },

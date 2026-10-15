@@ -42,10 +42,10 @@ export default {
             { type: 'p', text: 'Tres ideas resumen esas reglas, y las desarrollaremos a lo largo del curso:' },
             { type: 'list', items: [
               '<b>Las posibilidades se describen con amplitudes, no con probabilidades.</b> Las [[amplitud|amplitudes]] de caminos distintos se suman y pueden cancelarse: es la [[interferencia]].',
-              '<b>Varios sistemas pueden estar entrelazados.</b> Su estado conjunto no se puede describir como una lista de estados individuales (Módulo 3).',
+              '<b>Varios qubits pueden estar entrelazados:</b> unidos de tal forma que no se pueden describir uno por uno. Lo veremos en el Módulo 3.',
               '<b>Medir da un único resultado clásico,</b> con una probabilidad que depende de las amplitudes, y cambia el estado.',
             ] },
-            { type: 'p', text: 'La unidad de información es el [[qubit]]: un sistema con dos estados base, que se escriben $|0\\rangle$ y $|1\\rangle$, y que puede estar en combinaciones de ambos. Al medirlo se obtiene un bit: 0 o 1. Un algoritmo cuántico es una receta para preparar los qubits, transformarlos con operaciones y medirlos, de modo que la interferencia haga muy probable obtener la respuesta buscada.' },
+            { type: 'p', text: 'La unidad de información es el [[qubit]]: un sistema con dos estados base, que llamaremos 0 y 1, y que puede estar en combinaciones de ambos (con una amplitud para cada uno). Al medirlo se obtiene un bit: 0 o 1. Un algoritmo cuántico es una receta para preparar los qubits, transformarlos con operaciones y medirlos, de modo que la interferencia haga muy probable obtener la respuesta buscada.' },
           ],
         },
         {
@@ -71,14 +71,14 @@ export default {
           blocks: [
             { type: 'p', text: 'En la lección 1.1 hicimos explícitas las propiedades del bit que solemos dar por sentadas. Ahora podemos compararlas con las del qubit. Cada fila se estudiará en detalle en el Módulo 3:' },
             { type: 'table', head: ['Aspecto', 'Bit clásico', 'Qubit'], rows: [
-              ['Estado', 'Siempre 0 o 1', 'Descrito por dos amplitudes asociadas a $|0\\rangle$ y $|1\\rangle$'],
+              ['Estado', 'Siempre 0 o 1', 'Descrito por dos amplitudes: una para 0 y otra para 1'],
               ['Lectura', 'Leer no cambia el valor', 'Medir da 0 o 1 con cierta probabilidad y, en general, modifica el estado'],
-              ['Copia', 'Se copia libremente', 'Un estado desconocido no puede copiarse (no clonación [@wootters1982])'],
-              ['Varios a la vez', 'n bits: un valor de n bits', 'n qubits: el estado se describe con $2^n$ amplitudes y puede estar entrelazado'],
-              ['Operaciones', 'Pueden perder información (AND)', 'Reversibles; la única operación irreversible es la medición'],
-              ['Errores', 'Se controlan con umbrales y redundancia', 'Ruido y decoherencia; requieren corrección de errores cuántica'],
+              ['Copia', 'Se copia libremente', 'Un qubit cuyo estado no conocemos no se puede copiar [@wootters1982]'],
+              ['Varios a la vez', 'n bits: un valor de n bits', 'n qubits: describirlos puede requerir $2^n$ amplitudes'],
+              ['Operaciones', 'Pueden perder información (AND)', 'Siempre reversibles, salvo la medición (lección 1.6)'],
+              ['Errores', 'Se controlan con umbrales y redundancia', 'Mucho más sensibles al ruido; protegerlos exige técnicas especiales'],
             ] },
-            { type: 'callout', kind: 'warning', title: '$2^n$ amplitudes no son $2^n$ resultados', text: 'Describir el estado de $n$ qubits puede requerir $2^n$ amplitudes, y por eso es tan costoso simularlos (lección 1.2). Pero al medirlos se obtienen solo $n$ bits. Hay un resultado preciso, la cota de Holevo, que limita la información clásica que se puede extraer de $n$ qubits a $n$ bits [@nielsen2010]. La potencia de la computación cuántica no está en «guardar» muchos valores, sino en usar la interferencia para que el resultado medido sea útil.' },
+            { type: 'callout', kind: 'warning', title: '$2^n$ amplitudes no son $2^n$ resultados', text: 'Describir el estado de $n$ qubits puede requerir $2^n$ amplitudes, y por eso es tan costoso simularlos (lección 1.2). Pero al medirlos se obtienen solo $n$ bits. Está demostrado que de $n$ qubits no se pueden extraer más de $n$ bits de información [@nielsen2010]. La potencia de la computación cuántica no está en «guardar» muchos valores, sino en usar la interferencia para que el resultado medido sea útil.' },
           ],
         },
         {
@@ -98,24 +98,24 @@ export default {
           id: 'estado-actual',
           title: '¿Dónde estamos hoy?',
           blocks: [
-            { type: 'p', text: 'En 2018, John Preskill acuñó el término [[nisq|NISQ]] (<i>Noisy Intermediate-Scale Quantum</i>) para los dispositivos con decenas o cientos de qubits ruidosos, sin corrección de errores completa. Advirtió que serían herramientas valiosas para explorar la física, pero que «no cambiarán el mundo de inmediato», y que el objetivo a largo plazo es la computación cuántica tolerante a fallos [@preskill2018].' },
+            { type: 'p', text: 'En 2018, John Preskill acuñó el término [[nisq|NISQ]] (<i>Noisy Intermediate-Scale Quantum</i>) para los dispositivos con decenas o cientos de qubits ruidosos, sin corrección de errores completa. Advirtió que serían herramientas valiosas para explorar la física, pero que «no cambiarán el mundo de inmediato», y que el objetivo a largo plazo es la computación cuántica <em>tolerante a fallos</em>: máquinas que detectan y corrigen sus propios errores mientras calculan [@preskill2018].' },
             { type: 'p', text: 'Desde entonces ha habido resultados experimentales notables, que conviene leer con su contexto (la lección 2.2 los sitúa en la historia):' },
             { type: 'list', items: [
               '<b>2019:</b> un procesador de 53 qubits realizó una tarea de muestreo de circuitos aleatorios en unos 200 segundos; los autores estimaron unos 10 000 años para el mejor superordenador [@arute2019]. <b>2022:</b> un nuevo método clásico resolvió ese mismo problema en unas 15 horas con 512 GPU [@pan2022]. Las afirmaciones de ventaja cuántica son relativas al mejor algoritmo clásico conocido en cada momento.',
-              '<b>2025:</b> se mostró experimentalmente que, al aumentar el tamaño de un código de corrección de errores, el error lógico disminuye, como predice la teoría [@google2025]. Es un paso hacia la tolerancia a fallos, todavía lejos de las máquinas necesarias para aplicaciones como romper RSA.',
+              '<b>2025:</b> se mostró experimentalmente que repartir la información entre más qubits para protegerla reduce de verdad los errores, como predice la teoría [@google2025]. Es un paso hacia la tolerancia a fallos, todavía lejos de las máquinas necesarias para aplicaciones como romper RSA.',
             ] },
-            { type: 'callout', kind: 'note', status: 'emergente', title: 'Cómo leer las noticias', text: 'Ante un anuncio, conviene preguntarse: ¿es una tarea útil o una demostración? ¿Con qué algoritmo clásico se compara, y se ha intentado mejorarlo? ¿Los qubits están protegidos por corrección de errores? ¿Hay un artículo revisado por pares? En el Módulo 3 añadiremos criterios técnicos sobre el hardware.' },
+            { type: 'callout', kind: 'note', status: 'emergente', title: 'Cómo leer las noticias', text: 'Ante un anuncio, conviene preguntarse: ¿es una tarea útil o una demostración? ¿Con qué algoritmo clásico se compara, y se ha intentado mejorarlo? ¿Los qubits están protegidos por corrección de errores? ¿Hay un artículo revisado por pares? En la lección 2.6 añadiremos criterios sobre el hardware.' },
           ],
         },
       ],
     },
 
     matematico: {
-      intro: 'Una primera cuenta con amplitudes, sin más herramientas que la aritmética. El formalismo completo (vectores y números complejos) llega en el Módulo 4.',
+      intro: 'Aquí ponemos números a las ideas del nivel 1. Cada sección empieza con la idea en pocas palabras y un ejemplo; las demostraciones están en «Para profundizar», por si te interesan. Basta con aritmética.',
       sections: [
         {
           id: 'probabilidades-vs-amplitudes',
-          title: 'Sumar probabilidades frente a sumar amplitudes',
+          title: 'Sumar probabilidades frente a sumar amplitudes', key: 'En el modelo clásico se suman probabilidades, que nunca son negativas. En el cuántico se suman amplitudes, que pueden tener signo opuesto y cancelarse; solo al final se elevan al cuadrado.',
           blocks: [
             { type: 'p', text: '<b>Modelo clásico.</b> En cada divisor, el fotón toma cada salida con probabilidad $\\tfrac12$. Para llegar a D0 hay dos caminos (superior o inferior) y cada uno exige dos elecciones independientes:' },
             { type: 'math', tex: 'P(D_0) = \\underbrace{\\tfrac12 \\cdot \\tfrac12}_{\\text{camino superior}} + \\underbrace{\\tfrac12 \\cdot \\tfrac12}_{\\text{camino inferior}} = \\tfrac12' },
@@ -130,22 +130,22 @@ export default {
         },
         {
           id: 'bloqueo-desfase',
-          title: 'Bloquear un camino y desfasar',
+          title: 'Bloquear un camino y desfasar', key: 'Bloquear un camino elimina la cancelación, y un desfase de 180° hace que los fotones cambien de detector.',
           blocks: [
             { type: 'p', text: 'Si se bloquea el camino inferior, solo queda una contribución para cada detector:' },
             { type: 'math', tex: 'a(D_0) = \\tfrac12, \\quad a(D_1) = \\tfrac12 \\;\\Rightarrow\\; P(D_0) = P(D_1) = \\tfrac14, \\quad P(\\text{absorbido}) = \\tfrac12' },
             { type: 'p', text: 'D1 pasa de probabilidad 0 a $\\tfrac14$: quitar una posibilidad eliminó la cancelación.' },
-            { type: 'p', text: 'Un desfase de media longitud de onda (180°) en un camino cambia el signo de su amplitud, y las dos salidas se intercambian: $a(D_0) = 0$ y $a(D_1) = -1$. Para un desfase general $\\varphi$ hacen falta números complejos (Módulo 4); el resultado, que usa el simulador, es:' },
-            { type: 'math', tex: 'P(D_0) = \\cos^2\\!\\left(\\tfrac{\\varphi}{2}\\right), \\qquad P(D_1) = \\sin^2\\!\\left(\\tfrac{\\varphi}{2}\\right)', note: 'Para $\\varphi = 0$ da 1 y 0; para $\\varphi = 180°$, 0 y 1. Lo demostraremos en el Módulo 4.' },
+            { deep: true, type: 'p', text: 'Un desfase de media longitud de onda (180°) en un camino cambia el signo de su amplitud, y las dos salidas se intercambian: $a(D_0) = 0$ y $a(D_1) = -1$. Para un desfase general $\\varphi$ hacen falta números complejos (Módulo 4); el resultado, que usa el simulador, es:' },
+            { deep: true, type: 'math', tex: 'P(D_0) = \\cos^2\\!\\left(\\tfrac{\\varphi}{2}\\right), \\qquad P(D_1) = \\sin^2\\!\\left(\\tfrac{\\varphi}{2}\\right)', note: 'Para $\\varphi = 0$ da 1 y 0; para $\\varphi = 180°$, 0 y 1. Lo demostraremos en el Módulo 4.' },
           ],
         },
         {
           id: 'estadistica',
-          title: '¿Cuántos fotones hacen falta para notar la diferencia?',
+          title: '¿Cuántos fotones hacen falta para notar la diferencia?', key: 'Con 1000 fotones, la cuenta de cada detector varía en unos ±16 respecto a lo esperado. Más repeticiones dan estimaciones más precisas.',
           blocks: [
-            { type: 'p', text: 'Cada fotón da un único resultado. Para estimar una probabilidad $p$ se repite el experimento $N$ veces y se calcula la fracción observada $\\hat p$. Su error típico es:' },
-            { type: 'math', tex: '\\sigma_{\\hat p} = \\sqrt{\\frac{p(1-p)}{N}}', note: 'Con $p = \\tfrac12$ y $N = 1000$: $\\sigma \\approx 0{,}016$, es decir, unos 16 fotones de variación típica en cada detector.' },
-            { type: 'p', text: 'Por eso, en el modelo clásico, observar 511 fotones en D0 de 1000 es perfectamente compatible con $p = \\tfrac12$. En cambio, 1000 de 1000 es incompatible con $p = \\tfrac12$ más allá de toda duda razonable. Esta misma estadística gobernará los <em>shots</em> de los circuitos cuánticos (Módulo 3) y las pruebas de software cuántico (Módulo 8).' },
+            { deep: true, type: 'p', text: 'Cada fotón da un único resultado. Para estimar una probabilidad $p$ se repite el experimento $N$ veces y se calcula la fracción observada $\\hat p$. Su error típico es:' },
+            { deep: true, type: 'math', tex: '\\sigma_{\\hat p} = \\sqrt{\\frac{p(1-p)}{N}}', note: 'Con $p = \\tfrac12$ y $N = 1000$: $\\sigma \\approx 0{,}016$, es decir, unos 16 fotones de variación típica en cada detector.' },
+            { type: 'p', text: 'Por eso, en el modelo clásico, observar 511 fotones en D0 de 1000 es perfectamente compatible con $p = \\tfrac12$. En cambio, 1000 de 1000 es incompatible con $p = \\tfrac12$ más allá de toda duda razonable. Esta misma estadística servirá para leer los resultados de cualquier programa cuántico, que también se repite muchas veces.' },
           ],
         },
       ],
@@ -221,7 +221,7 @@ predicción cuántica: D0 = 1000, D1 = 0` },
   },
 
   misconceptions: [
-    { myth: '«Un qubit vale 0 y 1 al mismo tiempo».', reality: 'El estado de un qubit se describe con amplitudes para $|0\\rangle$ y $|1\\rangle$, pero al medirlo se obtiene un único valor. La frase sugiere que podríamos leer ambos valores, y no es así.' },
+    { myth: '«Un qubit vale 0 y 1 al mismo tiempo».', reality: 'El estado de un qubit se describe con dos amplitudes, una para 0 y otra para 1, pero al medirlo se obtiene un único valor. La frase sugiere que podríamos leer ambos valores, y no es así.' },
     { myth: '«Una computadora cuántica prueba todas las soluciones a la vez y lee la correcta».', reality: 'La medición devuelve un único resultado. Los algoritmos útiles usan la interferencia para que la respuesta correcta sea probable, y eso solo es posible para problemas con estructura adecuada.' },
     { myth: '«En el interferómetro, el fotón va por un camino, solo que no sabemos cuál».', reality: 'Ese modelo predice un reparto 50/50 y no explica que bloquear un camino haga aparecer fotones en D1. Los resultados exigen sumar amplitudes de ambos caminos.' },
     { myth: '«La aleatoriedad de los resultados cuánticos se debe al ruido de los aparatos».', reality: 'Un sistema cuántico ideal, sin ruido, ya da resultados probabilísticos al medirse. El ruido es un problema adicional que la corrección de errores intenta controlar.' },
@@ -232,7 +232,7 @@ predicción cuántica: D0 = 1000, D1 = 0` },
     'La computación cuántica procesa información con sistemas cuánticos: amplitudes que interfieren, entrelazamiento y medición probabilística.',
     'En el interferómetro, los fotones individuales interfieren: el resultado exige sumar amplitudes, no probabilidades.',
     'Bit frente a qubit: lectura sin perturbación frente a medición, copia libre frente a no clonación, operaciones irreversibles frente a reversibles.',
-    'n qubits se describen con hasta $2^n$ amplitudes, pero medirlos solo da n bits (cota de Holevo).',
+    'n qubits se describen con hasta $2^n$ amplitudes, pero medirlos solo da n bits.',
     'La tecnología actual es NISQ [@preskill2018]; las afirmaciones de ventaja son relativas al mejor método clásico conocido.',
   ],
 
@@ -245,7 +245,7 @@ predicción cuántica: D0 = 1000, D1 = 0` },
   ],
 
   references: [
-    { key: 'nielsen2010', use: 'Definición de la computación cuántica, cota de Holevo y no clonación.' },
+    { key: 'nielsen2010', use: 'Definición de la computación cuántica y límite de n bits extraíbles de n qubits (cota de Holevo).' },
     { key: 'grangier1986', use: 'Experimento con fotones individuales en un divisor de haz y en un interferómetro de Mach–Zehnder.' },
     { key: 'wootters1982', use: 'Teorema de no clonación.' },
     { key: 'preskill2018', use: 'Era NISQ y sus limitaciones.' },
