@@ -144,6 +144,33 @@
     btn(fe, '0.1').click();
     check('IEEE 754: valor exacto de 0.1 en binary64', fe.querySelector('.fe-exact').textContent === '0.1000000000000000055511151231257827021181583404541015625');
 
+    // ---------- Editor de código ----------
+    await go('#/leccion/representacion-informacion', () => doc().querySelector('.ce textarea'));
+    const ed = doc().querySelector('.ce');
+    const ta = ed.querySelector('textarea');
+    const original = ta.value;
+    ta.value = 'print(2 + 2)';
+    ta.dispatchEvent(new Event('input', { bubbles: true }));
+    check('editor: al editar aparece «modificado» y se activa «Restablecer»', !ed.querySelector('.ce-badge').hidden && !btn(ed, 'Restablecer').disabled);
+    check('editor: el resaltado sigue al texto editado', ed.querySelector('.ce-highlight').textContent.trim() === 'print(2 + 2)');
+    check('editor: el cambio se guarda en el navegador', Object.keys(frame.contentWindow.localStorage).some((k) => k.startsWith('isq.code.representacion-informacion') && frame.contentWindow.localStorage.getItem(k) === 'print(2 + 2)'));
+    await go('#/glosario', () => doc().querySelector('.glossary-entry'));
+    await go('#/leccion/representacion-informacion', () => doc().querySelector('.ce textarea'));
+    const ed2 = doc().querySelector('.ce');
+    check('editor: la edición se conserva al volver a la lección', ed2.querySelector('textarea').value === 'print(2 + 2)');
+    btn(ed2, 'Restablecer').click();
+    check('editor: «Restablecer» recupera el código original', ed2.querySelector('textarea').value === original && ed2.querySelector('.ce-badge').hidden);
+    check('editor: tras restablecer no queda nada guardado', !Object.keys(frame.contentWindow.localStorage).some((k) => k.startsWith('isq.code.representacion-informacion')));
+    check('editor: los bloques de Python tienen botón «Ejecutar»', Boolean(btn(ed2, '▶ Ejecutar')));
+    const metrics = (el) => { const c = frame.contentWindow.getComputedStyle(el); return [c.fontFamily, c.fontSize, c.lineHeight, c.paddingTop, c.paddingLeft, c.tabSize, c.whiteSpace].join('|'); };
+    const pairs = [...doc().querySelectorAll('.ce')].map((e) => [metrics(e.querySelector('.ce-highlight')), metrics(e.querySelector('textarea'))]);
+    check('editor: texto editable y resaltado comparten tipografía y márgenes (alineados)', pairs.length > 0 && pairs.every(([a, b]) => a === b), pairs.find(([a, b]) => a !== b)?.join(' ≠ ') || `${pairs.length} editores`);
+    await wait(200); // el tamaño se ajusta en el siguiente fotograma
+    const sizes = [...doc().querySelectorAll('.ce')].map((e) => [e.querySelector('textarea').offsetHeight, e.querySelector('.ce-highlight').scrollHeight]);
+    check('editor: el área editable mide lo mismo que el código', sizes.every(([t, p]) => Math.abs(t - p) <= 2), JSON.stringify(sizes));
+    await go('#/leccion/sistema-binario', () => doc().querySelector('.exercise .ce'));
+    check('editor: las soluciones de los ejercicios también son editables', Boolean(doc().querySelector('.exercise .ce textarea')));
+
     // ---------- Módulo 2 ----------
     await go('#/leccion/que-es-computacion-cuantica', () => doc().querySelector('.mz-svg') && doc().querySelector('.mz-stats'));
     const mz = widgetsByTitle('Mach')[0];

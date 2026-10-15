@@ -23,6 +23,17 @@ Combina libro de texto, curso autodidacta, laboratorio de simulaciones, glosario
 
 El índice muestra el programa completo (9 módulos, 102 lecciones). El Módulo 1 (11 lecciones) está publicado completo, y del Módulo 2, la unidad «Qué es y de dónde viene» (lecciones 2.1 y 2.2). Las demás lecciones aparecen como «pendiente» con los temas que cubrirán, sin contenido provisional.
 
+## Código editable y ejecutable
+
+Todos los bloques de código de las lecciones, incluidas las soluciones de los ejercicios, son editables:
+
+- **Editar:** escribe directamente sobre el código. El resaltado de sintaxis se mantiene, y los cambios se guardan en el navegador por bloque y se conservan al volver a la lección.
+- **Restablecer:** recupera el código original y borra la versión guardada.
+- **▶ Ejecutar** (o Ctrl/Cmd + Enter): ejecuta Python de verdad en el navegador con [Pyodide](https://pyodide.org/) 0.27.7 (CPython 3.12 compilado a WebAssembly). La primera ejecución descarga unos 10 MB, que el navegador guarda en caché. El código corre en un *worker* aparte, así que un bucle infinito se detiene a los 20 s sin congelar la página.
+- **Copiar** y **Descargar** el código, con tus cambios.
+
+Las «salidas esperadas» de las lecciones se obtuvieron con CPython 3.14. `tests/python.html` ejecuta todos los ejemplos en Pyodide y comprueba que coinciden. Solo difiere el bytecode de `dis` (lección 1.10), porque depende de la versión de Python, y la propia lección lo aprovecha para explicarlo.
+
 ## Ejecutar en local
 
 No hace falta instalar dependencias ni compilar nada. Solo se necesita Python 3 para servir los archivos:
@@ -49,7 +60,8 @@ El script ejecuta tres páginas en Chrome sin interfaz. También se pueden abrir
 
 - `tests/index.html`: pruebas unitarias de codificación binaria y UTF-8, y **pruebas de integridad del contenido**. Comprueban que toda cita, término del glosario, enlace entre lecciones, visualización y figura exista, que cada referencia citada aparezca en la bibliografía de la lección y que las referencias estén verificadas.
 - `tests/interaction.html`: usa la aplicación real (progreso, favoritos, niveles, conversor, búsqueda, páginas pendientes). Borra el progreso guardado en ese navegador.
-- `tests/responsive.html`: comprueba que ninguna página se desborde en horizontal a 360 px de ancho.
+- `tests/responsive.html`: comprueba que ninguna página se desborde en horizontal a 360 px de ancho ni muestre texto residual («null»).
+- `tests/python.html`: ejecuta en Pyodide todos los ejemplos de Python de las lecciones y compara su salida con la publicada. También comprueba que un bucle infinito se detiene y que los errores muestran un traceback limpio. Necesita conexión a internet; `SKIP_PYTHON=1 tools/run-tests.sh` la omite.
 
 ## Arquitectura
 
@@ -95,7 +107,7 @@ Navegación completa con teclado (atajo `/` para buscar, enlace para saltar al c
 
 ## Limitaciones conocidas
 
-- Los ejemplos de Python no se ejecutan en el navegador. Se muestran con su salida real, obtenida al ejecutarlos con CPython 3.14.
+- La ejecución en el navegador usa Python 3.12 (Pyodide) y necesita conexión la primera vez. No admite `input()` interactivo ni bibliotecas que no estén en Pyodide; para Qiskit (Módulo 5) se indicará cómo ejecutarlo en local.
 - El progreso no se sincroniza entre dispositivos (se puede exportar como JSON desde «Mi progreso»).
 - La MiniCPU de la lección 1.9 es un procesador educativo propio, no una ISA real; la lección lo indica y la compara con RISC-V.
 - Los simuladores cuánticos (esfera de Bloch, editor de circuitos, etc.) llegarán en etapas posteriores. La página «Simuladores» enumera los previstos.

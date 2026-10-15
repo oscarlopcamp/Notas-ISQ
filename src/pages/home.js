@@ -30,7 +30,7 @@ export function render(main) {
     h('div', { class: 'level-legend' },
       h('div', {}, h('strong', {}, '1 · Comprender'), 'Intuición, analogías, diagramas y simulaciones, con comparaciones con la computación clásica.'),
       h('div', {}, h('strong', {}, '2 · Entender matemáticamente'), 'Notación, definiciones y cálculos desarrollados paso a paso.'),
-      h('div', {}, h('strong', {}, '3 · Implementar'), 'Código en Python (y, desde el Módulo 5, Qiskit), resultados esperados y experimentos.')),
+      h('div', {}, h('strong', {}, '3 · Implementar'), 'Código en Python (y, desde el Módulo 5, Qiskit) que puedes editar y ejecutar en el propio navegador, con su resultado esperado.')),
 
     h('h3', {}, 'Dos formas de usarlo'),
     h('div', { class: 'two-col' },

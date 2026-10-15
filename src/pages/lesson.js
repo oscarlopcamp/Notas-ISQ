@@ -5,6 +5,7 @@ import { h } from '../utils/dom.js';
 import { inline } from '../utils/text.js';
 import { store } from '../utils/storage.js';
 import { renderBlocks } from '../components/blocks.js';
+import { createCodeEditor } from '../components/code-editor.js';
 import { breadcrumbs, statusBadge, setTitle } from '../components/ui.js';
 import { lessonById, moduleById, nextLesson, previousLesson } from '../../content/curriculum.js';
 import { references, formatReference, SOURCE_TYPES } from '../../references/references.js';
@@ -16,6 +17,7 @@ export const LEVELS = [
 ];
 
 export async function render(main, [id], ctx) {
+  ctx.lessonId = id;
   const meta = lessonById(id);
   if (!meta) return notFound(main, id);
   const mod = moduleById(meta.moduleId);
@@ -150,7 +152,7 @@ export async function render(main, [id], ctx) {
       lesson.exercises.map((ex, i) => h('div', { class: 'exercise', dataset: { level: ex.level || '' } },
         h('div', { class: 'exercise-head' }, `Ejercicio ${i + 1}`, ex.level ? ` · ${LEVELS.find((l) => l.id === ex.level)?.title}` : ''),
         h('div', { html: inline(ex.question) }),
-        h('details', {}, h('summary', {}, 'Ver solución'), h('div', { html: inline(ex.answer) })))),
+        h('details', {}, h('summary', {}, 'Ver solución'), editableAnswer(ex.answer, `${id}.ej${i + 1}`)))),
     ]));
   }
   if (lesson.references?.length) {
@@ -250,4 +252,15 @@ function notFound(main, id) {
   setTitle('Lección no encontrada');
   main.append(h('div', { class: 'page' }, h('h1', {}, 'Lección no encontrada'),
     h('p', {}, `No existe ninguna lección con el identificador «${id}». `, h('a', { href: '#/' }, 'Volver al inicio'), '.')));
+}
+
+/** Solución de un ejercicio con sus bloques de código convertidos en editores. */
+function editableAnswer(answer, keyPrefix) {
+  const div = h('div', { html: inline(answer) });
+  div.querySelectorAll('pre').forEach((pre, k) => {
+    const codeEl = pre.querySelector('code');
+    const lang = (codeEl?.className.match(/language-([\w-]+)/) || [])[1] || 'python';
+    pre.replaceWith(createCodeEditor({ code: pre.textContent, lang, storageKey: `${keyPrefix}.${k + 1}` }));
+  });
+  return div;
 }

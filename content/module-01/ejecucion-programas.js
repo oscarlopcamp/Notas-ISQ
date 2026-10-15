@@ -146,7 +146,7 @@ dis.dis(cuadrado)`,
 
   6           LOAD_FAST_BORROW_LOAD_FAST_BORROW 0 (x, x)
               BINARY_OP                5 (*)
-              RETURN_VALUE`, note: 'Salida de CPython 3.14.0. Los nombres de las instrucciones cambian entre versiones; en otra versión verás algo distinto. Los números de la izquierda son las líneas del archivo.' },
+              RETURN_VALUE`, note: 'Salida de CPython 3.14.0. Los nombres de las instrucciones cambian entre versiones. Compruébalo: si pulsas «Ejecutar», el código corre en el navegador con Python 3.12 y verás dos instrucciones <code>LOAD_FAST</code> separadas en lugar de la instrucción combinada de 3.14. Los números de la izquierda son las líneas del archivo.' },
             { type: 'list', items: [
               '<b>LOAD_FAST_BORROW_LOAD_FAST_BORROW</b> apila dos veces la variable local <code>x</code> (es una instrucción combinada, una optimización de esta versión).',
               '<b>BINARY_OP (*)</b> desapila dos valores, los multiplica y apila el resultado: exactamente el MUL de la máquina de pila del simulador.',

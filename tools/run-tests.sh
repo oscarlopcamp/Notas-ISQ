@@ -29,4 +29,8 @@ for page in index.html interaction.html responsive.html; do
   if [[ "$result" != "pass" ]]; then grep -o 'id="summary">[^<]*' <<<"$dom" | sed 's/id="summary">/   /' || true; fi
   [[ "$result" == "pass" ]] || status=1
 done
+if [[ "${SKIP_PYTHON:-0}" != "1" ]]; then
+  # Ejecuta los ejemplos de Python en el navegador (Pyodide; requiere internet).
+  python3 "$ROOT/tools/run-python-tests.py" "http://127.0.0.1:$PORT" "$CHROME" || status=1
+fi
 exit $status

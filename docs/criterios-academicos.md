@@ -81,3 +81,9 @@ Los recuadros distinguen: conocimiento establecido, modelo simplificado, resulta
 - **Código:** los cuatro programas de las lecciones se ejecutaron con CPython 3.14. Las probabilidades del interferómetro (1, 0; 0, 1; 1/4, 1/4), el argumento del problema de Deutsch y el error $2^{1-k}$ del algoritmo aleatorio de Deutsch–Jozsa coinciden con las pruebas automáticas (`tests/module2.test.js`).
 - **Matices añadidos para evitar simplificaciones:** la ventaja de Deutsch–Jozsa desaparece frente a algoritmos clásicos aleatorios; la «supremacía» de 2019 se presenta junto con su respuesta clásica de 2022; la cota de Holevo limita a $n$ bits la información extraíble de $n$ qubits.
 - **Nueva comprobación automática:** `tests/responsive.html` detecta texto residual («null», «undefined») en la página. Permitió corregir dos simuladores que lo mostraban.
+
+## Ejecución de código en el navegador (2026-10-14)
+
+- Los bloques de Python se ejecutan con Pyodide 0.27.7 (CPython 3.12.7) en un *worker*; no se simula ninguna ejecución.
+- `tests/python.html` ejecutó los 36 ejemplos publicados: 35 producen exactamente la salida publicada (obtenida con CPython 3.14) y 1 difiere de forma conocida y documentada (el bytecode de `dis`, lección 1.10, que ahora explica la diferencia).
+- La salida esperada de cada bloque se etiqueta con la versión con que se obtuvo (CPython 3.14), y la salida propia del lector, con la versión de Python del navegador.

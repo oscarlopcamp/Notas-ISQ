@@ -6,6 +6,7 @@ import { inline } from '../utils/text.js';
 import { renderMath } from '../utils/math.js';
 import { mountWidget, widgets } from '../visualizations/registry.js';
 import { figures } from '../visualizations/figures.js';
+import { createCodeEditor } from './code-editor.js';
 
 export const EPISTEMIC = {
   establecido: 'Conocimiento establecido',
@@ -73,7 +74,10 @@ const renderers = {
     return el;
   },
 
-  code: (b) => codeBlock(b),
+  code: (b, ctx) => {
+    const n = ctx ? (ctx.codeIndex = (ctx.codeIndex ?? 0) + 1) : 0;
+    return createCodeEditor({ ...b, storageKey: ctx?.lessonId ? `${ctx.lessonId}.${n}` : null });
+  },
 };
 
 export function renderBlocks(blocks = [], ctx = {}) {
@@ -85,42 +89,4 @@ export function renderBlocks(blocks = [], ctx = {}) {
     }
     return render(b, ctx);
   });
-}
-
-function codeBlock(b) {
-  const code = h('code', { class: b.lang ? `language-${b.lang}` : null }, b.code.trim());
-  if (globalThis.hljs && b.lang) {
-    try { globalThis.hljs.highlightElement(code); } catch { /* sin resaltado */ }
-  }
-  const copy = h('button', {
-    type: 'button',
-    onclick: async () => {
-      try {
-        await navigator.clipboard.writeText(b.code.trim());
-        copy.textContent = 'Copiado';
-      } catch {
-        copy.textContent = 'No se pudo copiar';
-      }
-      setTimeout(() => { copy.textContent = 'Copiar'; }, 1600);
-    },
-  }, 'Copiar');
-  const download = b.file ? h('button', {
-    type: 'button',
-    onclick: () => {
-      const url = URL.createObjectURL(new Blob([`${b.code.trim()}\n`], { type: 'text/plain' }));
-      const a = h('a', { href: url, download: b.file });
-      document.body.append(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    },
-  }, 'Descargar') : null;
-
-  return h('div', { class: 'code-block' },
-    h('div', { class: 'code-head' }, h('span', {}, b.file || b.lang || 'código'), h('span', { class: 'spacer' }), copy, download),
-    h('pre', {}, code),
-    b.output != null ? h('div', { class: 'code-output' },
-      h('div', { class: 'code-head' }, h('span', {}, b.outputLabel || 'Salida esperada')),
-      h('pre', {}, h('samp', {}, b.output.trim()))) : null,
-    b.note ? h('p', { class: 'widget-caption', html: inline(b.note) }) : null);
 }

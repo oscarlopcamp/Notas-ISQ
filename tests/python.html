@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Ejecución real de los ejemplos de Python</title>
+  <style>
+    body { font: 14px system-ui, sans-serif; margin: 1.5rem; max-width: 70rem; }
+    .pass { color: #1d7a4d; } .fail { color: #a8322d; font-weight: 600; } .known { color: #9a5b00; }
+    pre { background: #f4f2ed; padding: 0.5rem; white-space: pre-wrap; font-size: 12px; }
+  </style>
+</head>
+<body data-status="running">
+  <h1>Ejemplos de Python ejecutados en el navegador (Pyodide)</h1>
+  <p>Ejecuta cada bloque de Python de las lecciones publicadas y compara su salida con la «salida esperada», obtenida con CPython 3.14.
+     Algunas diferencias son esperables por la versión de Python o de zlib; se listan explícitamente y se muestran en naranja.</p>
+  <p id="summary">Cargando Python…</p>
+  <ul id="out"></ul>
+  <script type="module">
+    import { lessons } from '../content/curriculum.js';
+    import { runPython } from '../src/utils/python-runner.js';
+
+    // Diferencias conocidas y justificadas entre CPython 3.14 (salidas publicadas) y Pyodide.
+    const KNOWN = {
+      'bytecode.py': 'El bytecode y sys.version dependen de la versión de Python (la lección lo indica).',
+      'comprimir.py': 'El tamaño comprimido depende de la versión de zlib; la conclusión (los datos aleatorios crecen) se comprueba aparte.',
+      'endianness.py': 'sys.byteorder depende de la plataforma.',
+    };
+    const out = document.getElementById('out');
+    let pass = 0, fail = 0, known = 0;
+    const norm = (s) => s.replace(/\s+$/gm, '').trim();
+
+    for (const meta of lessons.filter((l) => l.status === 'disponible')) {
+      const lesson = (await meta.load()).default;
+      const blocks = [];
+      Object.values(lesson.levels).forEach((lvl) => lvl.sections.forEach((s) => s.blocks.forEach((b) => { if (b.type === 'code' && b.lang === 'python') blocks.push(b); })));
+      for (const b of blocks) {
+        const name = `${meta.number} ${b.file}`;
+        let r;
+        try { r = await runPython(b.code, { timeout: 60000 }); } catch (err) { r = { ok: false, stdout: '', error: err.message }; }
+        const got = norm([r.stdout, r.stderr].filter(Boolean).join('\n'));
+        const expected = b.output == null ? null : norm(b.output);
+        // Un bloque sin salida esperada solo debe ejecutarse sin error (o ser una ilustración).
+        const ok = expected == null ? (r.ok || /parada/.test(b.file)) : got === expected;
+        if (ok) { pass += 1; out.insertAdjacentHTML('beforeend', `<li class="pass">✓ ${name}</li>`); continue; }
+        if (KNOWN[b.file]) { known += 1; out.insertAdjacentHTML('beforeend', `<li class="known">≈ ${name}: ${KNOWN[b.file]}<pre>${got.replace(/</g, '&lt;')}</pre></li>`); continue; }
+        fail += 1;
+        out.insertAdjacentHTML('beforeend', `<li class="fail">✗ ${name}<pre>Esperado:\n${(expected ?? '').replace(/</g, '&lt;')}\n\nObtenido:\n${got.replace(/</g, '&lt;')}${r.error ? `\n\n${r.error.replace(/</g, '&lt;')}` : ''}</pre></li>`);
+      }
+    }
+    // Comprobación de la conclusión de comprimir.py con el zlib del navegador
+    const z = await runPython('import random, zlib\nrandom.seed(1)\nd = bytes(random.getrandbits(8) for _ in range(10000))\nprint(len(zlib.compress(b"ABAB" * 2500)) < 100, len(zlib.compress(d)) > 10000)');
+    const zok = z.stdout.trim() === 'True True';
+    zok ? pass++ : fail++;
+    out.insertAdjacentHTML('beforeend', `<li class="${zok ? 'pass' : 'fail'}">${zok ? '✓' : '✗'} conclusión de comprimir.py con el zlib de Pyodide</li>`);
+    // Un bucle infinito se detiene por tiempo y Python sigue disponible después.
+    let stopped = false;
+    try { await runPython('while True:\n    pass', { timeout: 3000 }); } catch (err) { stopped = /bucle infinito/.test(err.message); }
+    const after = await runPython('print(6 * 7)', { timeout: 60000 });
+    const loopOk = stopped && after.stdout.trim() === '42';
+    loopOk ? pass++ : fail++;
+    out.insertAdjacentHTML('beforeend', `<li class="${loopOk ? 'pass' : 'fail'}">${loopOk ? '✓' : '✗'} un bucle infinito se detiene a los 3 s y Python vuelve a funcionar</li>`);
+    // Los errores muestran el traceback del programa, sin marcos internos de Pyodide.
+    const e = await runPython('x = 1 / 0', { timeout: 60000 });
+    const errOk = !e.ok && /ZeroDivisionError/.test(e.error) && !/_pyodide/.test(e.error);
+    errOk ? pass++ : fail++;
+    out.insertAdjacentHTML('beforeend', `<li class="${errOk ? 'pass' : 'fail'}">${errOk ? '✓' : '✗'} un error muestra un traceback limpio</li>`);
+    document.getElementById('summary').textContent = `${pass} coinciden, ${known} con diferencias conocidas, ${fail} fallan.`;
+    document.body.dataset.status = fail ? 'fail' : 'pass';
+    // Para la ejecución automática (tools/run-tests.sh lee el título).
+    const details = [...out.querySelectorAll('li.fail, li.known')].map((li) => li.textContent.slice(0, 600));
+    document.title = `RESULT ${fail ? 'fail' : 'pass'} | ${document.getElementById('summary').textContent} | ${JSON.stringify(details)}`;
+  </script>
+</body>
+</html>
