@@ -118,3 +118,10 @@ Criterio nuevo: una lección no usa conceptos cuyas bases todavía no se han pre
 - **DOI comprobados en Crossref:** Schumacher (1995), origen del término «qubit»; Dirac (1939), notación de bras y kets; Born (1926), interpretación probabilística; y Bloch (1946), que da nombre a la esfera.
 - **Sin temas adelantados:** la lección 3.1 no usa todavía la notación |0⟩, que se presenta en la 3.2. Las amplitudes son reales en toda la unidad. Los números complejos (Módulo 4) y la fase (lección 3.6) aparecen solo a gran escala, y la fórmula general de la esfera de Bloch va en «Para profundizar».
 - **Código:** `medir.py`, `kets.py`, `amplitudes.py` y `bloch.py` se ejecutaron con CPython 3.14, y `tests/python.html` los comprobó en Pyodide (45 coincidencias en total). La lógica de los simuladores está en `src/utils/qubit.js` y se prueba en `tests/module3.test.js`.
+
+## Unidad 3.2: propiedades cuánticas (2026-10-16)
+
+- **DOI comprobados en Crossref:** Aspect, Dalibard y Roger (1982) y Hensen et al. (2015), pruebas experimentales de las desigualdades de Bell. También se comprobó la nota de prensa del Nobel de Física de 2022 en nobelprize.org.
+- **Sin temas adelantados:** la unidad usa una sola operación nueva, la «mezcla» (el divisor de haz de la lección 2.1). No se nombra la compuerta de Hadamard ni se usan matrices o números complejos fuera de «Para profundizar». La lección 3.7 presenta solo lo mínimo de dos qubits; los sistemas de n qubits quedan para la 3.9.
+- **Honestidad epistémica:** el simulador de la lección 3.7 distingue el par entrelazado de *un* par clásico concreto. La lección aclara que la imposibilidad de imitarlo con *cualquier* estrategia clásica es el teorema de Bell, que se cita y se deja para el Módulo 6.
+- **Código:** `superposicion.py`, `fase.py`, `entrelazamiento.py` e `interferencia.py` se ejecutaron con CPython 3.14, y `tests/python.html` los comprobó en Pyodide (49 coincidencias en total).

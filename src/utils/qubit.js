@@ -54,3 +54,55 @@ export function ketText(a, b, digits = 3) {
   if (ra === 0) return term(rb, 1);
   return `${term(ra, 0)} ${rb < 0 ? '−' : '+'} ${term(Math.abs(rb), 1)}`;
 }
+
+// ---------- Unidad 3.2: mezcla, fase, entrelazamiento e interferencia ----------
+// La «mezcla» es la operación del divisor de haz de la lección 2.1 (la compuerta
+// de Hadamard, que se presenta con ese nombre en la lección 3.11).
+
+const R = Math.SQRT1_2;
+
+/** Mezcla de un qubit: (a, b) → ((a + b)/√2, (a − b)/√2). */
+export const mix = (a, b) => [(a + b) * R, (a - b) * R];
+
+/** Operaciones de un qubit con amplitudes reales. */
+export const OPS = {
+  M: { label: 'Mezclar', apply: ([a, b]) => mix(a, b) },
+  S: { label: 'Cambiar signo del 1', apply: ([a, b]) => [a, -b] },
+  X: { label: 'Intercambiar 0 y 1', apply: ([a, b]) => [b, a] },
+};
+
+/** Aplica una secuencia de operaciones (p. ej., 'MSM') desde un estado; devuelve todos los pasos. */
+export function runOps(ops, start = [1, 0]) {
+  const steps = [start];
+  for (const op of ops) steps.push(OPS[op].apply(steps[steps.length - 1]));
+  return steps;
+}
+
+/** Contribuciones de cada amplitud de entrada a cada salida de una mezcla (para ver la interferencia). */
+export const mixContributions = (a, b) => ({ to0: [a * R, b * R], to1: [a * R, -b * R] });
+
+/** Fase relativa φ entre dos amplitudes iguales: P(0) directa = 1/2; tras mezclar, cos²(φ/2). */
+export const phaseMixP0 = (phi) => Math.cos(phi / 2) ** 2;
+
+/** Estado de dos qubits [a00, a01, a10, a11]; mezcla el qubit 0 (izquierdo) o 1 (derecho). */
+export function mixQubit(state, q) {
+  const e = [...state];
+  const pairs = q === 0 ? [[0, 2], [1, 3]] : [[0, 1], [2, 3]];
+  for (const [i, j] of pairs) [e[i], e[j]] = [(e[i] + e[j]) * R, (e[i] - e[j]) * R];
+  return e;
+}
+
+export const BELL = [R, 0, 0, R];
+
+/** Mide dos qubits: devuelve '00', '01', '10' o '11'. */
+export function measurePair(state, random = Math.random) {
+  let u = random();
+  const labels = ['00', '01', '10', '11'];
+  for (let k = 0; k < 4; k += 1) { u -= state[k] ** 2; if (u < 0) return labels[k]; }
+  // Por redondeo, u puede no llegar a ser negativo: se devuelve el último resultado posible.
+  for (let k = 3; k >= 0; k -= 1) if (state[k] !== 0) return labels[k];
+  return labels[0];
+}
+
+/** ¿Es un estado producto (a|0⟩+b|1⟩)(c|0⟩+d|1⟩)? Ocurre si y solo si a00·a11 = a01·a10. */
+export const isProduct = ([p, q, r, s], tol = 1e-12) => Math.abs(p * s - q * r) < tol;

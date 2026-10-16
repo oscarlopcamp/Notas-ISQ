@@ -699,3 +699,41 @@
 .bs-state { fill: var(--accent); stroke: var(--surface); stroke-width: 2; }
 .bs-state.back { opacity: 0.6; }
 @media (max-width: 640px) { .bs-layout { grid-template-columns: 1fr; } }
+
+/* ---------- 3.5 Superposición frente a moneda ---------- */
+.sv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+.sv-mode { margin: var(--space-2) 0; }
+.sv-mode-head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+.sv-mode .ab-bars { margin: var(--space-1) 0 0; }
+.sv-mystery-out { display: grid; gap: var(--space-2); }
+@media (max-width: 640px) { .sv-grid { grid-template-columns: 1fr; } }
+
+/* ---------- 3.6 Fase relativa ---------- */
+.pd-svg { width: 100%; max-width: 220px; height: auto; display: block; margin: 0 auto; }
+.pd-state { font-size: 0.95rem; overflow-wrap: anywhere; }
+.pd-results { display: grid; gap: var(--space-2); }
+
+/* ---------- 3.7 Entrelazamiento ---------- */
+.el-seq { font-size: 0.85rem; color: var(--ink-2); overflow-wrap: anywhere; }
+.el-bar { grid-template-columns: 2rem 1fr 3.5rem; }
+.el-table { width: 100%; border-collapse: collapse; margin-top: var(--space-3); font-size: 0.85rem; }
+.el-table th, .el-table td { border-bottom: 1px solid var(--rule); padding: 0.35rem 0.5rem; text-align: left; }
+.el-table th { font-weight: 600; color: var(--ink-2); }
+
+/* ---------- 3.8 Constructor de interferencias ---------- */
+.ib-strip { display: flex; align-items: center; gap: var(--space-2); overflow-x: auto; padding: var(--space-2) 0; }
+.ib-col { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 4.2rem; padding: var(--space-1); border: 1px solid var(--rule); border-radius: var(--radius); background: var(--bg); }
+.ib-title { font-size: 0.68rem; color: var(--muted); }
+.ib-bars { display: flex; gap: 6px; }
+.ib-cell { display: flex; flex-direction: column; align-items: center; width: 1.3rem; }
+.ib-half { position: relative; width: 100%; height: 34px; }
+.ib-half.up { border-bottom: 1px solid var(--rule-strong); }
+.ib-half i { position: absolute; left: 0; right: 0; }
+.ib-half.up i { bottom: 0; background: var(--accent); }
+.ib-half.down i { top: 0; background: var(--warn); }
+.ib-cell span { font-size: 0.7rem; color: var(--muted); }
+.ib-amps { font-size: 0.68rem; text-align: center; line-height: 1.3; }
+.ib-op { font-weight: 700; color: var(--accent); }
+.ib-explain { min-height: 3em; padding: var(--space-2) var(--space-3); background: var(--accent-soft); border-radius: var(--radius); }
+.pd-figure { margin: 0; text-align: center; }
+.pd-figure figcaption { margin-top: var(--space-1); }

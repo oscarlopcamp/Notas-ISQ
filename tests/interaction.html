@@ -94,7 +94,7 @@
     await go('#/progreso', () => doc().querySelector('.stat b'));
     check('«Mi progreso» cuenta 1 lección completada', doc().querySelector('.stat b')?.textContent === '1');
     check('«Mi progreso» lista el favorito', doc().querySelector('.page').textContent.includes('¿Cómo representa información'));
-    await go('#/leccion/superposicion', () => doc().querySelector('.pending-note'));
+    await go('#/leccion/varios-qubits', () => doc().querySelector('.pending-note'));
     check('una lección pendiente lo indica y no muestra contenido provisional', Boolean(doc().querySelector('.pending-note')));
     await go('#/referencias/rfc3629', () => doc().getElementById('ref-rfc3629')?.textContent.includes('Citada en'));
     check('las referencias muestran en qué lección se citan', doc().getElementById('ref-rfc3629')?.textContent.includes('Citada en'));
@@ -270,6 +270,42 @@
     check('Bloch: girar φ no cambia las probabilidades y supera el reto del ecuador', bsVals().join('|') === '50 %|50 %' && [...bs.querySelectorAll('.ab-challenges li.ok')].some((li) => li.textContent.includes('ni |−⟩')));
     setRange(tIn, 120);
     check('Bloch: θ = 120° da P(1) = 75 %', bsVals()[1] === '75 %', bsVals().join('|'));
+
+    // ---------- Módulo 3, unidad 3.2 ----------
+    await go('#/leccion/superposicion', () => doc().querySelector('.sv-grid .btn'));
+    const sv = widgetsByTitle('Superposición frente a moneda')[0];
+    const svCards = sv.querySelectorAll('.sv-grid .ql-card');
+    const svSend = (card, k) => [...card.querySelectorAll('.btn')].filter((b) => b.textContent === 'Enviar 100')[k].click();
+    svSend(svCards[0], 1); svSend(sv.querySelectorAll('.sv-grid .ql-card')[1], 1);
+    const svMixed = (k) => [...sv.querySelectorAll('.sv-grid .ql-card')[k].querySelectorAll('.sv-mode')[1].querySelectorAll('.ql-bar b')].map((b) => Number(b.textContent));
+    check('superposición: tras mezclar, |+⟩ da 100 ceros', svMixed(0)[0] === 100, svMixed(0).join('/'));
+    check('superposición: tras mezclar, la moneda da unos y ceros', svMixed(1)[0] > 20 && svMixed(1)[1] > 20, svMixed(1).join('/'));
+
+    await go('#/leccion/fase-relativa', () => doc().querySelector('.pd-results .ql-bar'));
+    const pd = widgetsByTitle('dial de la fase')[0];
+    const pdVals = () => [...pd.querySelectorAll('.pd-results .ql-bar b')].map((b) => b.textContent);
+    setRange(pd.querySelector('input[type="range"]'), 180);
+    check('fase: con 180°, directa 50 % y tras mezclar siempre 1', pdVals().join('|') === '50 %|50 %|0 %|100 %', pdVals().join('|'));
+    pd.querySelector('input[type="checkbox"]').click();
+    check('fase: la fase global no cambia las probabilidades', pdVals().join('|') === '50 %|50 %|0 %|100 %' && pd.querySelector('.pd-state').textContent.startsWith('−'));
+
+    await go('#/leccion/entrelazamiento', () => doc().querySelector('.el-summary table'));
+    const el = widgetsByTitle('Entrelazamiento frente a correlación clásica')[0];
+    const elChip = (t) => [...el.querySelectorAll('.chip')].find((c) => c.textContent.startsWith(t)).click();
+    const elRun = (s, m) => { elChip(s); elChip(m); btn(el, 'Medir 100 pares').click(); };
+    elRun('Par entrelazado', 'Medir directamente'); elRun('Par entrelazado', 'Mezclar'); elRun('Par clásico', 'Medir directamente'); elRun('Par clásico', 'Mezclar');
+    const elCells = [...el.querySelectorAll('.el-table td.mono')].map((c) => parseInt(c.textContent, 10));
+    check('entrelazamiento: el par entrelazado coincide siempre, también tras mezclar', elCells[0] === 100 && elCells[1] === 100, elCells.join(','));
+    check('entrelazamiento: el par clásico deja de coincidir siempre tras mezclar', elCells[2] === 100 && elCells[3] > 25 && elCells[3] < 75, elCells.join(','));
+
+    await go('#/leccion/interferencia', () => doc().querySelector('.ib-strip .ib-col'));
+    const ib = widgetsByTitle('Constructor de interferencias')[0];
+    const ibOp = (k) => [...ib.querySelectorAll('.btn')].find((b) => b.textContent.startsWith(`${k} ·`)).click();
+    ibOp('M'); ibOp('M');
+    check('interferencia: M, M vuelve a 0 y explica la cancelación', ib.querySelectorAll('.ab-bars .ql-bar b')[0].textContent === '100 %' && ib.querySelector('.ib-explain').textContent.includes('destructiva'));
+    btn(ib, 'Vaciar').click(); ibOp('M'); ibOp('S'); ibOp('M');
+    check('interferencia: M, S, M da 1 con certeza y supera el primer reto', ib.querySelectorAll('.ab-bars .ql-bar b')[1].textContent === '100 %' && ib.querySelector('.ab-challenges li').classList.contains('ok'));
+    check('interferencia: cuatro columnas (inicio y tres pasos)', ib.querySelectorAll('.ib-col').length === 4);
 
     try { frame.contentWindow.localStorage.removeItem('isq.v1'); } catch {}
     document.body.dataset.status = failed ? 'fail' : 'pass';

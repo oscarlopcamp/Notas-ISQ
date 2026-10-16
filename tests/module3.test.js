@@ -2,7 +2,7 @@
 // Python de las lecciones 3.3 y 3.4 (CPython 3.14).
 
 import { suite, equal, assert } from './run.js';
-import { probabilities, norm2, isNormalized, normalize, measure, fromTheta, blochProbabilities, blochPoint, ketText } from '../src/utils/qubit.js';
+import { probabilities, norm2, isNormalized, normalize, measure, fromTheta, blochProbabilities, blochPoint, ketText, mix, runOps, mixContributions, phaseMixP0, mixQubit, BELL, measurePair, isProduct } from '../src/utils/qubit.js';
 import { seededRandom } from '../src/utils/hardware.js';
 
 const close = (a, b, eps = 1e-12) => Math.abs(a - b) < eps;
@@ -60,3 +60,54 @@ suite('3.1 El qubit (src/utils/qubit.js)', (t) => {
       ['|0⟩', '|1⟩', '0.6|0⟩ + 0.8|1⟩', '0.8|0⟩ − 0.6|1⟩', '−|1⟩', '0.707|0⟩ − 0.707|1⟩']);
   });
 });
+
+suite('3.2 Propiedades cuánticas (src/utils/qubit.js)', (t) => {
+  const R = Math.SQRT1_2;
+  const near = (u, v) => u.every((x, i) => close(x, v[i], 1e-12));
+  t('mezcla: |0⟩→|+⟩, |1⟩→|−⟩, |+⟩→|0⟩, |−⟩→|1⟩ (tabla de la lección 3.5)', () => {
+    assert(near(mix(1, 0), [R, R]) && near(mix(0, 1), [R, -R]) && near(mix(R, R), [1, 0]) && near(mix(R, -R), [0, 1]));
+  });
+  t('mezclar dos veces devuelve el estado (como interferencia.py)', () => {
+    for (const s of [[0.6, 0.8], [0.8, -0.6], [1, 0]]) assert(near(mix(...mix(...s)), s));
+  });
+  t('secuencias de la lección 3.8: MM → |0⟩, MSM → |1⟩, MSMSM → −|−⟩, MXM → |0⟩', () => {
+    const last = (ops) => runOps(ops).at(-1);
+    assert(near(last('MM'), [1, 0]) && near(last('MSM'), [0, 1]) && near(last('MSMSM'), [-R, R]) && near(last('MXM'), [1, 0]));
+  });
+  t('las contribuciones de una mezcla suman la amplitud de salida', () => {
+    const c = mixContributions(R, R), out = mix(R, R);
+    assert(close(c.to0[0] + c.to0[1], out[0]) && close(c.to1[0] + c.to1[1], out[1]) && close(c.to1[0] + c.to1[1], 0));
+  });
+  t('fase: tabla de fase.py (0°, 45°, 90°, 135°, 180°)', () => {
+    equal([0, 45, 90, 135, 180].map((d) => Number(phaseMixP0((d * Math.PI) / 180).toFixed(2))), [1, 0.85, 0.5, 0.15, 0]);
+  });
+  t('fase con amplitudes reales: 0° es |+⟩ y 180° es |−⟩ al mezclar', () => {
+    assert(close(phaseMixP0(0), mix(R, R)[0] ** 2) && close(phaseMixP0(Math.PI), mix(R, -R)[0] ** 2));
+  });
+  t('la fase global no cambia ninguna probabilidad tras mezclar', () => {
+    for (const s of [[0.6, 0.8], [R, -R]]) {
+      const a = mix(...s), b = mix(-s[0], -s[1]);
+      assert(close(a[0] ** 2, b[0] ** 2) && close(a[1] ** 2, b[1] ** 2));
+    }
+  });
+  t('el estado de Bell está entrelazado; |+⟩|+⟩ no', () => assert(!isProduct(BELL) && isProduct([0.5, 0.5, 0.5, 0.5])));
+  t('mezclar los dos qubits del estado de Bell lo deja igual (coinciden siempre)', () => {
+    assert(near(mixQubit(mixQubit(BELL, 0), 1), BELL));
+  });
+  t('par clásico mezclado: los cuatro resultados equiprobables (coinciden la mitad)', () => {
+    for (const s of [[1, 0, 0, 0], [0, 0, 0, 1]]) mixQubit(mixQubit(s, 0), 1).forEach((x) => assert(close(x * x, 0.25)));
+  });
+  t('(|01⟩ + |10⟩)/√2 tras mezclar ambos da (|00⟩ − |11⟩)/√2 (ejercicio 3.7)', () => {
+    assert(near(mixQubit(mixQubit([0, R, R, 0], 0), 1), [R, 0, 0, -R]));
+  });
+  t('medir el estado de Bell da solo 00 y 11, con frecuencias parecidas', () => {
+    const rnd = seededRandom(21), c = { '00': 0, '01': 0, '10': 0, '11': 0 };
+    for (let i = 0; i < 10000; i += 1) c[measurePair(BELL, rnd)] += 1;
+    assert(c['01'] === 0 && c['10'] === 0 && Math.abs(c['00'] / 10000 - 0.5) < 0.02, JSON.stringify(c));
+  });
+  t('measurePair nunca devuelve un resultado de amplitud nula, aunque el redondeo no sume 1', () => {
+    for (let k = 0; k < 200; k += 1) assert(measurePair([0, 0, 0, 0.9999999], () => 0.99999999999) === '11');
+    assert(measurePair([0.9999999, 0, 0, 0], () => 0.99999999999) === '00');
+  });
+});
+

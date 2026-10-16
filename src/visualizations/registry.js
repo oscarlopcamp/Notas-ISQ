@@ -120,6 +120,10 @@ export const widgets = {
   'ket-match': { title: 'Une cada ket con su vector', description: 'Juego de emparejar: cada estado escrito en notación de Dirac con su lista de amplitudes.', module: 3, load: () => import('./ket-match.js'), lessons: ['notacion-dirac'] },
   'amplitude-builder': { title: 'Constructor de amplitudes', description: 'Elige las dos amplitudes de un qubit, comprueba si forman un estado válido, normalízalo y supera los retos.', module: 3, load: () => import('./amplitude-builder.js'), lessons: ['estado-general-amplitudes'] },
   'bloch-sphere': { title: 'Esfera de Bloch', description: 'Mueve el estado de un qubit por la esfera: la altura decide las probabilidades y el giro (la fase) no las cambia. Con retos.', module: 3, load: () => import('./bloch-sphere.js'), lessons: ['esfera-de-bloch'] },
+  'superposition-vs-coin': { title: 'Superposición frente a moneda', description: 'Un qubit en |+⟩ y una moneda dan lo mismo al medir directamente, pero no tras la mezcla. Incluye una caja misteriosa para distinguirlos.', module: 3, load: () => import('./superposition-vs-coin.js'), lessons: ['superposicion'] },
+  'phase-dial': { title: 'El dial de la fase', description: 'Cambia la fase relativa de un estado «mitad y mitad»: medido directamente no cambia nada; tras la mezcla, lo cambia todo. La fase global no tiene efecto.', module: 3, load: () => import('./phase-dial.js'), lessons: ['fase-relativa'] },
+  'entanglement-lab': { title: 'Entrelazamiento frente a correlación clásica', description: 'Mide pares de qubits entrelazados y pares clásicos, directamente y tras mezclar, y compara cuántas veces coinciden.', module: 3, load: () => import('./entanglement-lab.js'), lessons: ['entrelazamiento'] },
+  'interference-builder': { title: 'Constructor de interferencias', description: 'Encadena operaciones sobre un qubit y observa paso a paso cómo las amplitudes se refuerzan o se cancelan. Con retos.', module: 3, load: () => import('./interference-builder.js'), lessons: ['interferencia'] },
 };
 
 export async function mountWidget(id, container, options = {}) {

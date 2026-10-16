@@ -112,10 +112,10 @@ export const modules = [
       {
         title: '3.2 Propiedades cuánticas',
         lessons: [
-          L('superposicion', 'Superposición', ['Superposición', 'Amplitudes']),
-          L('fase-relativa', 'Fase relativa', ['Fase relativa']),
-          L('entrelazamiento', 'Entrelazamiento y correlación clásica', ['Entrelazamiento', 'Correlación clásica frente a entrelazamiento']),
-          L('interferencia', 'Interferencia constructiva y destructiva', ['Interferencia constructiva', 'Interferencia destructiva', 'Relación entre fase e interferencia']),
+          L('superposicion', 'Superposición', ['Superposición', 'Amplitudes'], { load: () => import('./module-03/superposicion.js'), minutes: 35 }),
+          L('fase-relativa', 'Fase relativa', ['Fase relativa'], { load: () => import('./module-03/fase-relativa.js'), minutes: 30 }),
+          L('entrelazamiento', 'Entrelazamiento y correlación clásica', ['Entrelazamiento', 'Correlación clásica frente a entrelazamiento'], { load: () => import('./module-03/entrelazamiento.js'), minutes: 40 }),
+          L('interferencia', 'Interferencia constructiva y destructiva', ['Interferencia constructiva', 'Interferencia destructiva', 'Relación entre fase e interferencia'], { load: () => import('./module-03/interferencia.js'), minutes: 35 }),
         ],
       },
       {
