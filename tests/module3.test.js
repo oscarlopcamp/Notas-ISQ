@@ -2,7 +2,7 @@
 // Python de las lecciones 3.3 y 3.4 (CPython 3.14).
 
 import { suite, equal, assert } from './run.js';
-import { probabilities, norm2, isNormalized, normalize, measure, fromTheta, blochProbabilities, blochPoint, ketText, mix, runOps, mixContributions, phaseMixP0, mixQubit, BELL, measurePair, isProduct } from '../src/utils/qubit.js';
+import { probabilities, norm2, isNormalized, normalize, measure, fromTheta, blochProbabilities, blochPoint, ketText, mix, runOps, mixContributions, phaseMixP0, mixQubit, BELL, measurePair, isProduct, basisLabel, productState, ghzState, sampleIndex } from '../src/utils/qubit.js';
 import { seededRandom } from '../src/utils/hardware.js';
 
 const close = (a, b, eps = 1e-12) => Math.abs(a - b) < eps;
@@ -108,6 +108,38 @@ suite('3.2 Propiedades cuánticas (src/utils/qubit.js)', (t) => {
   t('measurePair nunca devuelve un resultado de amplitud nula, aunque el redondeo no sume 1', () => {
     for (let k = 0; k < 200; k += 1) assert(measurePair([0, 0, 0, 0.9999999], () => 0.99999999999) === '11');
     assert(measurePair([0.9999999, 0, 0, 0], () => 0.99999999999) === '00');
+  });
+});
+
+suite('3.3 Sistemas de n qubits (src/utils/qubit.js)', (t) => {
+  const R = Math.SQRT1_2;
+  t('etiquetas con el convenio de Qiskit: 6 con 3 qubits es 110', () => equal([basisLabel(6, 3), basisLabel(1, 2), basisLabel(8, 4)], ['110', '01', '1000']));
+  t('qubit 0 en |+⟩ y qubit 1 en |0⟩ dan 00 y 01 (como la guía de Qiskit y varios_qubits.py)', () => {
+    const s = productState([[R, R], [1, 0]]);
+    assert(close(s[0], R) && close(s[1], R) && s[2] === 0 && s[3] === 0, JSON.stringify(s));
+  });
+  t('qubits 1 y 2 en 1 y qubit 0 en 0: solo el número 6', () => {
+    const s = productState([[1, 0], [0, 1], [0, 1]]);
+    assert(s[6] === 1 && s.filter((a) => a !== 0).length === 1);
+  });
+  t('n qubits en |+⟩: 2ⁿ amplitudes iguales a 1/√(2ⁿ)', () => {
+    for (let n = 1; n <= 5; n += 1) {
+      const s = productState(Array(n).fill([R, R]));
+      assert(s.length === 2 ** n && s.every((a) => close(a, 1 / Math.sqrt(2 ** n))), `n=${n}`);
+    }
+  });
+  t('los estados producto están normalizados', () => {
+    const s = productState([[0.6, 0.8], [R, -R], [0, 1]]);
+    assert(close(s.reduce((p, a) => p + a * a, 0), 1));
+  });
+  t('ejercicio de la lección: P(11) = 0,32', () => assert(close(productState([[0.6, 0.8], [R, R]])[3] ** 2, 0.32)));
+  t('con dos qubits, productState coincide con isProduct', () => assert(isProduct(productState([[0.6, 0.8], [R, -R]])) && !isProduct(ghzState(2))));
+  t('GHZ: solo 00…0 y 11…1, y medir da siempre todos iguales', () => {
+    const rnd = seededRandom(13);
+    for (let n = 2; n <= 5; n += 1) {
+      const g = ghzState(n);
+      for (let i = 0; i < 200; i += 1) { const x = sampleIndex(g, rnd); assert(x === 0 || x === 2 ** n - 1, `n=${n} x=${x}`); }
+    }
   });
 });
 

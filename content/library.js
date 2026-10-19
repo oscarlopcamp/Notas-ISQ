@@ -64,6 +64,8 @@ export const concepts = [
   { q: '¿Qué es la superposición?', lesson: 'superposicion', term: 'superposicion', tags: ['superposición'] },
   { q: '¿En qué se diferencia la superposición de no saber el valor?', lesson: 'superposicion', term: 'superposicion', tags: ['superposición', 'moneda'] },
   { q: '¿Qué es la fase de un qubit?', lesson: 'fase-relativa', term: 'fase-relativa', tags: ['fase'] },
+  { q: '¿Cuántos estados tiene un sistema de n qubits?', lesson: 'varios-qubits', term: 'estado-base', tags: ['qubits', 'exponencial'] },
+  { q: '¿En qué orden escribe Qiskit los qubits?', lesson: 'varios-qubits', term: 'orden-de-qubits', tags: ['qiskit', 'orden', 'endianness'] },
   { q: '¿Qué es el entrelazamiento?', lesson: 'entrelazamiento', term: 'entrelazamiento', tags: ['entrelazamiento'] },
   { q: '¿Permite el entrelazamiento comunicarse más rápido que la luz?', lesson: 'entrelazamiento', term: 'entrelazamiento', tags: ['entrelazamiento', 'comunicación'] },
   { q: '¿Qué es la interferencia constructiva y destructiva?', lesson: 'interferencia', term: 'interferencia', tags: ['interferencia', 'fase'] },

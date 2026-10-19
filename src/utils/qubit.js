@@ -106,3 +106,31 @@ export function measurePair(state, random = Math.random) {
 
 /** ¿Es un estado producto (a|0⟩+b|1⟩)(c|0⟩+d|1⟩)? Ocurre si y solo si a00·a11 = a01·a10. */
 export const isProduct = ([p, q, r, s], tol = 1e-12) => Math.abs(p * s - q * r) < tol;
+
+// ---------- Unidad 3.3: sistemas de n qubits ----------
+// Convenio de Qiskit: el qubit 0 es el bit de la DERECHA de la cadena, y la cadena
+// leída en binario es la posición de la amplitud en la lista (lección 3.9).
+
+/** Etiqueta del estado base x con n qubits: '0110', con el qubit 0 a la derecha. */
+export const basisLabel = (x, n) => x.toString(2).padStart(n, '0');
+
+/** Estado de qubits independientes; qubits[k] = [a, b] es el qubit k. Longitud 2^n. */
+export function productState(qubits) {
+  const n = qubits.length;
+  return Array.from({ length: 2 ** n }, (_, x) => qubits.reduce((amp, [a, b], k) => amp * ((x >> k) & 1 ? b : a), 1));
+}
+
+/** Estado GHZ de n qubits: (|00…0⟩ + |11…1⟩)/√2. */
+export function ghzState(n) {
+  const s = new Array(2 ** n).fill(0);
+  s[0] = R; s[2 ** n - 1] = R;
+  return s;
+}
+
+/** Mide un estado de n qubits: devuelve el índice x del resultado. */
+export function sampleIndex(state, random = Math.random) {
+  let u = random();
+  for (let x = 0; x < state.length; x += 1) { u -= state[x] ** 2; if (u < 0) return x; }
+  for (let x = state.length - 1; x >= 0; x -= 1) if (state[x] !== 0) return x; // redondeo
+  return 0;
+}

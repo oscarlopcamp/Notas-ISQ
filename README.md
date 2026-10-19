@@ -13,7 +13,7 @@ Combina libro de texto, curso autodidacta, laboratorio de simulaciones, glosario
 |---|---|---|
 | 1 | Arquitectura, interfaz, navegación, modelo de contenido, referencias y lección 1.1 completa | **Terminada** |
 | 2 | Módulo 1 completo (fundamentos clásicos): 11 lecciones, 32 simuladores | **Terminada** |
-| 3 | Módulos 2 y 3 (introducción y fundamentos conceptuales cuánticos) | En curso: Módulo 2 completo (6 lecciones); del Módulo 3, las unidades «El qubit» y «Propiedades cuánticas» (lecciones 3.1 a 3.8) |
+| 3 | Módulos 2 y 3 (introducción y fundamentos conceptuales cuánticos) | En curso: Módulo 2 completo (6 lecciones); del Módulo 3, las unidades «El qubit», «Propiedades cuánticas» y «Sistemas de varios qubits» (lecciones 3.1 a 3.9) |
 | 4 | Módulo 4 (matemáticas) | Pendiente |
 | 5 | Módulo 5 (Python y Qiskit) y tutoriales | Pendiente |
 | 6 | Módulos 6 y 7 (protocolos; Grover y Shor) | Pendiente |
@@ -21,7 +21,7 @@ Combina libro de texto, curso autodidacta, laboratorio de simulaciones, glosario
 | 8 | Módulo 9 (ciberseguridad cuántica) | Pendiente |
 | 9 | Revisión integral | Pendiente |
 
-El índice muestra el programa completo (9 módulos, 102 lecciones). El Módulo 1 (11 lecciones) está publicado completo, y también el Módulo 2 (6 lecciones): «Qué es y de dónde viene», «Motivaciones y límites» y «El sistema de cómputo». Del Módulo 3 están publicadas las unidades «El qubit» y «Propiedades cuánticas» (lecciones 3.1 a 3.8). Las demás lecciones aparecen como «pendiente» con los temas que cubrirán, sin contenido provisional.
+El índice muestra el programa completo (9 módulos, 102 lecciones). El Módulo 1 (11 lecciones) está publicado completo, y también el Módulo 2 (6 lecciones): «Qué es y de dónde viene», «Motivaciones y límites» y «El sistema de cómputo». Del Módulo 3 están publicadas las unidades «El qubit», «Propiedades cuánticas» y «Sistemas de varios qubits» (lecciones 3.1 a 3.9). Las demás lecciones aparecen como «pendiente» con los temas que cubrirán, sin contenido provisional.
 
 ## Código editable y ejecutable
 

@@ -121,7 +121,7 @@ export const modules = [
       {
         title: '3.3 Sistemas de varios qubits',
         lessons: [
-          L('varios-qubits', 'Sistemas de uno, dos, tres y n qubits', ['Un qubit', 'Dos qubits', 'Tres qubits', 'Estados base', 'Sistemas compuestos', 'Crecimiento exponencial de la dimensión del espacio', 'Superposición de estados de varios qubits']),
+          L('varios-qubits', 'Sistemas de uno, dos, tres y n qubits', ['Un qubit', 'Dos qubits', 'Tres qubits', 'Estados base', 'Sistemas compuestos', 'Crecimiento exponencial de la dimensión del espacio', 'Superposición de estados de varios qubits'], { load: () => import('./module-03/varios-qubits.js'), minutes: 40 }),
         ],
       },
       {

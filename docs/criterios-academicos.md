@@ -125,3 +125,10 @@ Criterio nuevo: una lección no usa conceptos cuyas bases todavía no se han pre
 - **Sin temas adelantados:** la unidad usa una sola operación nueva, la «mezcla» (el divisor de haz de la lección 2.1). No se nombra la compuerta de Hadamard ni se usan matrices o números complejos fuera de «Para profundizar». La lección 3.7 presenta solo lo mínimo de dos qubits; los sistemas de n qubits quedan para la 3.9.
 - **Honestidad epistémica:** el simulador de la lección 3.7 distingue el par entrelazado de *un* par clásico concreto. La lección aclara que la imposibilidad de imitarlo con *cualquier* estrategia clásica es el teorema de Bell, que se cita y se deja para el Módulo 6.
 - **Código:** `superposicion.py`, `fase.py`, `entrelazamiento.py` e `interferencia.py` se ejecutaron con CPython 3.14, y `tests/python.html` los comprobó en Pyodide (49 coincidencias en total).
+
+## Unidad 3.3: sistemas de varios qubits (2026-10-18)
+
+- **Convenio de orden:** se consultó la guía oficial «Bit-ordering in the Qiskit SDK» (Qiskit 2.5). En ella, el qubit 0 es el bit de la derecha de la cadena, y la amplitud de índice x corresponde a |x⟩. La guía advierte de que algunas primitivas devuelven el orden contrario, y la lección lo recoge. El libro adopta este convenio desde la lección 3.9.
+- **Comprobación cruzada:** el primer resultado de `varios_qubits.py` coincide con el ejemplo de la guía de Qiskit (qubit 0 en |+⟩ y qubit 1 en |0⟩ dan 00 y 01).
+- **Sin temas adelantados:** el producto tensorial solo se nombra en «Para profundizar» (Módulo 4).
+- **Código:** `varios_qubits.py` se ejecutó con CPython 3.14 y se comprobó en Pyodide (50 coincidencias en total).

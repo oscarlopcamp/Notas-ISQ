@@ -94,7 +94,7 @@
     await go('#/progreso', () => doc().querySelector('.stat b'));
     check('«Mi progreso» cuenta 1 lección completada', doc().querySelector('.stat b')?.textContent === '1');
     check('«Mi progreso» lista el favorito', doc().querySelector('.page').textContent.includes('¿Cómo representa información'));
-    await go('#/leccion/varios-qubits', () => doc().querySelector('.pending-note'));
+    await go('#/leccion/circuitos-cuanticos', () => doc().querySelector('.pending-note'));
     check('una lección pendiente lo indica y no muestra contenido provisional', Boolean(doc().querySelector('.pending-note')));
     await go('#/referencias/rfc3629', () => doc().getElementById('ref-rfc3629')?.textContent.includes('Citada en'));
     check('las referencias muestran en qué lección se citan', doc().getElementById('ref-rfc3629')?.textContent.includes('Citada en'));
@@ -306,6 +306,21 @@
     btn(ib, 'Vaciar').click(); ibOp('M'); ibOp('S'); ibOp('M');
     check('interferencia: M, S, M da 1 con certeza y supera el primer reto', ib.querySelectorAll('.ab-bars .ql-bar b')[1].textContent === '100 %' && ib.querySelector('.ab-challenges li').classList.contains('ok'));
     check('interferencia: cuatro columnas (inicio y tres pasos)', ib.querySelectorAll('.ib-col').length === 4);
+
+    // ---------- Módulo 3, unidad 3.3 ----------
+    await go('#/leccion/varios-qubits', () => doc().querySelector('.qr-table .qr-row'));
+    const qr = widgetsByTitle('Registro de n qubits')[0];
+    const qrN = (k) => [...qr.querySelectorAll('.widget-controls .chip')].find((c) => c.textContent === String(k)).click();
+    const qrPrep = (q, p) => [...qr.querySelectorAll('.qr-qubit')].find((d) => d.textContent.startsWith(`qubit ${q}`)).querySelectorAll('.chip')[['|0⟩', '|1⟩', '|+⟩', '|−⟩'].indexOf(p)].click();
+    qrN(3);
+    check('registro: 3 qubits muestran 8 estados base', qr.querySelectorAll('.qr-row:not(.head)').length === 8);
+    qrPrep(1, '|1⟩'); qrPrep(2, '|1⟩');
+    const qrNonZero = () => [...qr.querySelectorAll('.qr-row:not(.head):not(.zero)')].map((r) => r.firstChild.textContent);
+    check('registro: qubits 1 y 2 en |1⟩ dan solo |110⟩ (el 6) y superan el reto', qrNonZero().join() === '|110⟩' && qr.querySelector('.ab-challenges li').classList.contains('ok'), qrNonZero().join());
+    btn(qr, 'Medir 100 veces').click();
+    check('registro: 100 mediciones dan siempre 110', [...qr.querySelectorAll('.qr-row:not(.head)')].find((r) => r.firstChild.textContent === '|110⟩').lastChild.textContent === '100');
+    qr.querySelector('input[type="checkbox"]').click();
+    check('registro: GHZ de 3 qubits solo tiene |000⟩ y |111⟩', qrNonZero().join() === '|000⟩,|111⟩', qrNonZero().join());
 
     try { frame.contentWindow.localStorage.removeItem('isq.v1'); } catch {}
     document.body.dataset.status = failed ? 'fail' : 'pass';
