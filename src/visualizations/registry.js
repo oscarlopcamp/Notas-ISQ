@@ -125,6 +125,8 @@ export const widgets = {
   'entanglement-lab': { title: 'Entrelazamiento frente a correlación clásica', description: 'Mide pares de qubits entrelazados y pares clásicos, directamente y tras mezclar, y compara cuántas veces coinciden.', module: 3, load: () => import('./entanglement-lab.js'), lessons: ['entrelazamiento'] },
   'interference-builder': { title: 'Constructor de interferencias', description: 'Encadena operaciones sobre un qubit y observa paso a paso cómo las amplitudes se refuerzan o se cancelan. Con retos.', module: 3, load: () => import('./interference-builder.js'), lessons: ['interferencia'] },
   'qubit-register': { title: 'Registro de n qubits', description: 'Prepara de 1 a 5 qubits (o entrelázalos), observa sus 2ⁿ amplitudes con el convenio de Qiskit y mide. Con retos sobre el orden de los qubits.', module: 3, load: () => import('./qubit-register.js'), lessons: ['varios-qubits'] },
+  'circuit-builder': { title: 'Editor de circuitos cuánticos', description: 'Coloca compuertas H, X, Z y CNOT en hasta 3 qubits, recorre el circuito columna a columna y ejecútalo 1000 veces. Simulación exacta del vector de estado.', module: 3, load: () => import('./circuit-builder.js'), lessons: ['circuitos-cuanticos'] },
+  'circuit-quiz': { title: 'Leer circuitos', description: 'Cinco circuitos dibujados con los símbolos estándar: ¿qué puede salir al medirlos?', module: 3, load: () => import('./circuit-quiz.js'), lessons: ['circuitos-cuanticos'] },
 };
 
 export async function mountWidget(id, container, options = {}) {

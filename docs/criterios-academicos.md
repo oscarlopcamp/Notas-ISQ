@@ -132,3 +132,10 @@ Criterio nuevo: una lección no usa conceptos cuyas bases todavía no se han pre
 - **Comprobación cruzada:** el primer resultado de `varios_qubits.py` coincide con el ejemplo de la guía de Qiskit (qubit 0 en |+⟩ y qubit 1 en |0⟩ dan 00 y 01).
 - **Sin temas adelantados:** el producto tensorial solo se nombra en «Para profundizar» (Módulo 4).
 - **Código:** `varios_qubits.py` se ejecutó con CPython 3.14 y se comprobó en Pyodide (50 coincidencias en total).
+
+## Unidad 3.4: circuitos cuánticos (2026-10-20)
+
+- **Convenio de dibujo:** según la guía «Bit-ordering in the Qiskit SDK», el qubit 0 es la línea de arriba de los diagramas, aunque sea el bit de la derecha en las cadenas. La lección lo advierte, y el cuestionario incluye el ejemplo de la guía: una X en q1 da «10».
+- **Sin temas adelantados:** el circuito solo usa operaciones ya presentadas, con sus símbolos estándar: la mezcla (H), el cambio de signo (Z), el intercambio (X) y la CNOT de la lección 1.6. Sus nombres y las demás compuertas quedan para la unidad 3.5. Los circuitos dinámicos solo se mencionan.
+- **Comprobación:** el simulador del navegador (`src/utils/circuit.js`) se prueba frente a los resultados conocidos (Bell, GHZ, HZH = X), y las respuestas del cuestionario se verifican con él. `circuito.py` se ejecutó con CPython 3.14 y se comprobó en Pyodide (51 coincidencias).
+- **Corrección de presentación:** la etiqueta corta de la guía de Qiskit se redujo a «Bit-ordering», porque las citas no se parten de línea y desbordaban a 360 px.

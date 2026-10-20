@@ -66,6 +66,8 @@ export const concepts = [
   { q: '¿Qué es la fase de un qubit?', lesson: 'fase-relativa', term: 'fase-relativa', tags: ['fase'] },
   { q: '¿Cuántos estados tiene un sistema de n qubits?', lesson: 'varios-qubits', term: 'estado-base', tags: ['qubits', 'exponencial'] },
   { q: '¿En qué orden escribe Qiskit los qubits?', lesson: 'varios-qubits', term: 'orden-de-qubits', tags: ['qiskit', 'orden', 'endianness'] },
+  { q: '¿Cómo se lee un circuito cuántico?', lesson: 'circuitos-cuanticos', term: 'circuito-cuantico', tags: ['circuito', 'diagrama'] },
+  { q: '¿Por qué q0 está arriba en el dibujo y a la derecha en el resultado?', lesson: 'circuitos-cuanticos', term: 'orden-de-qubits', tags: ['qiskit', 'orden'] },
   { q: '¿Qué es el entrelazamiento?', lesson: 'entrelazamiento', term: 'entrelazamiento', tags: ['entrelazamiento'] },
   { q: '¿Permite el entrelazamiento comunicarse más rápido que la luz?', lesson: 'entrelazamiento', term: 'entrelazamiento', tags: ['entrelazamiento', 'comunicación'] },
   { q: '¿Qué es la interferencia constructiva y destructiva?', lesson: 'interferencia', term: 'interferencia', tags: ['interferencia', 'fase'] },

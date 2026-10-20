@@ -752,4 +752,32 @@
 .qr-amp { position: relative; display: flex; align-items: center; gap: 6px; }
 .qr-amp i { display: block; height: 0.8rem; max-width: 60%; background: var(--accent); border-radius: 2px; }
 .qr-amp i.neg { background: var(--warn); }
-@media (max-width: 560px) { .qr-row { grid-template-columns: 4.5rem 3rem 1fr 4rem; } .qr-row span:nth-child(5) { display: none; } }
+.qr-table { min-width: 0; overflow-x: auto; }
+.qr-amp { min-width: 0; }
+@media (max-width: 560px) { .qr-row { grid-template-columns: 4rem 2.2rem minmax(0, 1fr) 3.6rem 3rem; gap: 6px; font-size: 0.78rem; } }
+
+/* ---------- 3.10 Circuitos ---------- */
+.cs-svg { width: 100%; height: auto; display: block; }
+.cs-wire { stroke: var(--ink-2); stroke-width: 1.4; }
+.cs-classical { stroke: var(--muted); stroke-width: 1; }
+.cs-label { font: 600 13px var(--font-mono); fill: var(--ink); }
+.cs-init { font: 12px var(--font-mono); fill: var(--muted); }
+.cs-gate { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
+.cs-gate.g-X { fill: var(--ok-soft); stroke: var(--ok); }
+.cs-gate.g-Z { fill: var(--warn-soft); stroke: var(--warn); }
+.cs-gate-label { font: 700 15px var(--font-mono); fill: var(--ink); pointer-events: none; }
+.cs-ctrl { fill: var(--ink); }
+.cs-link { stroke: var(--ink); stroke-width: 1.6; }
+.cs-targ { fill: var(--surface); stroke: var(--ink); stroke-width: 1.6; }
+.cs-targ-line { stroke: var(--ink); stroke-width: 1.6; }
+.cs-meter { fill: var(--surface); stroke: var(--ink-2); stroke-width: 1.4; }
+.cs-meter-arc { fill: none; stroke: var(--ink-2); stroke-width: 1.4; }
+.cs-hit { fill: transparent; cursor: pointer; }
+.cs-hit:hover, .cs-hit:focus { fill: var(--accent-soft); fill-opacity: 0.5; outline: none; }
+.cs-active { fill: var(--warn-soft); }
+.cb-scroll { overflow-x: auto; }
+.cb-palette .chip { min-width: 2.4rem; }
+.cb-error { color: var(--bad); }
+.rq-item { border: 1px solid var(--rule); border-radius: var(--radius); padding: var(--space-3); margin-bottom: var(--space-3); background: var(--bg); }
+.rq-item.ok { border-color: var(--ok); } .rq-item.bad { border-color: var(--bad); }
+.rq-item .cs-svg { max-height: 190px; }

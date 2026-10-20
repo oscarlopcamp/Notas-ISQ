@@ -94,7 +94,7 @@
     await go('#/progreso', () => doc().querySelector('.stat b'));
     check('«Mi progreso» cuenta 1 lección completada', doc().querySelector('.stat b')?.textContent === '1');
     check('«Mi progreso» lista el favorito', doc().querySelector('.page').textContent.includes('¿Cómo representa información'));
-    await go('#/leccion/circuitos-cuanticos', () => doc().querySelector('.pending-note'));
+    await go('#/leccion/compuertas-x-h-z', () => doc().querySelector('.pending-note'));
     check('una lección pendiente lo indica y no muestra contenido provisional', Boolean(doc().querySelector('.pending-note')));
     await go('#/referencias/rfc3629', () => doc().getElementById('ref-rfc3629')?.textContent.includes('Citada en'));
     check('las referencias muestran en qué lección se citan', doc().getElementById('ref-rfc3629')?.textContent.includes('Citada en'));
@@ -321,6 +321,23 @@
     check('registro: 100 mediciones dan siempre 110', [...qr.querySelectorAll('.qr-row:not(.head)')].find((r) => r.firstChild.textContent === '|110⟩').lastChild.textContent === '100');
     qr.querySelector('input[type="checkbox"]').click();
     check('registro: GHZ de 3 qubits solo tiene |000⟩ y |111⟩', qrNonZero().join() === '|000⟩,|111⟩', qrNonZero().join());
+
+    // ---------- Módulo 3, unidad 3.4 ----------
+    await go('#/leccion/circuitos-cuanticos', () => doc().querySelector('.rq-item .cs-svg') && doc().querySelector('.cb-scroll .cs-svg'));
+    const cq = widgetsByTitle('Leer circuitos')[0];
+    [...cq.querySelectorAll('.rq-item')[1].querySelectorAll('.chip')].find((c) => c.textContent === 'Siempre 10').click();
+    check('circuitos: la pregunta del orden (X en q1 → 10) se marca correcta', cq.querySelectorAll('.rq-item')[1].classList.contains('ok'));
+    const cb = widgetsByTitle('Editor de circuitos cuánticos')[0];
+    const cbNonZero = () => [...cb.querySelectorAll('.qr-row:not(.head):not(.zero)')].map((r) => r.firstChild.textContent).join();
+    check('editor: el par de Bell da |00⟩ y |11⟩', cbNonZero() === '|00⟩,|11⟩', cbNonZero());
+    setRange(cb.querySelector('input[type="range"]'), 1);
+    check('editor: tras la primera columna, |00⟩ y |01⟩', cbNonZero() === '|00⟩,|01⟩', cbNonZero());
+    btn(cb, 'Ejecutar 1000 veces y medir').click();
+    const cbCounts = [...cb.querySelectorAll('.qr-row:not(.head)')].map((r) => Number(r.lastChild.textContent));
+    check('editor: 1000 ejecuciones reparten entre 00 y 11', cbCounts[0] + cbCounts[3] === 1000 && cbCounts[0] > 400, cbCounts.join(','));
+    [...cb.querySelectorAll('.cb-palette .chip')].find((c) => c.textContent.startsWith('⊕')).click();
+    cb.querySelectorAll('.cs-hit')[4].dispatchEvent(new MouseEvent('click', { bubbles: true })); // columna 3, q0
+    check('editor: un ⊕ sin control se señala como error', cb.querySelector('.cb-error').textContent.includes('Columna 3'));
 
     try { frame.contentWindow.localStorage.removeItem('isq.v1'); } catch {}
     document.body.dataset.status = failed ? 'fail' : 'pass';

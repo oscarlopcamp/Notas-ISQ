@@ -5,7 +5,6 @@ import { breadcrumbs, setTitle } from '../components/ui.js';
 
 // Simuladores previstos en el programa que aún no están implementados.
 const PLANNED = [
-  ['Editor de circuitos cuánticos', 3],
   ['Plano complejo, vectores y matrices', 4],
   ['Producto tensorial', 4],
   ['Histogramas y shots', 5],

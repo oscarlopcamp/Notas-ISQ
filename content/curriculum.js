@@ -127,7 +127,7 @@ export const modules = [
       {
         title: '3.4 Circuitos cuánticos',
         lessons: [
-          L('circuitos-cuanticos', 'Cómo leer un circuito cuántico', ['¿Qué es un circuito?', 'Cómo leer un circuito', 'Líneas de qubits', 'Estado inicial', 'Operaciones', 'Compuertas', 'Mediciones', 'Registros clásicos', 'Interpretación de símbolos']),
+          L('circuitos-cuanticos', 'Cómo leer un circuito cuántico', ['¿Qué es un circuito?', 'Cómo leer un circuito', 'Líneas de qubits', 'Estado inicial', 'Operaciones', 'Compuertas', 'Mediciones', 'Registros clásicos', 'Interpretación de símbolos'], { load: () => import('./module-03/circuitos-cuanticos.js'), minutes: 45 }),
         ],
       },
       {

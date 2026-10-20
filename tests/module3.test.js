@@ -4,6 +4,8 @@
 import { suite, equal, assert } from './run.js';
 import { probabilities, norm2, isNormalized, normalize, measure, fromTheta, blochProbabilities, blochPoint, ketText, mix, runOps, mixContributions, phaseMixP0, mixQubit, BELL, measurePair, isProduct, basisLabel, productState, ghzState, sampleIndex } from '../src/utils/qubit.js';
 import { seededRandom } from '../src/utils/hardware.js';
+import { simulate, columnError, probabilitiesOf, applyGate, zeroState, CTRL, TARG } from '../src/utils/circuit.js';
+import { QUESTIONS } from '../src/visualizations/circuit-quiz.js';
 
 const close = (a, b, eps = 1e-12) => Math.abs(a - b) < eps;
 
@@ -140,6 +142,36 @@ suite('3.3 Sistemas de n qubits (src/utils/qubit.js)', (t) => {
       const g = ghzState(n);
       for (let i = 0; i < 200; i += 1) { const x = sampleIndex(g, rnd); assert(x === 0 || x === 2 ** n - 1, `n=${n} x=${x}`); }
     }
+  });
+});
+
+suite('3.4 Circuitos (src/utils/circuit.js)', (t) => {
+  const R = Math.SQRT1_2;
+  const amps = (n, cols) => Array.from(simulate(n, cols).at(-1).re);
+  const near = (u, v) => u.every((x, i) => close(x, v[i], 1e-12));
+  t('par de Bell: H en q0 y CNOT q0→q1 (como circuito.py)', () => assert(near(amps(2, [['H', null], [CTRL, TARG]]), [R, 0, 0, R])));
+  t('tras la H, solo |00⟩ y |01⟩ (q0 es el bit de la derecha)', () => assert(near(Array.from(simulate(2, [['H', null]])[1].re), [R, R, 0, 0])));
+  t('X en q1 da |10⟩ (el ejemplo de la guía de Qiskit)', () => assert(near(amps(2, [[null, 'X']]), [0, 0, 1, 0])));
+  t('GHZ de 3 qubits', () => assert(near(amps(3, [['H', null, null], [CTRL, TARG, null], [CTRL, null, TARG]]), [R, 0, 0, 0, 0, 0, 0, R])));
+  t('H Z H = X y H H = identidad (lección 3.8)', () => {
+    assert(near(amps(1, [['H'], ['Z'], ['H']]), [0, 1]) && near(amps(1, [['H'], ['H']]), [1, 0]));
+  });
+  t('las mismas operaciones que el simulador de la unidad 3.2', () => {
+    const s = applyGate(applyGate(zeroState(1), 'H'), 'Z');
+    assert(near(Array.from(s.re), [R, -R]));
+  });
+  t('columnas inválidas: dos controles, un ⊕ sin ●, compuerta junto a CNOT', () => {
+    assert(columnError([CTRL, CTRL]) && columnError([TARG, null]) && columnError([CTRL, TARG, 'H']) && !columnError([CTRL, TARG]) && !columnError(['H', 'X']));
+  });
+  t('la simulación se detiene en la primera columna inválida', () => equal(simulate(2, [['H', null], [TARG, null], ['X', null]]).length, 2));
+  t('ejercicio: H, CNOT y X en q1 dan 10 y 01', () => assert(near(amps(2, [['H', null], [CTRL, TARG], [null, 'X']]), [0, R, R, 0])));
+  t('las probabilidades suman 1', () => assert(close(probabilitiesOf(simulate(3, [['H', 'H', 'X'], [null, CTRL, TARG]]).at(-1)).reduce((a, b) => a + b, 0), 1)));
+  t('las respuestas del cuestionario coinciden con la simulación', () => {
+    const expected = [[1], [2], [0, 1], [1], [0, 3]]; // índices con probabilidad > 0
+    QUESTIONS.forEach((q, i) => {
+      const nz = probabilitiesOf(simulate(q.n, q.cols).at(-1)).map((p, x) => [p, x]).filter(([p]) => p > 1e-9).map(([, x]) => x);
+      equal(nz, expected[i], `pregunta ${i + 1}`);
+    });
   });
 });
 

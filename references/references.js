@@ -529,7 +529,7 @@ const list = [
   },
   {
     key: 'qiskit-bit-ordering',
-    short: '«Bit-ordering in the Qiskit SDK»',
+    short: '«Bit-ordering»',
     type: 'documentation',
     authors: ['IBM Quantum'],
     year: null,
